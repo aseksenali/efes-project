@@ -360,41 +360,41 @@ def merge_stats(slide, L):
 def build_future(slide, L):
     strip_slide(slide)
     S = {
-     'ru': dict(kick='Развитие', h2='Возможности дальнейшего развития',
-        sub='Платформа уже в работе — следующие шаги расширяют её возможности: от AI-поиска по истории акций до проверки накладных 1С и новых типов расчётов.',
+     'ru': dict(kick='Развитие', h2='Этап 2 · Развитие платформы',
+        sub='Платформа уже в работе — опциональный Этап 2 (5 000 000 ₸) расширяет её: AI-поиск по истории акций, проверка накладных 1С, новые типы расчётов и календарь промо.',
         cards=[
-          dict(t='AI Search & Knowledge Base',
+          dict(t='AI Search & Knowledge Base', p='1 600 000 ₸',
                b='Поиск и ответы на вопросы по текущим и историческим промо-акциям.',
                lead='Пример:', ex='«Какие акции были на Ульбу в июле 2024, 2025, 2026?»'),
-          dict(t='1C Invoice Validation',
+          dict(t='1C Invoice Validation', p='1 500 000 ₸',
                b='Автоматическая проверка выгрузок и накладных из 1С.',
                lead='Эффект:', ex='−30 % времени трейд- и sales controlling-специалистов; проверка 1С каждой точки вручную — ∞ часов.'),
-          dict(t='Масштабирование расчётов',
-               b='Перенос расчётов на другие типы компенсаций — например, расчёт Kega Boom.',
-               lead='База готова:', ex='единая логика квот, цен и периодов уже в системе.'),
-          dict(t='Исторический календарь промо',
+          dict(t='Исторический календарь промо', p='800 000 ₸',
                b='Календарь всех текущих и исторических промо-акций.',
                lead='Как работает:', ex='клик по дате показывает активности, действовавшие в этот период.'),
+          dict(t='Масштабирование расчётов', p='1 100 000 ₸',
+               b='Перенос расчётов на другие типы компенсаций — например, расчёт Kega Boom.',
+               lead='База готова:', ex='единая логика квот, цен и периодов уже в системе.'),
         ]),
-     'en': dict(kick="What's next", h2='Future development possibilities',
-        sub='The platform is already live — the next steps extend it: from AI search over promo history to 1C invoice validation and new calculation types.',
+     'en': dict(kick="What's next", h2='Phase 2 · Platform development',
+        sub='The platform is already live — the optional Phase 2 (5,000,000 KZT) extends it: AI search over promo history, 1C invoice validation, new calculation types and a promo calendar.',
         cards=[
-          dict(t='AI Search & Knowledge Base',
+          dict(t='AI Search & Knowledge Base', p='1,600,000 KZT',
                b='Search and answers to questions about current and historical promo activities.',
                lead='Example:', ex='“Which promos ran for Ulba in July 2024, 2025 and 2026?”'),
-          dict(t='1C Invoice Validation',
+          dict(t='1C Invoice Validation', p='1,500,000 KZT',
                b='Automatic validation of exports and invoices from 1C.',
                lead='Effect:', ex='−30% of trade & sales-controlling specialists’ time; checking 1C from every point manually — ∞ hours.'),
-          dict(t='Scaling the calculations',
-               b='Extending calculations to other compensation types — e.g. the Kega Boom calculation.',
-               lead='Foundation ready:', ex='shared quota, price and period logic is already in the system.'),
-          dict(t='Historical Promo Calendar',
+          dict(t='Historical Promo Calendar', p='800,000 KZT',
                b='A calendar of all current and historical promo activities.',
                lead='How it works:', ex='clicking a date shows the activities that were active in that period.'),
+          dict(t='Scaling the calculations', p='1,100,000 KZT',
+               b='Extending calculations to other compensation types — e.g. the Kega Boom calculation.',
+               lead='Foundation ready:', ex='shared quota, price and period logic is already in the system.'),
         ]),
     }[L]
     ICONS = [(str(ICONDIR / 'search.png'), '14304F'), (str(ICONDIR / 'invoice.png'), '2C2310'),
-             (str(ICONDIR / 'calc.png'), '10301F'), (str(ICONDIR / 'calendar.png'), '14304F')]
+             (str(ICONDIR / 'calendar.png'), '14304F'), (str(ICONDIR / 'calc.png'), '10301F')]
     kicker(slide, MX, 0.56, S['kick'], True)
     add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='EEF2F7', anchor='m')
     add_text(slide, MX, 1.56, 11.9, 0.8, S['sub'], size=12.5, color='9AA9BF', spacing=1.15)
@@ -406,6 +406,12 @@ def build_future(slide, L):
         d = 0.58
         add_round_rect(slide, x + 0.28, cy + 0.3, d, d, ICONS[i][1], None, radius_in=d*0.27)
         add_pic(slide, chip, x + 0.28 + d*0.24, cy + 0.3 + d*0.24, d*0.52, d*0.52)
+        # module price chip (merged from the other machine's Этап 2 slide)
+        pw2 = 1.34
+        add_round_rect(slide, x + cw - 0.28 - pw2, cy + 0.42, pw2, 0.34, '0E1726', '2E72AE',
+                       radius_in=0.17)
+        add_text(slide, x + cw - 0.28 - pw2, cy + 0.42, pw2, 0.34, cardS['p'], size=9.5,
+                 bold=True, color='9CC6E8', align='c', anchor='m')
         add_text(slide, x + 0.28, cy + 1.02, cw - 0.56, 0.72, cardS['t'], size=14, bold=True,
                  color='EEF2F7', spacing=1.05)
         add_text(slide, x + 0.28, cy + 1.78, cw - 0.56, 0.85, cardS['b'], size=10.5, color='9AA9BF', spacing=1.16)
@@ -418,9 +424,11 @@ def build_future(slide, L):
     by = 6.22; bh = 0.58
     add_round_rect(slide, MX, by, CW, bh, '0C3F77', '2E72AE', radius_in=0.09)
     add_pic(slide, str(ICONDIR / 'bolt_white.png'), MX + 0.32, by + bh/2 - 0.13, 0.26, 0.26)
-    band = ('Новые механики промо-акций легко интегрируются в платформу — партнёры мгновенно получают уведомления о запуске.'
+    band = ('Новые механики легко интегрируются в платформу. Полный пакет развития (Этап 2) — '
+            '5 000 000 ₸; модули можно запускать по отдельности.'
             if L == 'ru' else
-            'New promo mechanics plug straight into the platform — partners are notified the instant they go live.')
+            'New mechanics plug straight into the platform. The full development package (Phase 2) — '
+            '5,000,000 KZT; modules can be started separately.')
     add_text(slide, MX + 0.76, by, CW - 1.1, bh, band, size=12.5, bold=True, color='FFFFFF', anchor='m')
 
 # ============================================================
@@ -1032,42 +1040,50 @@ def author_photo():
 def build_author(slide, L):
     strip_slide(slide); plain_footer(slide)
     S = {'ru': dict(
-            kick='Команда', h2='Кто делает Efes Nexus',
-            sub='Платформу разрабатывает команда из пяти инженеров под руководством основателя проекта.',
+            kick='Команда', h2='Команда проекта',
+            sub='Проект выполняет команда из 5 инженеров — под руководством основателя проекта, '
+                'отвечающего за архитектуру, ключевые технические решения и качество результата.',
             name='Асет Сексенали', initials='АС',
-            role='Founding engineer · тимлид', contact='asetseksenali@gmail.com',
-            cards=[('РОЛЬ В ПРОЕКТЕ',
-                    'Основатель и ведущий инженер Efes Nexus. Отвечает за архитектуру платформы, '
-                    'модель процессов и интеграции с Panorama и 1С.'),
-                   ('КОМАНДА',
-                    'Тимлид команды из четырёх разработчиков: фронтенд, бэкенд, интеграции и внедрение. '
-                    'Вся разработка ведётся внутри команды, без подрядчиков.'),
-                   ('ЧТО УЖЕ СДЕЛАНО',
-                    'Смоделированы три BPMN-процесса промо-активностей, разобраны ограничения '
-                    'KZPromotion, собрана и запущена работающая платформа.')]),
+            role='Основатель проекта · Тимлид',
+            d1='Senior Full-Stack инженер · 8+ лет высоконагруженных production-систем.',
+            d2='Архитектура · решения · приёмка качества',
+            cards=[('Halyk Bank',
+                    'онлайн-банкинг: 100 000+ бизнес-клиентов, 20+ поставленных фич'),
+                   ('Archimedes · CTO',
+                    'общенациональная медицинская платформа — до 5 000 RPS, 5 регионов'),
+                   ('Zencoder · США',
+                    'AI-инструменты для разработчиков: плагины VS Code и JetBrains'),
+                   ('Lumica · CTO',
+                    'LMS-платформа: 15+ микросервисов, до 3 000 RPS, команда из 5 инженеров')],
+            bandt='Команда: тимлид + 4 разработчика',
+            bandb='backend · frontend · DevOps · QA — единый центр ответственности за результат'),
          'en': dict(
-            kick='The team', h2='Who builds Efes Nexus',
-            sub='The platform is built by a team of five engineers led by the founding engineer of the project.',
+            kick='The team', h2='The project team',
+            sub='The project is delivered by a team of 5 engineers — led by the founder of the project, '
+                'who owns the architecture, the key technical decisions and the quality of the result.',
             name='Aset Seksenali', initials='AS',
-            role='Founding engineer · team lead', contact='asetseksenali@gmail.com',
-            cards=[('ROLE ON THE PROJECT',
-                    'Founding and lead engineer of Efes Nexus. Owns the platform architecture, '
-                    'the process model and the Panorama and 1C integrations.'),
-                   ('THE TEAM',
-                    'Team lead of four developers: frontend, backend, integrations and rollout. '
-                    'All development is done in-house, with no subcontractors.'),
-                   ('WHAT IS ALREADY DONE',
-                    'Three promo-activity BPMN processes modelled, the limits of KZPromotion mapped, '
-                    'and a working platform built and running.')])}[L]
+            role='Project founder · Team lead',
+            d1='Senior full-stack engineer · 8+ years of high-load production systems.',
+            d2='Architecture · decisions · quality acceptance',
+            cards=[('Halyk Bank',
+                    'online banking: 100,000+ business clients, 20+ features shipped'),
+                   ('Archimedes · CTO',
+                    'nationwide medical platform — up to 5,000 RPS, 5 regions'),
+                   ('Zencoder · USA',
+                    'AI tools for developers: VS Code and JetBrains plugins'),
+                   ('Lumica · CTO',
+                    'LMS platform: 15+ microservices, up to 3,000 RPS, a team of 5 engineers')],
+            bandt='The team: team lead + 4 developers',
+            bandb='backend · frontend · DevOps · QA — a single point of accountability for the result')}[L]
     kicker(slide, MX, 0.56, S['kick'], False)
     add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
-    add_text(slide, MX, 1.56, 11.9, 0.6, S['sub'], size=12.5, color='56616F', spacing=1.15)
-    top, bot = 2.32, 6.46
+    add_text(slide, MX, 1.52, 11.9, 0.7, S['sub'], size=12.5, color='56616F', spacing=1.15)
+    top, bot = 2.36, 6.46
     # ---- profile card (left) ----
-    pw = 4.5; ph = bot - top
+    pw = 4.42; ph = bot - top
     add_round_rect(slide, MX, top, pw, ph, 'FFFFFF', 'E2E7EE', shadow=True)
     add_rect(slide, MX + 0.02, top, pw - 0.04, 0.05, '004C8D')
-    av = 1.70; ax = MX + (pw - av) / 2; ay = top + 0.42
+    av = 1.62; ax = MX + (pw - av) / 2; ay = top + 0.34
     photo = author_photo()
     if photo:
         add_pic(slide, photo, ax, ay, av, av)
@@ -1075,24 +1091,35 @@ def build_author(slide, L):
         add_round_rect(slide, ax, ay, av, av, 'E3EEF8', '9CC6E8', radius_in=av / 2)
         add_text(slide, ax, ay, av, av, S['initials'], size=46, bold=True,
                  color='004C8D', align='c', anchor='m')
-    add_text(slide, MX + 0.35, ay + av + 0.28, pw - 0.7, 0.42, S['name'], size=22, bold=True,
+    add_text(slide, MX + 0.30, ay + av + 0.24, pw - 0.6, 0.42, S['name'], size=21, bold=True,
              color='0C1726', align='c', anchor='m')
-    add_text(slide, MX + 0.35, ay + av + 0.73, pw - 0.7, 0.36, S['role'], size=13, bold=True,
+    add_text(slide, MX + 0.30, ay + av + 0.70, pw - 0.6, 0.32, S['role'], size=12.5, bold=True,
              color='1166A8', align='c', anchor='m')
-    add_rect(slide, MX + 0.9, ay + av + 1.24, pw - 1.8, 0.014, 'E2E7EE')
-    add_text(slide, MX + 0.35, ay + av + 1.36, pw - 0.7, 0.34, S['contact'], size=12,
+    add_rect(slide, MX + 0.85, ay + av + 1.18, pw - 1.7, 0.014, 'E2E7EE')
+    add_text(slide, MX + 0.42, ay + av + 1.30, pw - 0.84, 0.56, S['d1'], size=11,
+             color='56616F', align='c', spacing=1.25)
+    add_text(slide, MX + 0.42, ay + av + 1.86, pw - 0.84, 0.30, S['d2'], size=11,
              color='56616F', align='c', anchor='m')
-    # ---- fact cards (right) ----
+    # ---- track-record cards (right, 2x2) + team band ----
     rx = MX + pw + 0.24; rw = CW - pw - 0.24
-    ch = (ph - 0.44) / 3
+    bh = 0.92                      # team band height
+    gh = 0.22                      # gap
+    ch = (ph - bh - gh - gh) / 2   # card row height
+    cwr = (rw - gh) / 2
     for i, (lab, body) in enumerate(S['cards']):
-        y = top + i * (ch + 0.22)
-        add_round_rect(slide, rx, y, rw, ch, 'FFFFFF', 'E2E7EE', shadow=True)
-        add_rect(slide, rx, y + 0.02, 0.05, ch - 0.04, '004C8D')
-        add_text(slide, rx + 0.32, y + 0.18, rw - 0.6, 0.24, lab, size=8.5, bold=True,
-                 color='1166A8', char_spacing=0.8, anchor='m')
-        add_text(slide, rx + 0.32, y + 0.48, rw - 0.62, ch - 0.62, body, size=12.5,
+        x = rx + (i % 2) * (cwr + gh)
+        y = top + (i // 2) * (ch + gh)
+        add_round_rect(slide, x, y, cwr, ch, 'FFFFFF', 'E2E7EE', shadow=True)
+        add_text(slide, x + 0.30, y + 0.20, cwr - 0.58, 0.30, lab, size=13, bold=True,
+                 color='0C1726', anchor='m')
+        add_text(slide, x + 0.30, y + 0.56, cwr - 0.58, ch - 0.70, body, size=11,
                  color='56616F', spacing=1.25)
+    by = top + 2 * (ch + gh)
+    add_round_rect(slide, rx, by, rw, bh, 'E9F1FA', '9CC6E8')
+    add_text(slide, rx + 0.30, by + 0.16, rw - 0.6, 0.30, S['bandt'], size=13, bold=True,
+             color='004C8D', anchor='m')
+    add_text(slide, rx + 0.30, by + 0.50, rw - 0.6, 0.30, S['bandb'], size=11,
+             color='56616F', anchor='m')
 
 # ============================================================
 # COMMERCIAL PROPOSAL / PRICING SLIDE
@@ -1100,78 +1127,65 @@ def build_author(slide, L):
 def build_pricing(slide, L):
     strip_slide(slide); plain_footer(slide)
     S = {'ru': dict(
-            kick='Коммерческое предложение', h2='Стоимость и этапы',
-            sub='Платформа разворачивается на сервере Efes Kazakhstan — отдельная инфраструктура не нужна. '
-                'Первый этап покрывает всё, что показано в презентации; второй подключается по решению заказчика.',
-            l1='ЭТАП 1 · ВНЕДРЕНИЕ ПЛАТФОРМЫ', p1='5 000 000 ₸',
-            c1='всё, что работает в презентации',
-            i1=['Создание, изменение и закрытие промо-активностей',
-                'Уведомления партнёров и синхронизация с Panorama',
-                'Расчёт компенсаций и выгрузка отчётов',
-                'Проверка остатков на складе партнёра и предрасчёты промо',
-                'Развёртывание на сервере Efes Kazakhstan, обучение команды'],
-            l2='ЭТАП 2 · ОПЦИОНАЛЬНО', p2='+ 5 000 000 ₸',
-            c2='возможности дальнейшего развития',
-            i2=['AI Search & Knowledge Base — поиск по истории акций',
-                '1C Invoice Validation — проверка выгрузок и накладных',
-                'Масштабирование расчётов на другие типы компенсаций',
-                'Исторический календарь промо-активностей'],
-            n2='Подключается отдельно, после запуска первого этапа.',
-            band='Первый этап — 5 000 000 ₸ за работающую платформу на сервере заказчика. '
-                 'Второй этап не обязателен и оплачивается только если Efes решит его запускать.'),
+            kick='Стоимость', h2='Стоимость проекта',
+            sub='Фиксированная стоимость в два этапа: Этап 1 — разработка и внедрение системы; '
+                'Этап 2 — опциональный пакет развития. Размещение — на инфраструктуре Efes, без затрат на хостинг.',
+            l1='ЭТАП 1 · РАЗРАБОТКА И ВНЕДРЕНИЕ', p1='5 000 000 ₸',
+            c1='фиксированная стоимость · без НДС',
+            i1=[('8 модулей системы и 3 сквозных BPMN-процесса', None),
+                ('Интеграции: Panorama, 1С, корпоративная почта', None),
+                ('AI-верификация запросов партнёров', None),
+                ('Развёртывание на сервере Efes и обучение команды', None),
+                ('MVP — уже через 6 недель', None)],
+            l2='ЭТАП 2 · РАЗВИТИЕ ПЛАТФОРМЫ (ОПЦИОНАЛЬНО)', p2='+ 5 000 000 ₸',
+            c2='отдельное соглашение · модули в любом порядке',
+            i2=[('AI Search & Knowledge Base', '1 600 000 ₸'),
+                ('Проверка накладных 1С', '1 500 000 ₸'),
+                ('Масштабирование расчётов (Kega Boom)', '1 100 000 ₸'),
+                ('Исторический календарь промо', '800 000 ₸')]),
          'en': dict(
-            kick='Commercial proposal', h2='Pricing and phases',
-            sub='The platform is deployed on the Efes Kazakhstan server — no separate infrastructure is needed. '
-                'Phase 1 covers everything shown in this deck; phase 2 is taken up at the client’s discretion.',
-            l1='PHASE 1 · PLATFORM ROLLOUT', p1='5,000,000 KZT',
-            c1='everything shown in this deck',
-            i1=['Creating, changing and closing promo activities',
-                'Partner notifications and Panorama synchronisation',
-                'Compensation calculations and report exports',
-                'Partner stock checks and promo pre-calculations',
-                'Deployment on the Efes Kazakhstan server, team training'],
-            l2='PHASE 2 · OPTIONAL', p2='+ 5,000,000 KZT',
-            c2='further development possibilities',
-            i2=['AI Search & Knowledge Base — search across promo history',
-                '1C Invoice Validation — checking exports and invoices',
-                'Scaling calculations to other compensation types',
-                'Historical promo activity calendar'],
-            n2='Taken up separately, after phase 1 goes live.',
-            band='Phase 1 — 5,000,000 KZT for a working platform on the client’s own server. '
-                 'Phase 2 is optional and is paid for only if Efes decides to start it.')}[L]
-    kicker(slide, MX, 0.56, S['kick'], False)
-    add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
-    add_text(slide, MX, 1.52, 11.9, 0.7, S['sub'], size=12.5, color='56616F', spacing=1.15)
-    top = 2.32; ch = 3.74
-    cw = (CW - 0.24) / 2
+            kick='Pricing', h2='Project cost',
+            sub='A fixed price in two phases: Phase 1 — development and rollout of the system; '
+                'Phase 2 — an optional development package. Hosted on Efes infrastructure, with no hosting costs.',
+            l1='PHASE 1 · DEVELOPMENT AND ROLLOUT', p1='5,000,000 KZT',
+            c1='fixed price · VAT not included',
+            i1=[('8 system modules and 3 end-to-end BPMN processes', None),
+                ('Integrations: Panorama, 1C, corporate email', None),
+                ('AI verification of partner requests', None),
+                ('Deployment on the Efes server and team training', None),
+                ('MVP — in just 6 weeks', None)],
+            l2='PHASE 2 · PLATFORM DEVELOPMENT (OPTIONAL)', p2='+ 5,000,000 KZT',
+            c2='separate agreement · modules in any order',
+            i2=[('AI Search & Knowledge Base', '1,600,000 KZT'),
+                ('1C invoice validation', '1,500,000 KZT'),
+                ('Scaling the calculations (Kega Boom)', '1,100,000 KZT'),
+                ('Historical promo calendar', '800,000 KZT')])}[L]
+    kicker(slide, MX, 0.56, S['kick'], True)
+    add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='EEF2F7', anchor='m')
+    add_text(slide, MX, 1.52, 11.9, 0.7, S['sub'], size=12.5, color='9AA9BF', spacing=1.15)
+    top = 2.36; ch = 4.10
+    cw = (CW - 0.30) / 2
 
-    def card(x, lab, price, cap, items, note, primary):
-        add_round_rect(slide, x, top, cw, ch, 'FFFFFF', 'E2E7EE', shadow=True)
-        add_rect(slide, x + 0.02, top, cw - 0.04, 0.05, '004C8D' if primary else '9CC6E8')
-        add_text(slide, x + 0.42, top + 0.26, cw - 0.8, 0.26, lab, size=9, bold=True,
-                 color='1166A8' if primary else '8B94A2', char_spacing=1.0, anchor='m')
-        add_text(slide, x + 0.42, top + 0.60, cw - 0.8, 0.78, price, size=40, bold=True,
-                 color='004C8D' if primary else '56616F', anchor='m')
-        add_text(slide, x + 0.44, top + 1.42, cw - 0.8, 0.28, cap, size=12,
-                 color='8B94A2', italic=True, anchor='m')
-        add_rect(slide, x + 0.42, top + 1.82, cw - 0.84, 0.014, 'E2E7EE')
-        for j, it in enumerate(items):
-            y = top + 1.94 + j * 0.345
-            add_round_rect(slide, x + 0.44, y + 0.11, 0.085, 0.085,
-                           '004C8D' if primary else '9CC6E8', radius_in=0.0425)
-            add_text(slide, x + 0.70, y, cw - 1.1, 0.30, it, size=11.5, color='56616F', anchor='m')
-        if note:
-            add_text(slide, x + 0.44, top + ch - 0.44, cw - 0.9, 0.32, note, size=11,
-                     color='8B94A2', italic=True, anchor='m')
+    def card(x, lab, price, cap, items, primary):
+        add_round_rect(slide, x, top, cw, ch, '16223B', '2E72AE' if primary else '28364E')
+        add_text(slide, x + 0.46, top + 0.28, cw - 0.9, 0.28, lab, size=9, bold=True,
+                 color='5CA3DB' if primary else '8FA0B8', char_spacing=1.2, anchor='m')
+        add_text(slide, x + 0.46, top + 0.66, cw - 0.9, 0.86, price, size=40, bold=True,
+                 color='FFFFFF', anchor='m')
+        add_text(slide, x + 0.48, top + 1.58, cw - 0.9, 0.28, cap, size=11.5, italic=True,
+                 color='5CA3DB' if primary else '8FA0B8', anchor='m')
+        add_rect(slide, x + 0.46, top + 2.02, cw - 0.92, 0.014, '28364E')
+        for j, (it, money) in enumerate(items):
+            y = top + 2.18 + j * 0.38
+            add_round_rect(slide, x + 0.48, y + 0.13, 0.075, 0.075,
+                           '5CA3DB' if primary else '8FA0B8', radius_in=0.0375)
+            runs = [(it, {})] if money is None else [(it + ' — ', {}),
+                                                     (money, {'bold': True, 'color': 'FFFFFF'})]
+            add_text(slide, x + 0.74, y, cw - 1.2, 0.32, runs, size=11.5,
+                     color='C8D3E2', anchor='m')
 
-    card(MX, S['l1'], S['p1'], S['c1'], S['i1'], None, True)
-    card(MX + cw + 0.24, S['l2'], S['p2'], S['c2'], S['i2'], S['n2'], False)
-    # ---- closing band ----
-    by = top + ch + 0.16
-    add_round_rect(slide, MX, by, CW, 0.52, '004C8D', radius_in=0.1)
-    add_pic(slide, str(ICONDIR / 'bolt_white.png'), MX + 0.34, by + 0.15, 0.22, 0.22)
-    add_text(slide, MX + 0.72, by, CW - 1.0, 0.52, S['band'], size=11.5, bold=True,
-             color='FFFFFF', anchor='m')
+    card(MX, S['l1'], S['p1'], S['c1'], S['i1'], True)
+    card(MX + cw + 0.30, S['l2'], S['p2'], S['c2'], S['i2'], False)
 
 # ============================================================
 # DELETE SLIDE
@@ -1204,8 +1218,8 @@ def run(src, out, L, shots):
     retitle(prs.slides[2], 'BPMN ·', T['k3'], T['told'], T['t3'])
     remove_red_node(prs.slides[1], L)          # (1) drop the not-performed step from "today"
     # today the partner letter is written and sent by hand, so it is not an auto-notification
-    MAIL = {'ru': ('Авто-уведомление партнёров письмом', 'Письмо партнёрам вручную'),
-            'en': ('Auto-notifying partners by email', 'Manual email to partners')}[L]
+    MAIL = {'ru': ('Авто-уведомление партнёров письмом', 'Ручное уведомление партнёров письмом'),
+            'en': ('Auto-notifying partners by email', 'Manual partner notification by email')}[L]
     replace_text_everywhere(prs.slides[1], *MAIL)
     mark_new_step(prs.slides[2], L)            # (3+10) red NEW step + accent callout
     build_video(prs.slides[4], L)              # (5+6) "Промо-дашборд" with embedded video
@@ -1224,7 +1238,9 @@ def run(src, out, L, shots):
     n = len(prs.slides._sldIdLst)
     duplicate_slide(prs, 1, n)
     build_author(prs.slides[n], L)
-    duplicate_slide(prs, 1, n + 1)
+    # pricing is duplicated off the dark 'Этап 2' slide (index 7) so it inherits the dark
+    # background — the two commercial slides then read as one block.
+    duplicate_slide(prs, 7, n + 1)
     build_pricing(prs.slides[n + 1], L)
     # drop the old 'scaling' slide last (its part number would otherwise be reused)
     delete_slide(prs, 8)
