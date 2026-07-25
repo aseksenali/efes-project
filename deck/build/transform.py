@@ -1199,6 +1199,86 @@ def delete_slide(prs, index):
     sldIdLst.remove(sldId)
 
 # ============================================================
+# 1C integration — matching the universal report against the invoices
+# ============================================================
+def build_1c(slide, L):
+    strip_slide(slide); plain_footer(slide)
+    S = {'ru': dict(
+            kick='Интеграция · 1С', h2='Интеграция с 1С — сверка отчёта и накладных',
+            sub='Партнёр присылает выгрузку из 1С и накладные — система сверяет их между собой и '
+                'подсвечивает расхождения. Проверку становится возможно проводить сразу по всем '
+                'торговым точкам: вручную такой объём данных не обработать.',
+            cap1='Универсальный отчёт из 1С',
+            cap2='Накладная на отпуск запасов на сторону',
+            chip='СВЕРКА',
+            cards=[('Загрузка отчёта из 1С',
+                    'Универсальный отчёт по реализации загружается одним файлом.'),
+                   ('Сверка с накладными',
+                    'Суммы, скидки и объёмы сопоставляются по каждому контрагенту.'),
+                   ('Контроль расхождений',
+                    'Несовпадения по скидке, объёму или периоду подсвечиваются автоматически.'),
+                   ('Все точки сразу',
+                    'Можно запросить накладные со всех точек партнёра — вручную это невозможно.')]),
+         'en': dict(
+            kick='Integration · 1C', h2='1C integration — matching the report against the invoices',
+            sub='The partner sends the 1C export and the invoices — the system matches them against '
+                'each other and highlights the discrepancies. Checking becomes possible across every '
+                'outlet at once: that volume of data cannot be processed by hand.',
+            cap1='Universal report from 1C',
+            cap2='Goods release note (invoice)',
+            chip='MATCHING',
+            cards=[('1C report upload',
+                    'The universal sales report is uploaded as a single file.'),
+                   ('Matching against invoices',
+                    'Amounts, discounts and volumes are matched per counterparty.'),
+                   ('Discrepancy control',
+                    'Mismatches in discount, volume or period are highlighted automatically.'),
+                   ('Every outlet at once',
+                    'Invoices can be requested from all partner outlets — impossible by hand.')])}[L]
+    kicker(slide, MX, 0.56, S['kick'], False)
+    add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
+    add_text(slide, MX, 1.52, 11.9, 0.72, S['sub'], size=12.5, color='56616F', spacing=1.15)
+
+    top = 2.42
+    ih = 1.86                                   # shared display height of both screenshots
+    w1 = ih * (871 / 528); w2 = ih * (1280 / 387)
+    pad = 0.22
+    c1w = w1 + pad * 2; c2w = w2 + pad * 2
+    gap = CW - c1w - c2w
+    ch = ih + pad * 2 + 0.32                    # + caption strip
+    x1 = MX; x2 = MX + c1w + gap
+
+    def shot(x, cw_, path, cap):
+        add_round_rect(slide, x, top, cw_, ch, 'FFFFFF', 'E2E7EE', shadow=True)
+        pic = add_pic(slide, path, x + pad, top + pad, cw_ - pad * 2, ih)
+        pic.line.color.rgb = C('E2E7EE'); pic.line.width = Pt(0.75)
+        add_text(slide, x + pad, top + pad + ih, cw_ - pad * 2, 0.32, cap,
+                 size=10, bold=True, color='56616F', align='c', anchor='m')
+
+    shot(x1, c1w, str(SHOTS / '1c_report.png'), S['cap1'])
+    shot(x2, c2w, str(SHOTS / '1c_invoice.png'), S['cap2'])
+
+    # centre chip between the two screenshots
+    cd = 0.72; cx = x1 + c1w + (gap - cd) / 2; cy = top + (ch - cd) / 2 - 0.16
+    add_round_rect(slide, cx, cy, cd, cd, '004C8D', None, radius_in=cd / 2)
+    add_pic(slide, str(ICONDIR / 'invoice_white.png'), cx + cd * 0.26, cy + cd * 0.26,
+            cd * 0.48, cd * 0.48)
+    add_text(slide, cx - 0.34, cy + cd + 0.08, cd + 0.68, 0.26, S['chip'], size=8.5, bold=True,
+             color='004C8D', char_spacing=1.2, align='c', anchor='m')
+
+    # functionality row
+    by = top + ch + 0.20; bh = 6.46 - by
+    g = 0.18; cw_ = (CW - g * 3) / 4
+    for i, (t, b) in enumerate(S['cards']):
+        x = MX + i * (cw_ + g)
+        add_round_rect(slide, x, by, cw_, bh, 'FFFFFF', 'E2E7EE', shadow=True)
+        add_rect(slide, x, by + 0.02, 0.05, bh - 0.04, '004C8D')
+        add_text(slide, x + 0.24, by + 0.12, cw_ - 0.46, 0.28, t, size=12, bold=True,
+                 color='0C1726', anchor='m')
+        add_text(slide, x + 0.24, by + 0.44, cw_ - 0.46, bh - 0.54, b, size=10,
+                 color='56616F', spacing=1.14)
+
+# ============================================================
 def run(src, out, L, shots):
     prs = Presentation(src)
     # keep a pristine copy of BPMN slide as new slide 3 ("with the system")
@@ -1242,6 +1322,9 @@ def run(src, out, L, shots):
     # background — the two commercial slides then read as one block.
     duplicate_slide(prs, 7, n + 1)
     build_pricing(prs.slides[n + 1], L)
+    # closing deep-dive: how the 1C integration actually checks the data
+    duplicate_slide(prs, 1, n + 2)
+    build_1c(prs.slides[n + 2], L)
     # drop the old 'scaling' slide last (its part number would otherwise be reused)
     delete_slide(prs, 8)
     # (8) new logo everywhere
