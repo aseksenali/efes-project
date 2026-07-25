@@ -1,13 +1,15 @@
 # dependencies (restore with npm install)
 node_modules/
 
-# regenerable render outputs
-render_final/
-en_build/en_img/
-en_build/orig_img/
-en_build/en_final/
-proposals/render/
-pptx_build/gen/
+# generated renders and build scratch
+deck/render/
+deck/build/gen/
+proposal/render/
+
+# editor / tooling local state
+.claude/
+.vscode/
+.idea/
 
 # Office lock files
 ~$*

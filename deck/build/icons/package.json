@@ -1,0 +1,16 @@
+{
+  "name": "efes-deck-icons",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Renders the Font Awesome 6 icons used by the Efes Nexus deck to PNG",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node gen.js"
+  },
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.7.0",
+    "sharp": "^0.35.3"
+  }
+}
