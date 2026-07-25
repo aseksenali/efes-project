@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_PromoCreate" targetNamespace="http://camunda.org/examples" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:process id="Process_PromoCreate" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_TM" name="Trade marketing specialist">
+        <bpmn:flowNodeRef>Start_Promo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_SenderChoice</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_TM_Send</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_OT" name="On-trade support specialist">
+        <bpmn:flowNodeRef>Task_OT_Send</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SSC" name="Sales systems communication specialist">
+        <bpmn:flowNodeRef>Gw_SendMerge</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AssignIDs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendToCRM</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_NotifyPartners</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_CRM" name="CRM support specialist">
+        <bpmn:flowNodeRef>Task_CRM_Create</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CRM_Notify</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_PRT" name="Partner">
+        <bpmn:flowNodeRef>Task_PRT_Receive</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_PRT</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_Promo" name="Promo-activity request initiated" />
+    <bpmn:exclusiveGateway id="Gw_SenderChoice" name="Sender?" />
+    <bpmn:task id="Task_TM_Send" name="Email Excel file with&#10;new promo-activities" />
+    <bpmn:task id="Task_OT_Send" name="Email Excel file with&#10;new promo-activities" />
+    <bpmn:exclusiveGateway id="Gw_SendMerge" />
+    <bpmn:task id="Task_AssignIDs" name="Assign unique IDs to&#10;each promo-activity" />
+    <bpmn:task id="Task_SendToCRM" name="Email prepared file&#10;to CRM support" />
+    <bpmn:task id="Task_NotifyPartners" name="Email each Partner&#10;(one per promo-activity)" />
+    <bpmn:task id="Task_CRM_Create" name="Create promo-activities&#10;in Panorama" />
+    <bpmn:task id="Task_CRM_Notify" name="Notify SSC via Email" />
+    <bpmn:task id="Task_PRT_Receive" name="Receive promo-activity&#10;notifications" />
+    <bpmn:endEvent id="End_PRT" name="Promo-activities live" />
+    <bpmn:sequenceFlow id="Flow_Start_Sender" sourceRef="Start_Promo" targetRef="Gw_SenderChoice" />
+    <bpmn:sequenceFlow id="Flow_Sender_TM" name="Trade marketing" sourceRef="Gw_SenderChoice" targetRef="Task_TM_Send" />
+    <bpmn:sequenceFlow id="Flow_Sender_OT" name="On-trade support" sourceRef="Gw_SenderChoice" targetRef="Task_OT_Send" />
+    <bpmn:sequenceFlow id="Flow_TM_Merge" sourceRef="Task_TM_Send" targetRef="Gw_SendMerge" />
+    <bpmn:sequenceFlow id="Flow_OT_Merge" sourceRef="Task_OT_Send" targetRef="Gw_SendMerge" />
+    <bpmn:sequenceFlow id="Flow_Merge_Assign" sourceRef="Gw_SendMerge" targetRef="Task_AssignIDs" />
+    <bpmn:sequenceFlow id="Flow_Assign_SendToCRM" sourceRef="Task_AssignIDs" targetRef="Task_SendToCRM" />
+    <bpmn:sequenceFlow id="Flow_SendToCRM_Create" sourceRef="Task_SendToCRM" targetRef="Task_CRM_Create" />
+    <bpmn:sequenceFlow id="Flow_Create_Notify" sourceRef="Task_CRM_Create" targetRef="Task_CRM_Notify" />
+    <bpmn:sequenceFlow id="Flow_Notify_NotifyPRT" sourceRef="Task_CRM_Notify" targetRef="Task_NotifyPartners" />
+    <bpmn:sequenceFlow id="Flow_NotifyPRT_Receive" sourceRef="Task_NotifyPartners" targetRef="Task_PRT_Receive" />
+    <bpmn:sequenceFlow id="Flow_Receive_End" sourceRef="Task_PRT_Receive" targetRef="End_PRT" />
+    <bpmn:textAnnotation id="Note_AssignIDs">
+      <bpmn:text>Each row receives a unique promo-activity ID assigned by SSC before the file is forwarded to CRM.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_AssignIDs" sourceRef="Note_AssignIDs" targetRef="Task_AssignIDs" />
+    <bpmn:textAnnotation id="Note_Multi">
+      <bpmn:text>Multi-instance: CRM creates one promo-activity in Panorama per row of the file; SSC then sends one notification email per (promo-activity × affected Partner) pair.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_Multi" sourceRef="Note_Multi" targetRef="Task_NotifyPartners" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_PromoCreate">
+      <bpmndi:BPMNShape id="Lane_PRT_di" bpmnElement="Lane_PRT" isHorizontal="true">
+        <dc:Bounds x="160" y="660" width="1450" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_CRM_di" bpmnElement="Lane_CRM" isHorizontal="true">
+        <dc:Bounds x="160" y="520" width="1450" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SSC_di" bpmnElement="Lane_SSC" isHorizontal="true">
+        <dc:Bounds x="160" y="320" width="1450" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_OT_di" bpmnElement="Lane_OT" isHorizontal="true">
+        <dc:Bounds x="160" y="200" width="1450" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_TM_di" bpmnElement="Lane_TM" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1450" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_Promo_di" bpmnElement="Start_Promo">
+        <dc:Bounds x="202" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="167" y="163" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_SenderChoice_di" bpmnElement="Gw_SenderChoice" isMarkerVisible="true">
+        <dc:Bounds x="285" y="115" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="260" y="90" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TM_Send_di" bpmnElement="Task_TM_Send">
+        <dc:Bounds x="365" y="100" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_OT_Send_di" bpmnElement="Task_OT_Send">
+        <dc:Bounds x="365" y="220" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_SendMerge_di" bpmnElement="Gw_SendMerge" isMarkerVisible="true">
+        <dc:Bounds x="545" y="395" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AssignIDs_di" bpmnElement="Task_AssignIDs">
+        <dc:Bounds x="635" y="380" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendToCRM_di" bpmnElement="Task_SendToCRM">
+        <dc:Bounds x="815" y="380" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NotifyPartners_di" bpmnElement="Task_NotifyPartners">
+        <dc:Bounds x="1325" y="380" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CRM_Create_di" bpmnElement="Task_CRM_Create">
+        <dc:Bounds x="985" y="550" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CRM_Notify_di" bpmnElement="Task_CRM_Notify">
+        <dc:Bounds x="1155" y="550" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PRT_Receive_di" bpmnElement="Task_PRT_Receive">
+        <dc:Bounds x="1325" y="685" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_PRT_di" bpmnElement="End_PRT">
+        <dc:Bounds x="1522" y="707" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1487" y="748" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Note_AssignIDs_di" bpmnElement="Note_AssignIDs">
+        <dc:Bounds x="200" y="325" width="320" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Note_Multi_di" bpmnElement="Note_Multi">
+        <dc:Bounds x="200" y="665" width="360" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_Sender_di" bpmnElement="Flow_Start_Sender">
+        <di:waypoint x="238" y="140" />
+        <di:waypoint x="285" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Sender_TM_di" bpmnElement="Flow_Sender_TM">
+        <di:waypoint x="335" y="140" />
+        <di:waypoint x="365" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="350" y="118" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Sender_OT_di" bpmnElement="Flow_Sender_OT">
+        <di:waypoint x="310" y="165" />
+        <di:waypoint x="310" y="210" />
+        <di:waypoint x="430" y="210" />
+        <di:waypoint x="430" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="316" y="177" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TM_Merge_di" bpmnElement="Flow_TM_Merge">
+        <di:waypoint x="430" y="180" />
+        <di:waypoint x="520" y="180" />
+        <di:waypoint x="520" y="420" />
+        <di:waypoint x="545" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OT_Merge_di" bpmnElement="Flow_OT_Merge">
+        <di:waypoint x="430" y="300" />
+        <di:waypoint x="430" y="365" />
+        <di:waypoint x="570" y="365" />
+        <di:waypoint x="570" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Merge_Assign_di" bpmnElement="Flow_Merge_Assign">
+        <di:waypoint x="595" y="420" />
+        <di:waypoint x="635" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Assign_SendToCRM_di" bpmnElement="Flow_Assign_SendToCRM">
+        <di:waypoint x="765" y="420" />
+        <di:waypoint x="815" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendToCRM_Create_di" bpmnElement="Flow_SendToCRM_Create">
+        <di:waypoint x="880" y="460" />
+        <di:waypoint x="880" y="590" />
+        <di:waypoint x="985" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Create_Notify_di" bpmnElement="Flow_Create_Notify">
+        <di:waypoint x="1115" y="590" />
+        <di:waypoint x="1155" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Notify_NotifyPRT_di" bpmnElement="Flow_Notify_NotifyPRT">
+        <di:waypoint x="1285" y="590" />
+        <di:waypoint x="1300" y="590" />
+        <di:waypoint x="1300" y="420" />
+        <di:waypoint x="1325" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotifyPRT_Receive_di" bpmnElement="Flow_NotifyPRT_Receive">
+        <di:waypoint x="1390" y="460" />
+        <di:waypoint x="1390" y="685" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Receive_End_di" bpmnElement="Flow_Receive_End">
+        <di:waypoint x="1455" y="725" />
+        <di:waypoint x="1522" y="725" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Note_AssignIDs_di" bpmnElement="Assoc_Note_AssignIDs">
+        <di:waypoint x="360" y="350" />
+        <di:waypoint x="700" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Note_Multi_di" bpmnElement="Assoc_Note_Multi">
+        <di:waypoint x="380" y="725" />
+        <di:waypoint x="1390" y="420" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

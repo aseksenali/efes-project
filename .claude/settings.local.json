@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(mkdir -p _design_promo)",
+      "Bash(tar -tzf /Users/asetseksenali/.claude/projects/-Users-asetseksenali-Desktop-efes/70904e0c-dc61-451e-adc8-d78133da4acd/tool-results/webfetch-1779039218047-zo0nux.bin)",
+      "Bash(mkdir -p pptx_build)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"const s=require\\('sharp'\\); s\\('../assets/efes-badge.png'\\).metadata\\(\\).then\\(m=>console.log\\('badge',m.width+'x'+m.height,m.format\\)\\).catch\\(e=>console.log\\('ERR',e.message\\)\\)\")",
+      "Read(//Applications/**)",
+      "Bash(mdfind -name \"soffice\")",
+      "Bash(node -e \"const s=require\\('/Users/asetseksenali/Downloads/efes/pptx_build/node_modules/sharp'\\); s\\('/Users/asetseksenali/Downloads/efes/assets/efes-badge.png'\\).metadata\\(\\).then\\(m=>console.log\\('badge',m.width+'x'+m.height,m.format,'hasAlpha='+m.hasAlpha\\)\\)\")",
+      "Bash(brew install *)",
+      "Bash(node build.js)",
+      "Bash(python -c \"import zipfile,os; zipfile.ZipFile\\('Efes_Nexus.pptx'\\).extractall\\('unpacked'\\); print\\('OK'\\)\")",
+      "Bash(ls unpacked/ppt/charts/)",
+      "Bash(ls unpacked/ppt/embeddings/)",
+      "Bash(grep -n -E \"useStateApp|useMemoApp|useEffectApp|const \\\\{ useState|useState,|React.useState|= React;\" index.dev.html)",
+      "PowerShell(python -m markitdown \"C:\\\\Users\\\\Aset\\\\Downloads\\\\Telegram Desktop\\\\efes \\(5\\)\\\\efes\\\\Efes_Nexus_new.pptx\")"
+    ]
+  }
+}

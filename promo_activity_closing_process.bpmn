@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" id="Definitions_PromoClosing" targetNamespace="http://camunda.org/examples" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:process id="Process_PromoClosing" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_CRM" name="CRM support specialist">
+        <bpmn:flowNodeRef>Start_MonthClosed</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CRM_Notify</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SSCS" name="Sales system communication supervisor">
+        <bpmn:flowNodeRef>Task_SSCSup_Upload</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SSC" name="Sales systems communication specialist">
+        <bpmn:flowNodeRef>Task_RemindPartner</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Reminded</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Split</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_TakePriceList</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DownloadReport</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Calculate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_JoinValidate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Validate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Correct</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CreateOverall</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EmailSC</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitRequests</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EmailFixes</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitCorrected</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BoundaryTimer_14th</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_PRT" name="Partner">
+        <bpmn:flowNodeRef>Task_Partner_SendZapros</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Partner_FixZapros</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SC" name="Sales controlling">
+        <bpmn:flowNodeRef>Task_SC_Compensate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Compensated</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_MonthClosed" name="Month closed in Panorama" />
+    <bpmn:task id="Task_CRM_Notify" name="Email SSC: month closed" />
+    <bpmn:task id="Task_SSCSup_Upload" name="Upload actual price list&#10;to shared folder" />
+    <bpmn:task id="Task_RemindPartner" name="Email reminder to&#10;non-responding Partner" />
+    <bpmn:endEvent id="End_Reminded" name="Partner reminded" />
+    <bpmn:parallelGateway id="Gw_Split" />
+    <bpmn:task id="Task_TakePriceList" name="Take price list&#10;from shared folder" />
+    <bpmn:task id="Task_DownloadReport" name="Download 33235&#10;report (Panorama)" />
+    <bpmn:task id="Task_Calculate" name="Calculate actual prices&#10;∑(liters × period price)" />
+    <bpmn:parallelGateway id="Gw_JoinValidate" />
+    <bpmn:task id="Task_Validate" name="Validate «Zapros»&#10;against calculation" />
+    <bpmn:exclusiveGateway id="Gw_Correct" name="All «Zapros» correct?" />
+    <bpmn:task id="Task_CreateOverall" name="Create overall file:&#10;totals by channel &amp; Partner" />
+    <bpmn:task id="Task_EmailSC" name="Email Sales controlling&#10;for compensation" />
+    <bpmn:receiveTask id="Task_WaitRequests" name="Wait for «Zapros»&#10;from all Partners" messageRef="Msg_Zapros" />
+    <bpmn:task id="Task_EmailFixes" name="Email Partner with&#10;specific fixes" />
+    <bpmn:receiveTask id="Task_WaitCorrected" name="Wait for corrected&#10;«Zapros»" messageRef="Msg_ZaprosCorrected" />
+    <bpmn:task id="Task_Partner_SendZapros" name="Send «Zapros»&#10;(liters sold per&#10;promo-activity)" />
+    <bpmn:task id="Task_Partner_FixZapros" name="Resend corrected&#10;«Zapros»" />
+    <bpmn:task id="Task_SC_Compensate" name="Execute compensation" />
+    <bpmn:endEvent id="End_Compensated" name="Compensation completed" />
+    <bpmn:boundaryEvent id="BoundaryTimer_14th" attachedToRef="Task_WaitRequests" cancelActivity="false" name="14th of month elapsed">
+      <bpmn:timerEventDefinition id="BoundaryTimer_14th_def">
+        <bpmn:timeCycle id="BoundaryTimer_14th_val">0 0 0 14 * ?</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_Start_Notify" sourceRef="Start_MonthClosed" targetRef="Task_CRM_Notify" />
+    <bpmn:sequenceFlow id="Flow_Notify_Split" sourceRef="Task_CRM_Notify" targetRef="Gw_Split" />
+    <bpmn:sequenceFlow id="Flow_Split_Upload" sourceRef="Gw_Split" targetRef="Task_SSCSup_Upload" />
+    <bpmn:sequenceFlow id="Flow_Upload_Take" sourceRef="Task_SSCSup_Upload" targetRef="Task_TakePriceList" />
+    <bpmn:sequenceFlow id="Flow_Take_Download" sourceRef="Task_TakePriceList" targetRef="Task_DownloadReport" />
+    <bpmn:sequenceFlow id="Flow_Download_Calc" sourceRef="Task_DownloadReport" targetRef="Task_Calculate" />
+    <bpmn:sequenceFlow id="Flow_Calc_Join" sourceRef="Task_Calculate" targetRef="Gw_JoinValidate" />
+    <bpmn:sequenceFlow id="Flow_Split_PartnerSend" sourceRef="Gw_Split" targetRef="Task_Partner_SendZapros" />
+    <bpmn:sequenceFlow id="Flow_PartnerSend_Wait" sourceRef="Task_Partner_SendZapros" targetRef="Task_WaitRequests" />
+    <bpmn:sequenceFlow id="Flow_Wait_Join" sourceRef="Task_WaitRequests" targetRef="Gw_JoinValidate" />
+    <bpmn:sequenceFlow id="Flow_Boundary_Remind" sourceRef="BoundaryTimer_14th" targetRef="Task_RemindPartner" />
+    <bpmn:sequenceFlow id="Flow_Remind_End" sourceRef="Task_RemindPartner" targetRef="End_Reminded" />
+    <bpmn:sequenceFlow id="Flow_Join_Validate" sourceRef="Gw_JoinValidate" targetRef="Task_Validate" />
+    <bpmn:sequenceFlow id="Flow_Validate_Correct" sourceRef="Task_Validate" targetRef="Gw_Correct" />
+    <bpmn:sequenceFlow id="Flow_Correct_Yes" sourceRef="Gw_Correct" targetRef="Task_CreateOverall" name="Yes" />
+    <bpmn:sequenceFlow id="Flow_Correct_No" sourceRef="Gw_Correct" targetRef="Task_EmailFixes" name="No" />
+    <bpmn:sequenceFlow id="Flow_EmailFixes_Fix" sourceRef="Task_EmailFixes" targetRef="Task_Partner_FixZapros" />
+    <bpmn:sequenceFlow id="Flow_Fix_WaitCorr" sourceRef="Task_Partner_FixZapros" targetRef="Task_WaitCorrected" />
+    <bpmn:sequenceFlow id="Flow_WaitCorr_Validate" sourceRef="Task_WaitCorrected" targetRef="Task_Validate" />
+    <bpmn:sequenceFlow id="Flow_Overall_EmailSC" sourceRef="Task_CreateOverall" targetRef="Task_EmailSC" />
+    <bpmn:sequenceFlow id="Flow_EmailSC_Compensate" sourceRef="Task_EmailSC" targetRef="Task_SC_Compensate" />
+    <bpmn:sequenceFlow id="Flow_Compensate_End" sourceRef="Task_SC_Compensate" targetRef="End_Compensated" />
+    <bpmn:textAnnotation id="Note_PartnerRule">
+      <bpmn:text>Until the 14th of each month every Partner sends a «Zapros» listing the liters sold per promo-activity. If a «Zapros» is incorrect, the Partner receives an email with specific fixes and resends a corrected version.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_PartnerRule" sourceRef="Note_PartnerRule" targetRef="Task_Partner_SendZapros" />
+    <bpmn:textAnnotation id="Note_Calculation">
+      <bpmn:text>Calculation: for each promo-activity, sum (liters × price in the matching period) using the price-list history.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_Calculation" sourceRef="Note_Calculation" targetRef="Task_Calculate" />
+  </bpmn:process>
+  <bpmn:message id="Msg_Zapros" name="ZaprosFromPartner">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=partnerId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Msg_ZaprosCorrected" name="CorrectedZaprosFromPartner">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=partnerId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_PromoClosing">
+      <bpmndi:BPMNShape id="Lane_CRM_di" bpmnElement="Lane_CRM" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2010" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SSCS_di" bpmnElement="Lane_SSCS" isHorizontal="true">
+        <dc:Bounds x="160" y="200" width="2010" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SSC_di" bpmnElement="Lane_SSC" isHorizontal="true">
+        <dc:Bounds x="160" y="320" width="2010" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_PRT_di" bpmnElement="Lane_PRT" isHorizontal="true">
+        <dc:Bounds x="160" y="720" width="2010" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SC_di" bpmnElement="Lane_SC" isHorizontal="true">
+        <dc:Bounds x="160" y="850" width="2010" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_MonthClosed_di" bpmnElement="Start_MonthClosed">
+        <dc:Bounds x="182" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="147" y="163" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CRM_Notify_di" bpmnElement="Task_CRM_Notify">
+        <dc:Bounds x="275" y="100" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SSCSup_Upload_di" bpmnElement="Task_SSCSup_Upload">
+        <dc:Bounds x="575" y="220" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RemindPartner_di" bpmnElement="Task_RemindPartner">
+        <dc:Bounds x="575" y="320" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Reminded_di" bpmnElement="End_Reminded">
+        <dc:Bounds x="802" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="767" y="383" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Split_di" bpmnElement="Gw_Split">
+        <dc:Bounds x="455" y="435" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TakePriceList_di" bpmnElement="Task_TakePriceList">
+        <dc:Bounds x="755" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DownloadReport_di" bpmnElement="Task_DownloadReport">
+        <dc:Bounds x="905" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Calculate_di" bpmnElement="Task_Calculate">
+        <dc:Bounds x="1055" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_JoinValidate_di" bpmnElement="Gw_JoinValidate">
+        <dc:Bounds x="1235" y="435" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Validate_di" bpmnElement="Task_Validate">
+        <dc:Bounds x="1305" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Correct_di" bpmnElement="Gw_Correct">
+        <dc:Bounds x="1475" y="435" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1445" y="410" width="120" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CreateOverall_di" bpmnElement="Task_CreateOverall">
+        <dc:Bounds x="1575" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EmailSC_di" bpmnElement="Task_EmailSC">
+        <dc:Bounds x="1735" y="420" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitRequests_di" bpmnElement="Task_WaitRequests">
+        <dc:Bounds x="575" y="520" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EmailFixes_di" bpmnElement="Task_EmailFixes">
+        <dc:Bounds x="1435" y="630" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitCorrected_di" bpmnElement="Task_WaitCorrected">
+        <dc:Bounds x="1305" y="630" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Partner_SendZapros_di" bpmnElement="Task_Partner_SendZapros">
+        <dc:Bounds x="575" y="745" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Partner_FixZapros_di" bpmnElement="Task_Partner_FixZapros">
+        <dc:Bounds x="1435" y="745" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SC_Compensate_di" bpmnElement="Task_SC_Compensate">
+        <dc:Bounds x="1895" y="870" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Compensated_di" bpmnElement="End_Compensated">
+        <dc:Bounds x="2092" y="892" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2057" y="933" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryTimer_14th_di" bpmnElement="BoundaryTimer_14th">
+        <dc:Bounds x="622" y="502" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="587" y="474" width="110" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_Notify_di" bpmnElement="Flow_Start_Notify">
+        <di:waypoint x="218" y="140" />
+        <di:waypoint x="275" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Notify_Split_di" bpmnElement="Flow_Notify_Split">
+        <di:waypoint x="340" y="180" />
+        <di:waypoint x="480" y="180" />
+        <di:waypoint x="480" y="435" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Split_Upload_di" bpmnElement="Flow_Split_Upload">
+        <di:waypoint x="480" y="435" />
+        <di:waypoint x="480" y="310" />
+        <di:waypoint x="640" y="310" />
+        <di:waypoint x="640" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Upload_Take_di" bpmnElement="Flow_Upload_Take">
+        <di:waypoint x="640" y="300" />
+        <di:waypoint x="640" y="310" />
+        <di:waypoint x="730" y="310" />
+        <di:waypoint x="730" y="410" />
+        <di:waypoint x="820" y="410" />
+        <di:waypoint x="820" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Take_Download_di" bpmnElement="Flow_Take_Download">
+        <di:waypoint x="885" y="460" />
+        <di:waypoint x="905" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Download_Calc_di" bpmnElement="Flow_Download_Calc">
+        <di:waypoint x="1035" y="460" />
+        <di:waypoint x="1055" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Calc_Join_di" bpmnElement="Flow_Calc_Join">
+        <di:waypoint x="1185" y="460" />
+        <di:waypoint x="1235" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Split_PartnerSend_di" bpmnElement="Flow_Split_PartnerSend">
+        <di:waypoint x="480" y="485" />
+        <di:waypoint x="480" y="785" />
+        <di:waypoint x="575" y="785" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_PartnerSend_Wait_di" bpmnElement="Flow_PartnerSend_Wait">
+        <di:waypoint x="640" y="745" />
+        <di:waypoint x="640" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Wait_Join_di" bpmnElement="Flow_Wait_Join">
+        <di:waypoint x="705" y="560" />
+        <di:waypoint x="1260" y="560" />
+        <di:waypoint x="1260" y="485" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Boundary_Remind_di" bpmnElement="Flow_Boundary_Remind">
+        <di:waypoint x="640" y="502" />
+        <di:waypoint x="640" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Remind_End_di" bpmnElement="Flow_Remind_End">
+        <di:waypoint x="705" y="360" />
+        <di:waypoint x="802" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_Validate_di" bpmnElement="Flow_Join_Validate">
+        <di:waypoint x="1285" y="460" />
+        <di:waypoint x="1305" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Validate_Correct_di" bpmnElement="Flow_Validate_Correct">
+        <di:waypoint x="1435" y="460" />
+        <di:waypoint x="1475" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Correct_Yes_di" bpmnElement="Flow_Correct_Yes">
+        <di:waypoint x="1525" y="460" />
+        <di:waypoint x="1575" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1550" y="438" width="60" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Correct_No_di" bpmnElement="Flow_Correct_No">
+        <di:waypoint x="1500" y="485" />
+        <di:waypoint x="1500" y="630" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1506" y="547" width="60" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EmailFixes_Fix_di" bpmnElement="Flow_EmailFixes_Fix">
+        <di:waypoint x="1500" y="710" />
+        <di:waypoint x="1500" y="745" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Fix_WaitCorr_di" bpmnElement="Flow_Fix_WaitCorr">
+        <di:waypoint x="1435" y="785" />
+        <di:waypoint x="1370" y="785" />
+        <di:waypoint x="1370" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitCorr_Validate_di" bpmnElement="Flow_WaitCorr_Validate">
+        <di:waypoint x="1370" y="630" />
+        <di:waypoint x="1370" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Overall_EmailSC_di" bpmnElement="Flow_Overall_EmailSC">
+        <di:waypoint x="1705" y="460" />
+        <di:waypoint x="1735" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EmailSC_Compensate_di" bpmnElement="Flow_EmailSC_Compensate">
+        <di:waypoint x="1800" y="500" />
+        <di:waypoint x="1800" y="910" />
+        <di:waypoint x="1895" y="910" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Compensate_End_di" bpmnElement="Flow_Compensate_End">
+        <di:waypoint x="2025" y="910" />
+        <di:waypoint x="2092" y="910" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Note_PartnerRule_di" bpmnElement="Note_PartnerRule">
+        <dc:Bounds x="200" y="725" width="360" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_Note_PartnerRule_di" bpmnElement="Assoc_Note_PartnerRule">
+        <di:waypoint x="380" y="785" />
+        <di:waypoint x="640" y="785" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Note_Calculation_di" bpmnElement="Note_Calculation">
+        <dc:Bounds x="1020" y="630" width="320" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Assoc_Note_Calculation_di" bpmnElement="Assoc_Note_Calculation">
+        <di:waypoint x="1180" y="665" />
+        <di:waypoint x="1120" y="460" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

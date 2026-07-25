@@ -1,0 +1,21 @@
+# dependencies (restore with npm install)
+node_modules/
+
+# regenerable render outputs
+render_final/
+en_build/en_img/
+en_build/orig_img/
+en_build/en_final/
+proposals/render/
+pptx_build/gen/
+
+# Office lock files
+~$*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# temp / scratch
+_to_delete/
+*.tmp

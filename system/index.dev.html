@@ -1,0 +1,3969 @@
+<!doctype html>
+<!-- Efes Nexus — EDITABLE SOURCE. Loads React/Babel/TanStack from CDN (needs internet). Edit here, then re-inline to regenerate the self-contained index.html. -->
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<title>Efes — Менеджер промо-активностей</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* Efes Nexus — Efes
+   Stripe/Mercury-style enterprise palette anchored on #004c8d */
+
+:root {
+  --brand-900: #002a52;
+  --brand-800: #003a73;
+  --brand-700: #004c8d;
+  --brand-600: #1166a8;
+  --brand-500: #2d83c4;
+  --brand-100: #e6eff7;
+  --brand-50:  #f3f7fb;
+
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #fbfcfd;
+  --border: #e6e8ec;
+  --border-strong: #d6d9df;
+  --text: #15181c;
+  --text-2: #4a5160;
+  --text-3: #7a8294;
+  --text-muted: #9aa1ad;
+
+  --ok-bg: #e9f7ee;
+  --ok-fg: #0a7a3b;
+  --ok-border: #b9e3c8;
+
+  --warn-bg: #fdf3e0;
+  --warn-fg: #8a5a06;
+  --warn-border: #f0d9a3;
+
+  --bad-bg: #fdeaea;
+  --bad-fg: #a51e1e;
+  --bad-border: #f1c2c2;
+
+  --neutral-bg: #f0f1f3;
+  --neutral-fg: #4a5160;
+  --neutral-border: #dfe2e7;
+
+  --info-bg: #e8f1fa;
+  --info-fg: #0e4f8a;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 1px rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 18px 48px rgba(15, 23, 42, 0.10), 0 6px 16px rgba(15, 23, 42, 0.06);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+[data-theme='dark'] {
+  --bg: #0c1117;
+  --surface: #141a22;
+  --surface-2: #1a212b;
+  --border: #232b37;
+  --border-strong: #2e3743;
+  --text: #ecf0f5;
+  --text-2: #b8c0cc;
+  --text-3: #8a93a3;
+  --text-muted: #6c7586;
+
+  --brand-100: #0e2a47;
+  --brand-50:  #0a1d31;
+
+  --ok-bg: #0f2c1d;
+  --ok-fg: #4cc480;
+  --ok-border: #1d4a32;
+
+  --warn-bg: #2d2210;
+  --warn-fg: #e7b563;
+  --warn-border: #4a3a1c;
+
+  --bad-bg: #2c1414;
+  --bad-fg: #ef7878;
+  --bad-border: #4a2222;
+
+  --neutral-bg: #1d242e;
+  --neutral-fg: #b8c0cc;
+  --neutral-border: #2c3441;
+
+  --info-bg: #0e2a47;
+  --info-fg: #6db0ec;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-md: 0 6px 16px rgba(0,0,0,.4);
+  --shadow-lg: 0 18px 48px rgba(0,0,0,.55);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body { min-height: 100vh; }
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; color: inherit; }
+
+/* ===== App shell ===== */
+.app {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 8px 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.brand-mark {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(140deg, var(--brand-700), var(--brand-500));
+  display: grid; place-items: center;
+  color: #fff; font-weight: 700; font-size: 14px;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong { font-size: 13px; color: var(--text); }
+.brand-text span { font-size: 11px; color: var(--text-3); }
+
+.nav-section-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-3); padding: 14px 10px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.nav-item:hover { background: var(--brand-50); color: var(--text); }
+.nav-item.active {
+  background: var(--brand-100);
+  color: var(--brand-700);
+  border-color: color-mix(in oklab, var(--brand-700) 18%, transparent);
+}
+[data-theme='dark'] .nav-item.active { color: #6db0ec; }
+.nav-item .nav-count {
+  margin-left: auto;
+  font-size: 11px;
+  background: var(--neutral-bg);
+  color: var(--text-2);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.nav-item.active .nav-count {
+  background: color-mix(in oklab, var(--brand-700) 18%, transparent);
+  color: var(--brand-700);
+}
+
+.user-card {
+  margin-top: auto;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #6e8cb1, #305d8e);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 600;
+}
+.user-meta { line-height: 1.2; min-width: 0; }
+.user-meta strong { font-size: 12.5px; display: block; }
+.user-meta span { font-size: 11px; color: var(--text-3); }
+
+/* ===== Main ===== */
+.main { display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+  height: 60px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 14px;
+  position: sticky; top: 0; z-index: 20;
+}
+.topbar .crumbs { font-size: 13px; color: var(--text-3); }
+.topbar .crumbs strong { color: var(--text); font-weight: 600; }
+.topbar .search {
+  flex: 1; max-width: 480px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin-left: 24px;
+}
+.topbar .search input {
+  border: none; background: transparent; outline: none;
+  flex: 1; font-size: 13px;
+}
+.topbar .search-icon { color: var(--text-3); flex: none; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* ===== Components ===== */
+.lang-toggle {
+  display: inline-flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+}
+.lang-toggle button {
+  border: none; background: transparent; padding: 5px 10px;
+  font-size: 12px; font-weight: 600; color: var(--text-3);
+  border-radius: 6px;
+}
+.lang-toggle button.active {
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  transition: background .12s ease, border-color .12s ease, transform .05s ease;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn.primary {
+  background: var(--brand-700);
+  border-color: var(--brand-700);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.btn.primary:hover { background: var(--brand-800); border-color: var(--brand-800); }
+.btn.ghost { border-color: transparent; background: transparent; }
+.btn.ghost:hover { background: var(--brand-50); }
+.btn.danger { color: var(--bad-fg); border-color: var(--bad-border); background: var(--bad-bg); }
+.btn.danger:hover { background: color-mix(in oklab, var(--bad-bg) 80%, var(--bad-fg) 6%); }
+.btn.sm { padding: 5px 9px; font-size: 12px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--neutral-border);
+  background: var(--neutral-bg);
+  color: var(--neutral-fg);
+  letter-spacing: 0.01em;
+}
+.badge.dot::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+}
+.badge.ok    { background: var(--ok-bg);    color: var(--ok-fg);    border-color: var(--ok-border); }
+.badge.warn  { background: var(--warn-bg);  color: var(--warn-fg);  border-color: var(--warn-border); }
+.badge.bad   { background: var(--bad-bg);   color: var(--bad-fg);   border-color: var(--bad-border); }
+.badge.info  { background: var(--info-bg);  color: var(--info-fg);  border-color: color-mix(in oklab, var(--info-fg) 25%, transparent); }
+.badge.draft { background: var(--neutral-bg); color: var(--text-3); }
+
+.badge-type {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--brand-50);
+  border-color: color-mix(in oklab, var(--brand-700) 20%, transparent);
+  color: var(--brand-700);
+}
+[data-theme='dark'] .badge-type { color: #6db0ec; }
+
+.code-tag {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--text-3);
+}
+
+/* ===== Page ===== */
+.page { padding: 24px 28px 60px; max-width: 1500px; }
+.page-title {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; flex-wrap: wrap; gap: 14px;
+}
+.page-title h1 {
+  font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em;
+}
+.page-title p { margin: 2px 0 0; color: var(--text-3); font-size: 13px; }
+.page-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ===== Stat tiles ===== */
+.stats {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 18px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.stat .stat-label { font-size: 12px; color: var(--text-3); font-weight: 500; }
+.stat .stat-value {
+  font-size: 26px; font-weight: 600; letter-spacing: -0.02em;
+  font-feature-settings: 'tnum';
+}
+.stat .stat-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.stat .stat-sub b { color: var(--ok-fg); font-weight: 600; }
+.stat::after {
+  content: ''; position: absolute; right: -40px; bottom: -40px;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--brand-700) 7%, transparent), transparent 70%);
+}
+
+/* ===== Filters / table ===== */
+.toolbar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 10px 14px;
+  border-bottom: none;
+  flex-wrap: wrap;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; padding: 5px 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 999px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+.chip:hover { background: var(--surface-2); }
+.chip.active {
+  background: var(--brand-100);
+  color: var(--brand-700);
+  border-color: color-mix(in oklab, var(--brand-700) 25%, transparent);
+}
+[data-theme='dark'] .chip.active { color: #6db0ec; }
+.chip .x { color: var(--text-3); margin-left: 4px; }
+
+.toolbar-spacer { flex: 1; }
+
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+}
+table.data {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+table.data thead th {
+  text-align: left; font-weight: 600; font-size: 11.5px;
+  color: var(--text-3); text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  white-space: nowrap;
+}
+table.data tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.data tbody tr:last-child td { border-bottom: none; }
+table.data tbody tr { transition: background .08s ease; }
+table.data tbody tr:hover { background: var(--brand-50); cursor: pointer; }
+table.data tbody tr.selected { background: var(--brand-50); }
+
+.cell-stack { display: flex; flex-direction: column; line-height: 1.25; }
+.cell-stack .sub { color: var(--text-3); font-size: 12px; }
+.cell-num { font-family: var(--font-mono); font-feature-settings: 'tnum'; }
+
+/* progress bar */
+.progress {
+  height: 6px; background: var(--neutral-bg); border-radius: 999px; overflow: hidden;
+  width: 120px;
+}
+.progress > span {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--brand-600), var(--brand-500));
+  border-radius: 999px;
+}
+.progress.warn > span { background: linear-gradient(90deg, #d18316, #e7a849); }
+.progress.bad > span  { background: linear-gradient(90deg, #b03030, #d05858); }
+
+/* ===== Drawer ===== */
+.drawer-mask {
+  position: fixed; inset: 0; background: rgba(15,23,42,.32);
+  backdrop-filter: blur(2px);
+  z-index: 80;
+}
+.drawer {
+  position: fixed; top: 0; right: 0; height: 100vh;
+  width: min(720px, 92vw);
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  z-index: 90;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  animation: slideIn .22s ease;
+}
+.drawer.wide { width: min(900px, 95vw); }
+@keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+.drawer-head {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.drawer-head h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.drawer-head .sub { color: var(--text-3); font-size: 12px; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 22px; }
+.drawer-foot {
+  border-top: 1px solid var(--border);
+  padding: 12px 22px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface-2);
+}
+.icon-btn {
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--text-2);
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
+
+/* ===== Detail layout ===== */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 22px;
+}
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.section h3 {
+  font-size: 13px; font-weight: 600; margin: 0 0 12px;
+  color: var(--text-2);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.kv-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px;
+}
+.kv { display: flex; flex-direction: column; gap: 2px; }
+.kv .k { font-size: 11.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.kv .v { font-size: 14px; color: var(--text); font-weight: 500; }
+.kv.editable .v { display: flex; align-items: center; gap: 6px; }
+.kv.editable .edit-btn {
+  opacity: 0; transition: opacity .12s;
+  border: none; background: transparent; color: var(--text-3); padding: 2px;
+}
+.kv.editable:hover .edit-btn { opacity: 1; }
+
+.ops-list { display: grid; gap: 8px; grid-template-columns: 1fr; }
+.op-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.op-row:hover { background: var(--brand-50); }
+.op-row strong { font-size: 13px; font-weight: 600; }
+.op-row .desc { font-size: 12px; color: var(--text-3); }
+
+.timeline { display: flex; flex-direction: column; gap: 10px; }
+.tl-item {
+  display: grid; grid-template-columns: 14px 1fr; gap: 10px; font-size: 12.5px;
+  position: relative;
+}
+.tl-item::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--brand-500);
+  margin-top: 6px; margin-left: 3px;
+}
+.tl-item .when { color: var(--text-3); font-size: 11.5px; }
+
+/* ===== Tree picker ===== */
+.tree { font-size: 13px; }
+.tree-node {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 6px;
+}
+.tree-node:hover { background: var(--brand-50); }
+.tree-node .twisty {
+  width: 16px; height: 16px; display: grid; place-items: center;
+  color: var(--text-3); cursor: pointer;
+}
+.tree-node label { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
+.tree-node .count { font-size: 11px; color: var(--text-3); }
+.tree-children { padding-left: 22px; border-left: 1px dashed var(--border); margin-left: 11px; }
+
+/* ===== Wizard ===== */
+.steps {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 22px;
+}
+.step {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 0;
+  margin-right: 28px;
+  font-size: 13px; color: var(--text-3); font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.step .num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--neutral-bg); color: var(--text-3);
+  display: grid; place-items: center; font-size: 11px; font-weight: 700;
+}
+.step.active { color: var(--brand-700); border-bottom-color: var(--brand-700); }
+.step.active .num { background: var(--brand-700); color: #fff; }
+.step.done .num { background: var(--ok-fg); color: #fff; }
+.step.done { color: var(--text-2); }
+
+/* ===== Form bits ===== */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.field .hint { font-size: 11.5px; color: var(--text-3); }
+.input, .textarea, .select {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .12s, box-shadow .12s;
+}
+.input:focus, .textarea:focus, .select:focus {
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-700) 14%, transparent);
+}
+.textarea { min-height: 100px; resize: vertical; font-family: var(--font-sans); }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.type-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.type-card:hover { border-color: var(--brand-500); }
+.type-card.selected {
+  border-color: var(--brand-700);
+  background: var(--brand-50);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-700) 14%, transparent);
+}
+.type-card.disabled { opacity: 0.45; cursor: not-allowed; }
+.type-card .t-title { font-size: 14px; font-weight: 600; }
+.type-card .t-desc { font-size: 12px; color: var(--text-3); }
+
+/* AI panel */
+.ai-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  background: linear-gradient(160deg, var(--brand-50), var(--surface));
+}
+[data-theme='dark'] .ai-card { background: var(--surface-2); }
+.ai-card .ai-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ai-card .ai-head strong { font-size: 13px; }
+.ai-card .conf {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: var(--text-3); margin-left: auto;
+  font-family: var(--font-mono);
+}
+.ai-card .conf-bar {
+  width: 60px; height: 4px; background: var(--neutral-bg); border-radius: 2px; overflow: hidden;
+}
+.ai-card .conf-bar > span { display: block; height: 100%; background: var(--brand-600); }
+.ai-card .ai-notes { font-size: 12.5px; color: var(--text-2); line-height: 1.55; }
+
+/* Email preview */
+.email {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.email-head {
+  display: grid; grid-template-columns: 80px 1fr; gap: 4px 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 12.5px;
+}
+.email-head .lk { color: var(--text-3); }
+.email-head .vl { color: var(--text); }
+.email-body { padding: 16px; font-size: 13px; white-space: pre-wrap; line-height: 1.55; }
+
+/* product chip */
+.prod-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--border); background: var(--surface-2);
+  padding: 4px 8px; border-radius: 7px; font-size: 12px;
+  font-family: var(--font-mono);
+}
+.prod-chip .rm { color: var(--text-3); cursor: pointer; }
+
+/* selectable rows */
+.checkbox {
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface); cursor: pointer;
+  display: grid; place-items: center;
+  flex: none;
+}
+.checkbox.checked { background: var(--brand-700); border-color: var(--brand-700); }
+.checkbox.checked svg { color: #fff; }
+.checkbox.indet { background: var(--brand-700); border-color: var(--brand-700); }
+.checkbox.indet::after { content: ''; width: 8px; height: 2px; background: #fff; border-radius: 1px; }
+
+/* small dot list */
+.dot-list { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* AI variations switcher */
+.ai-evidence {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  font-size: 12.5px;
+}
+.ai-evidence .col {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; background: var(--surface);
+}
+.ai-evidence .col h5 {
+  margin: 0 0 6px; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-3); font-weight: 600;
+}
+.diff-row {
+  display: flex; justify-content: space-between; padding: 4px 0;
+  border-bottom: 1px dashed var(--border); font-family: var(--font-mono);
+}
+.diff-row:last-child { border-bottom: none; }
+.diff-row .delta { font-weight: 600; }
+.diff-row .delta.ok { color: var(--ok-fg); }
+.diff-row .delta.bad { color: var(--bad-fg); }
+.diff-row .delta.warn { color: var(--warn-fg); }
+
+/* AI conversational */
+.ai-chat { display: flex; flex-direction: column; gap: 10px; }
+.ai-msg {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 12.5px;
+}
+.ai-msg .av {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(140deg, var(--brand-700), var(--brand-500));
+  color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700;
+  flex: none;
+}
+.ai-msg .bubble {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 8px 12px; border-radius: 12px; line-height: 1.5;
+}
+
+/* Toast */
+.toast-wrap {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  z-index: 999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--text); color: var(--surface);
+  padding: 10px 16px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 8px;
+  animation: toastIn .22s ease;
+}
+@keyframes toastIn { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* misc */
+.empty {
+  padding: 36px; text-align: center; color: var(--text-3);
+}
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+.scroll-hint::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-hint::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+@media (max-width: 980px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .detail-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Enhanced promo table (group / sort / filter) ===== */
+.toolbar .tb-div { width: 1px; height: 22px; background: var(--border); flex: none; }
+.toolbar .tb-label { font-size: 11.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+.toolbar .tb-hint { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+.group-by { display: inline-flex; align-items: center; gap: 8px; }
+.select.compact { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+.toolbar.toolbar-sub { border-radius: 0; border-top: 1px solid var(--border); padding-top: 8px; padding-bottom: 8px; min-height: 43px; }
+
+table.data thead th.sortable { cursor: pointer; user-select: none; transition: background .08s ease, color .08s ease; }
+table.data thead th.sortable:hover { color: var(--text-2); background: var(--brand-50); }
+.th-inner { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.sort-ind { font-size: 9px; color: var(--text-muted); opacity: .55; }
+.sort-ind.asc, .sort-ind.desc { color: var(--brand-600); opacity: 1; }
+
+tr.group-row { cursor: pointer; }
+tr.group-row td { background: var(--surface-2); padding: 9px 14px; }
+tr.group-row:hover td { background: var(--brand-50); }
+.group-head { display: flex; align-items: center; gap: 10px; }
+.group-twisty { display: grid; place-items: center; color: var(--text-3); }
+.group-dim { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-3); font-weight: 600; }
+.group-val { font-size: 13px; font-weight: 600; color: var(--text); display: inline-flex; align-items: center; }
+.group-aggs { margin-left: auto; display: flex; gap: 16px; font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
+
+/* ===== Excel-style promo pivot (mirrors "NEW KZT PROMO status" workbook) ===== */
+.pivot-toolbar .rf-group { display: inline-flex; align-items: center; gap: 6px; }
+.pivot-toolbar .rf-group .tb-label { white-space: nowrap; }
+.pivot-toolbar .rf-arrow { color: var(--text-3); font-size: 14px; }
+
+.table-wrap.pivot-wrap { overflow: auto; max-height: 64vh; }
+table.data.pivot { border-collapse: separate; border-spacing: 0; min-width: 760px; }
+
+table.data.pivot thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-strong);
+  border-right: 1px solid var(--border);
+  padding: 9px 14px;
+}
+table.data.pivot thead th:last-child { border-right: none; }
+table.data.pivot th.num, table.data.pivot td.num {
+  text-align: right; font-family: var(--font-mono); font-feature-settings: 'tnum'; white-space: nowrap;
+}
+table.data.pivot td.num { color: var(--text-2); }
+table.data.pivot thead th.num .th-inner { justify-content: flex-end; }
+
+/* frozen first column */
+table.data.pivot th:first-child,
+table.data.pivot td:first-child {
+  position: sticky; left: 0; z-index: 1;
+  min-width: 240px; max-width: 360px;
+  border-right: 1px solid var(--border-strong);
+}
+table.data.pivot thead th:first-child { z-index: 3; }
+
+table.data.pivot tbody td { border-bottom: 1px solid var(--border); padding: 7px 14px; }
+
+.pv-name { display: flex; align-items: center; gap: 8px; }
+.pv-twisty { width: 14px; flex: none; text-align: center; color: var(--text-3); font-size: 10px; }
+.pv-label { font-weight: 600; }
+.pv-leaf-sub { color: var(--text-3); font-size: 12px; font-weight: 400; }
+
+/* level shading — the sticky first cell must repaint its own background */
+tr.pv-l1 > td, tr.pv-l1 > td:first-child { background: var(--brand-50); }
+tr.pv-l1 .pv-label { text-transform: uppercase; letter-spacing: .03em; font-size: 12px; color: var(--brand-800); }
+[data-theme='dark'] tr.pv-l1 .pv-label { color: #8fc1ee; }
+tr.pv-l2 > td, tr.pv-l2 > td:first-child { background: var(--surface-2); }
+tr.pv-leaf > td, tr.pv-leaf > td:first-child { background: var(--surface); }
+tr.pv-group { cursor: pointer; }
+tr.pv-group:hover > td, tr.pv-group:hover > td:first-child { background: var(--brand-100); }
+tr.pv-leaf:hover > td, tr.pv-leaf:hover > td:first-child { background: var(--brand-50); }
+
+/* Grand Total — frozen to the bottom edge like a pivot's Grand Total row */
+tr.pv-total > td {
+  position: sticky; bottom: 0; z-index: 2;
+  background: var(--neutral-bg); font-weight: 700;
+  border-top: 2px solid var(--border-strong); border-bottom: none;
+}
+tr.pv-total > td:first-child { z-index: 3; }
+
+/* conditional formatting on the realisation % column (Excel cellIs: >100% -> red) */
+td.pv-pct.cf-over { background: #fdeaea !important; color: #a51e1e !important; font-weight: 700; }
+td.pv-pct.cf-near { background: #fdf3e0 !important; color: #8a5a06 !important; }
+[data-theme='dark'] td.pv-pct.cf-over { background: color-mix(in oklab, #a51e1e 30%, transparent) !important; color: #ff9c9c !important; }
+[data-theme='dark'] td.pv-pct.cf-near { background: color-mix(in oklab, #8a5a06 32%, transparent) !important; color: #f0c277 !important; }
+
+/* ===== Promo slicers (multi-select filters) + flat activity table ===== */
+.promo-filters { display: grid; grid-template-columns: 1.7fr 1fr 1fr; gap: 14px; margin-bottom: 16px; align-items: start; }
+@media (max-width: 1080px) { .promo-filters { grid-template-columns: 1fr; } }
+
+.slicer { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-sm); }
+.slicer-head { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.slicer-head .sl-icon { color: var(--brand-600); display: grid; place-items: center; }
+.slicer-head .sl-title { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text-2); }
+.slicer-head .sl-count { font-size: 11px; font-weight: 700; color: var(--brand-700); background: var(--brand-100); border-radius: 999px; padding: 1px 8px; min-width: 18px; text-align: center; }
+[data-theme='dark'] .slicer-head .sl-count { color: #8fc1ee; }
+.slicer-head .sl-clear { margin-left: auto; border: none; background: transparent; cursor: pointer; color: var(--text-3); font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px; padding: 4px 7px; border-radius: 6px; }
+.slicer-head .sl-clear:hover:not(:disabled) { background: var(--brand-50); color: var(--text-2); }
+.slicer-head .sl-clear:disabled { opacity: .35; cursor: default; }
+
+.slicer-search { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.slicer-search .search-icon { color: var(--text-3); flex: none; display: grid; place-items: center; }
+.slicer-search input { border: none; background: transparent; outline: none; width: 100%; font-size: 12.5px; color: var(--text); font-family: inherit; }
+.slicer-search input::placeholder { color: var(--text-muted); }
+
+.slicer-body { display: flex; flex-wrap: wrap; gap: 7px; padding: 12px; overflow-y: auto; max-height: 168px; align-content: flex-start; }
+.slicer-body.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); box-shadow: inset 0 -20px 14px -14px color-mix(in oklab, var(--text) 14%, transparent); }
+.slicer-body::-webkit-scrollbar { width: 8px; }
+.slicer-body::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
+
+.sl-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 6px 11px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-2); border-radius: 999px; cursor: pointer; user-select: none; transition: background .1s ease, border-color .1s ease, color .1s ease; text-align: left; }
+.slicer-body.grid .sl-pill { border-radius: 8px; }
+.sl-pill .sl-pill-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sl-pill:hover { background: var(--brand-50); border-color: var(--brand-500); color: var(--text); }
+.sl-pill.on { background: var(--brand-700); border-color: var(--brand-700); color: #fff; box-shadow: var(--shadow-sm); }
+.sl-pill.on:hover { background: var(--brand-800); color: #fff; }
+.sl-pill .sl-check { width: 0; opacity: 0; overflow: hidden; display: inline-flex; transition: width .1s ease, opacity .1s ease; flex: none; }
+.sl-pill.on .sl-check { width: 11px; opacity: 1; }
+.sl-empty { font-size: 12px; color: var(--text-3); padding: 6px 4px; }
+[data-theme='dark'] .sl-pill { background: #1c242f; border-color: #3a4654; color: var(--text-2); }
+[data-theme='dark'] .sl-pill:hover { background: var(--brand-50); border-color: var(--brand-500); color: var(--text); }
+
+/* results / active-filter bar */
+.promo-resultbar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-bottom: none; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 11px 16px; }
+.promo-resultbar .rb-count { font-size: 13px; color: var(--text-2); }
+.promo-resultbar .rb-count b { color: var(--brand-700); font-size: 15px; font-weight: 700; margin-right: 3px; }
+[data-theme='dark'] .promo-resultbar .rb-count b { color: #8fc1ee; }
+.promo-resultbar .rb-metric { font-size: 12px; color: var(--text-3); }
+.promo-resultbar .rb-metric b { font-size: 13.5px; color: var(--text); font-family: var(--font-mono); font-feature-settings: 'tnum'; font-weight: 700; margin: 0 3px; }
+.promo-resultbar .rb-clear { margin-left: auto; font-size: 12px; color: var(--text-3); background: transparent; border: 1px solid var(--border-strong); border-radius: 8px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.promo-resultbar .rb-clear:hover { background: var(--brand-50); color: var(--text-2); border-color: var(--brand-500); }
+
+/* flat activity table */
+.table-wrap.flat-wrap { border-radius: 0 0 var(--radius-lg) var(--radius-lg); overflow: auto; max-height: 62vh; }
+table.data.flat { border-collapse: separate; border-spacing: 0; min-width: 880px; table-layout: fixed; }
+table.data.flat thead th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); border-bottom: 1px solid var(--border-strong); padding: 10px 14px; }
+table.data.flat th.num, table.data.flat td.num { text-align: right; font-family: var(--font-mono); font-feature-settings: 'tnum'; white-space: nowrap; color: var(--text-2); }
+table.data.flat thead th.num .th-inner { justify-content: flex-end; }
+table.data.flat tbody td { border-bottom: 1px solid var(--border); padding: 10px 14px; vertical-align: middle; }
+table.data.flat tbody tr:hover { background: var(--brand-50); cursor: pointer; }
+
+.fl-date { font-family: var(--font-mono); font-feature-settings: 'tnum'; font-size: 12.5px; color: var(--text-2); white-space: nowrap; }
+.fl-promo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.fl-promo .fl-name { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.fl-promo .fl-title { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-promo .fl-sub { font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-promo .code-tag { flex: none; }
+
+.fl-pct { width: 200px; }
+.fl-bar { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.fl-bar-val { font-family: var(--font-mono); font-feature-settings: 'tnum'; font-size: 12.5px; font-weight: 600; color: var(--text-2); width: 38px; text-align: right; flex: none; }
+.fl-bar-track { position: relative; width: 108px; height: 16px; background: var(--neutral-bg); border-radius: 4px; overflow: hidden; flex: none; }
+.fl-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--brand-600), var(--brand-500)); border-radius: 4px; min-width: 2px; }
+.fl-bar.near .fl-bar-fill { background: linear-gradient(90deg, #d18316, #e7a849); }
+.fl-bar.over .fl-bar-fill { background: linear-gradient(90deg, #b03030, #d05858); }
+.fl-bar.near .fl-bar-val { color: var(--warn-fg); }
+.fl-bar.over .fl-bar-val { color: var(--bad-fg); }
+td.fl-pct.near { background: var(--warn-bg); }
+td.fl-pct.over { background: var(--bad-bg); }
+[data-theme='dark'] td.fl-pct.near { background: color-mix(in oklab, #8a5a06 28%, transparent); }
+[data-theme='dark'] td.fl-pct.over { background: color-mix(in oklab, #a51e1e 28%, transparent); }
+
+table.data.flat tfoot tr.fl-total td { position: sticky; bottom: 0; z-index: 2; background: var(--neutral-bg); font-weight: 700; border-top: 2px solid var(--border-strong); border-bottom: none; padding: 10px 14px; }
+table.data.flat tfoot tr.fl-total td.fl-pct { background: var(--neutral-bg); }
+
+</style></head><body><div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@tanstack/react-table@8.21.3/build/umd/index.production.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script>
+// Mock data for Efes Nexus
+// Channels structure (per the spec):
+//   On trade  → HoReCa, SpecPegas         (only N+1 activities)
+//   Off trade → Sale point → Sale point (Datum) → Sale point (Nondatum)
+//             → Diot, Wholesale            (N + 1 + N + KZT)
+
+window.CHANNELS = {
+  ontrade: {
+    id: 'ontrade',
+    label_en: 'On trade',
+    label_ru: 'Он-трейд',
+    children: [
+      { id: 'horeca', label_en: 'HoReCa', label_ru: 'HoReCa' },
+      { id: 'specpegas', label_en: 'SpecPegas', label_ru: 'СпецПегас' },
+    ],
+  },
+  offtrade: {
+    id: 'offtrade',
+    label_en: 'Off trade',
+    label_ru: 'Офф-трейд',
+    children: [
+      {
+        id: 'salepoint',
+        label_en: 'Sale point',
+        label_ru: 'Точка продаж',
+        children: [
+          {
+            id: 'datum',
+            label_en: 'Sale point (Datum)',
+            label_ru: 'Точка продаж (Датум)',
+            children: [
+              { id: 'nondatum', label_en: 'Sale point (Nondatum)', label_ru: 'Точка продаж (Нондатум)' },
+            ],
+          },
+        ],
+      },
+      { id: 'diot', label_en: 'Diot', label_ru: 'Диот' },
+      { id: 'wholesale', label_en: 'Wholesale', label_ru: 'Оптовая торговля' },
+    ],
+  },
+};
+
+window.ACTIVITY_TYPES = [
+  { id: 'nplus1', label_en: 'N + 1', label_ru: 'N + 1', description_en: 'For every N litres purchased, 1 free litre as a gift.', description_ru: 'За каждые N литров — 1 литр в подарок.', allowedIn: ['ontrade', 'offtrade'] },
+  { id: 'money', label_en: 'N + KZT', label_ru: 'N + KZT', description_en: 'Compensation on delivery cost or volume (N + KZT).', description_ru: 'Компенсация на стоимость доставки или объём.', allowedIn: ['offtrade'] },
+];
+
+window.PRODUCTS = [
+  { sku: 'EFS-PIL-050', name: 'Efes Pilsener 0.5L', volume: 0.5 },
+  { sku: 'EFS-PIL-100', name: 'Efes Pilsener 1.0L', volume: 1.0 },
+  { sku: 'EFS-LGR-050', name: 'Efes Lager 0.5L', volume: 0.5 },
+  { sku: 'EFS-LGR-150', name: 'Efes Lager 1.5L', volume: 1.5 },
+  { sku: 'GLB-DRT-050', name: 'Goldberg Draught 0.5L', volume: 0.5 },
+  { sku: 'GLB-DRT-300', name: 'Goldberg Draught 30L Keg', volume: 30 },
+  { sku: 'KRN-PRM-050', name: 'Karmen Premium 0.5L', volume: 0.5 },
+  { sku: 'KRN-PRM-200', name: 'Karmen Premium 2.0L', volume: 2.0 },
+  { sku: 'STL-WHT-033', name: 'Stella Wheat 0.33L', volume: 0.33 },
+  { sku: 'STL-WHT-050', name: 'Stella Wheat 0.5L', volume: 0.5 },
+];
+
+window.PARTNERS = [
+  {
+    id: 'p-001', code: '20331', name: 'Tulpar master', city: 'Almaty', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-001', name: 'Tulpar Dostyk Hub', address: 'pr. Dostyk 248', channel: 'datum' },
+      { id: 'sp-002', name: 'Tulpar Mega Branch', address: 'ul. Makataeva 127', channel: 'datum' },
+      { id: 'sp-003', name: 'Tulpar Aksai Express', address: 'mkr. Aksai-4, 12', channel: 'nondatum' },
+    ],
+  },
+  {
+    id: 'p-002', code: '20351', name: 'ReMalto', city: 'Astana', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-010', name: 'ReMalto Saryarka', address: 'pr. Saryarka 14', channel: 'datum' },
+      { id: 'sp-011', name: 'ReMalto Kabanbay Batyr', address: 'pr. Kabanbay Batyr 38', channel: 'datum' },
+      { id: 'sp-012', name: 'ReMalto Esil Mini', address: 'ul. Kenesary 6', channel: 'nondatum' },
+    ],
+  },
+  {
+    id: 'p-003', code: '20515', name: 'Bridge Team', city: 'Almaty', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-020', name: 'Bridge Team Al-Farabi', address: 'pr. Al-Farabi 124', channel: 'datum' },
+      { id: 'sp-021', name: 'Bridge Team Abay', address: 'pr. Abaya 22', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-004', code: '20348', name: 'HAT Logistics', city: 'Almaty', segment: 'ontrade',
+    salePoints: [
+      { id: 'sp-030', name: 'HAT Logistics Dostyk', address: 'pr. Dostyk 71', channel: 'horeca' },
+      { id: 'sp-031', name: 'HAT Logistics Esentai', address: 'pr. Al-Farabi 77', channel: 'horeca' },
+      { id: 'sp-032', name: 'HAT Logistics Express', address: 'vokzal Almaty-1', channel: 'specpegas' },
+    ],
+  },
+  {
+    id: 'p-005', code: '20345', name: 'Kampit&K', city: 'Astana', segment: 'ontrade',
+    salePoints: [
+      { id: 'sp-040', name: 'Kampit&K Nurzhol', address: 'bul. Nurzhol 58', channel: 'horeca' },
+      { id: 'sp-041', name: 'Kampit&K Turan', address: 'pr. Turan 37', channel: 'horeca' },
+    ],
+  },
+  {
+    id: 'p-006', code: '20316', name: 'Tolyk', city: 'Karaganda', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-050', name: 'Tolyk Warehouse #1', address: 'Industrialnaya zona 4', channel: 'wholesale' },
+      { id: 'sp-051', name: 'Tolyk Warehouse #2', address: 'Industrialnaya zona 7', channel: 'wholesale' },
+    ],
+  },
+  {
+    id: 'p-007', code: '20321', name: 'Ulbakomplex (Oskemen)', city: 'Oskemen', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-060', name: 'Ulbakomplex Levyi Bereg', address: 'ul. Naberezhnaya 220', channel: 'diot' },
+      { id: 'sp-061', name: 'Ulbakomplex Pravyi Bereg', address: 'ul. Promyshlennaya 50', channel: 'diot' },
+    ],
+  },
+  {
+    id: 'p-008', code: '20332', name: 'Novruz trade (Shymkent)', city: 'Shymkent', segment: 'ontrade',
+    salePoints: [
+      { id: 'sp-070', name: 'Novruz trade Center', address: 'pr. Tauke Khana 3', channel: 'horeca' },
+    ],
+  },
+  {
+    id: 'p-009', code: '20555', name: 'Yupiter Aqtobe', city: 'Aktobe', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-080', name: 'Yupiter Hypermarket', address: 'pr. Abilkaiyr Khana 42', channel: 'datum' },
+      { id: 'sp-081', name: 'Yupiter Mart #19', address: 'ul. Bratiev Zhubanovykh 18', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-010', code: '20395', name: 'BAT Pavlodar', city: 'Pavlodar/Ekibastuz', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-090', name: 'BAT Pavlodar Satpayev', address: 'ul. Satpayeva 50', channel: 'nondatum' },
+      { id: 'sp-091', name: 'BAT Pavlodar Toraighyrov', address: 'ul. Toraighyrova 112', channel: 'nondatum' },
+    ],
+  },
+  {
+    id: 'p-011', code: '20446', name: 'TDK Trading Company', city: 'Taldykorgan', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-110', name: 'TDK Trading Company HQ', address: 'g. Taldykorgan, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-012', code: '20321', name: 'Ulbakomplex (Altay)', city: 'Altay', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-120', name: 'Ulbakomplex (Altay) HQ', address: 'g. Altay, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-013', code: '20327', name: 'Podgoretskiy', city: 'Ridder', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-130', name: 'Podgoretskiy HQ', address: 'g. Ridder, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-014', code: '20322', name: 'Gaisina', city: 'Shemonaiha', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-140', name: 'Gaisina HQ', address: 'g. Shemonaiha, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-015', code: '20505', name: 'BEST GROUP KAZAKHSTAN', city: 'Semey', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-150', name: 'BEST GROUP KAZAKHSTAN HQ', address: 'g. Semey, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-016', code: '20347', name: 'BEK Trader', city: 'Ayagoz', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-160', name: 'BEK Trader HQ', address: 'g. Ayagoz, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-017', code: '20332', name: 'Novruz trade (Taraz)', city: 'Taraz', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-170', name: 'Novruz trade (Taraz) HQ', address: 'g. Taraz, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-018', code: '20332', name: 'Novruz trade (Kyzylorda)', city: 'Kyzylorda', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-180', name: 'Novruz trade (Kyzylorda) HQ', address: 'g. Kyzylorda, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-019', code: '20478', name: 'Azamat', city: 'Shymkent', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-190', name: 'Azamat HQ', address: 'g. Shymkent, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-020', code: '20325', name: 'Mir yug', city: 'Turkestan', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-200', name: 'Mir yug HQ', address: 'g. Turkestan, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-021', code: '20575', name: 'БриджТим Астана', city: 'Astana', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-210', name: 'БриджТим Астана HQ', address: 'g. Astana, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-022', code: '20343', name: 'BEK Yazukevichys O.', city: 'Atbasar', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-220', name: 'BEK Yazukevichys O. HQ', address: 'g. Atbasar, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-023', code: '20337', name: 'Moiseyev O.V.', city: 'Shuchinsk', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-230', name: 'Moiseyev O.V. HQ', address: 'g. Shuchinsk, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-024', code: '20334', name: 'Enterprise', city: 'Stepnogorsk', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-240', name: 'Enterprise HQ', address: 'g. Stepnogorsk, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-025', code: '20338', name: 'Brasis', city: 'Akkol/Yerementau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-250', name: 'Brasis HQ', address: 'g. Akkol/Yerementau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-026', code: '20349', name: 'Kavun A.A.', city: 'Kokshetau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-260', name: 'Kavun A.A. HQ', address: 'g. Kokshetau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-027', code: '20367', name: 'SHARYN', city: 'Karaganda', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-270', name: 'SHARYN HQ', address: 'g. Karaganda, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-028', code: '20319', name: 'Egemma', city: 'Zhezkazgan', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-280', name: 'Egemma HQ', address: 'g. Zhezkazgan, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-029', code: '20344', name: 'BALKHASH MEREI', city: 'Balkhash', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-290', name: 'BALKHASH MEREI HQ', address: 'g. Balkhash, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-030', code: '20317', name: 'Ruslan LTD', city: 'Petropavlovsk', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-300', name: 'Ruslan LTD HQ', address: 'g. Petropavlovsk, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-031', code: '20475', name: 'S.E.J. Treid', city: 'Kostanay', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-310', name: 'S.E.J. Treid HQ', address: 'g. Kostanay, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-032', code: '20326', name: 'ADM Company (Aktau)', city: 'Aktau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-320', name: 'ADM Company (Aktau) HQ', address: 'g. Aktau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-033', code: '20326', name: 'ADM Company (Zhanaozen)', city: 'Zhanaozen', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-330', name: 'ADM Company (Zhanaozen) HQ', address: 'g. Zhanaozen, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-034', code: '20333', name: 'Altair-Atyrau', city: 'Atyrau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-340', name: 'Altair-Atyrau HQ', address: 'g. Atyrau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-035', code: '20576', name: 'Altair-Trade', city: 'Atyrau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-350', name: 'Altair-Trade HQ', address: 'g. Atyrau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-036', code: '20336', name: 'Tagkan-Service', city: 'Atyrau', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-360', name: 'Tagkan-Service HQ', address: 'g. Atyrau, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-037', code: '20346', name: 'Koshenov B.M.', city: 'Kulsary', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-370', name: 'Koshenov B.M. HQ', address: 'g. Kulsary, sklad', channel: 'datum' },
+    ],
+  },
+  {
+    id: 'p-038', code: '20437', name: 'Batys Saudager', city: 'Oral', segment: 'offtrade',
+    salePoints: [
+      { id: 'sp-380', name: 'Batys Saudager HQ', address: 'g. Oral, sklad', channel: 'datum' },
+    ],
+  },
+];
+
+// Promo activities
+function pad5(n) { return String(n).padStart(5, '0'); }
+function daysAgo(d) { const x = new Date('2026-05-02T00:00:00'); x.setDate(x.getDate() - d); return x.toISOString().slice(0, 10); }
+function daysAhead(d) { const x = new Date('2026-05-02T00:00:00'); x.setDate(x.getDate() + d); return x.toISOString().slice(0, 10); }
+
+window.PROMOS = [
+  {
+    code: 'PR-' + pad5(10421), type: 'nplus1', status: 'active',
+    partnerId: 'p-002', salePointIds: ['sp-010', 'sp-011'], channelIds: ['datum'],
+    products: ['EFS-PIL-050', 'EFS-LGR-050'],
+    nValue: 10, // every 10L → +1L gift
+    quotaLitres: 4500, usedLitres: 2840,
+    quotaMoney: null, usedMoney: null,
+    startDate: daysAgo(18), endDate: daysAhead(42),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(20),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10422), type: 'money', status: 'active',
+    partnerId: 'p-003', salePointIds: ['sp-020'], channelIds: ['datum'],
+    products: ['EFS-LGR-150', 'KRN-PRM-200'],
+    nValue: null,
+    quotaLitres: null, usedLitres: null,
+    quotaMoney: 850000, usedMoney: 312400,
+    startDate: daysAgo(12), endDate: daysAhead(48),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(14),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10423), type: 'nplus1', status: 'pending',
+    partnerId: 'p-004', salePointIds: ['sp-030', 'sp-031'], channelIds: ['horeca'],
+    products: ['GLB-DRT-300'],
+    nValue: 20,
+    quotaLitres: 1200, usedLitres: 0,
+    startDate: daysAhead(3), endDate: daysAhead(63),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(2),
+    emailSent: false,
+  },
+  {
+    code: 'PR-' + pad5(10424), type: 'nplus1', status: 'active',
+    partnerId: 'p-001', salePointIds: ['sp-001', 'sp-002', 'sp-003'], channelIds: ['datum', 'nondatum'],
+    products: ['EFS-PIL-050', 'EFS-PIL-100', 'STL-WHT-050'],
+    nValue: 12,
+    quotaLitres: 8200, usedLitres: 7104,
+    startDate: daysAgo(40), endDate: daysAhead(20),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(42),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10425), type: 'money', status: 'active',
+    partnerId: 'p-006', salePointIds: ['sp-050', 'sp-051'], channelIds: ['wholesale'],
+    products: ['EFS-PIL-100', 'EFS-LGR-150'],
+    quotaMoney: 1500000, usedMoney: 1389200,
+    startDate: daysAgo(55), endDate: daysAhead(5),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(58),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10426), type: 'nplus1', status: 'cancelled',
+    partnerId: 'p-005', salePointIds: ['sp-040'], channelIds: ['horeca'],
+    products: ['STL-WHT-033'],
+    nValue: 8,
+    quotaLitres: 600, usedLitres: 144,
+    startDate: daysAgo(30), endDate: daysAhead(30),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(32),
+    emailSent: true,
+    cancelReason: 'Partner withdrew due to renovation closure.',
+  },
+  {
+    code: 'PR-' + pad5(10427), type: 'nplus1', status: 'active',
+    partnerId: 'p-009', salePointIds: ['sp-080', 'sp-081'], channelIds: ['datum'],
+    products: ['EFS-PIL-050', 'EFS-LGR-050', 'KRN-PRM-050', 'STL-WHT-050'],
+    nValue: 15,
+    quotaLitres: 12000, usedLitres: 5240,
+    startDate: daysAgo(7), endDate: daysAhead(53),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(9),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10428), type: 'money', status: 'expired',
+    partnerId: 'p-002', salePointIds: ['sp-012'], channelIds: ['nondatum'],
+    products: ['EFS-PIL-050'],
+    quotaMoney: 220000, usedMoney: 220000,
+    startDate: daysAgo(95), endDate: daysAgo(5),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(98),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10429), type: 'nplus1', status: 'active',
+    partnerId: 'p-007', salePointIds: ['sp-060', 'sp-061'], channelIds: ['diot'],
+    products: ['EFS-LGR-050', 'GLB-DRT-050'],
+    nValue: 10,
+    quotaLitres: 3000, usedLitres: 1820,
+    startDate: daysAgo(22), endDate: daysAhead(38),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(24),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10430), type: 'nplus1', status: 'active',
+    partnerId: 'p-008', salePointIds: ['sp-070'], channelIds: ['horeca'],
+    products: ['STL-WHT-033', 'STL-WHT-050'],
+    nValue: 6,
+    quotaLitres: 480, usedLitres: 198,
+    startDate: daysAgo(10), endDate: daysAhead(50),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(12),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10431), type: 'money', status: 'active',
+    partnerId: 'p-010', salePointIds: ['sp-090', 'sp-091'], channelIds: ['nondatum'],
+    products: ['EFS-PIL-050', 'KRN-PRM-050'],
+    quotaMoney: 640000, usedMoney: 88200,
+    startDate: daysAgo(4), endDate: daysAhead(56),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(6),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10432), type: 'nplus1', status: 'draft',
+    partnerId: 'p-001', salePointIds: ['sp-001'], channelIds: ['datum'],
+    products: ['GLB-DRT-300'],
+    nValue: 25,
+    quotaLitres: 900, usedLitres: 0,
+    startDate: daysAhead(7), endDate: daysAhead(67),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(0),
+    emailSent: false,
+  },
+  {
+    code: 'PR-' + pad5(10433), type: 'money', status: 'active',
+    partnerId: 'p-009', salePointIds: ['sp-080'], channelIds: ['datum'],
+    products: ['EFS-LGR-150'],
+    quotaMoney: 480000, usedMoney: 102000,
+    startDate: daysAgo(15), endDate: daysAhead(45),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(18),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10434), type: 'nplus1', status: 'active',
+    partnerId: 'p-004', salePointIds: ['sp-032'], channelIds: ['specpegas'],
+    products: ['EFS-PIL-050'],
+    nValue: 10,
+    quotaLitres: 200, usedLitres: 64,
+    startDate: daysAgo(8), endDate: daysAhead(22),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(10),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10435), type: 'nplus1', status: 'active',
+    partnerId: 'p-002', salePointIds: ['sp-010', 'sp-011', 'sp-012'], channelIds: ['datum', 'nondatum'],
+    products: ['EFS-PIL-050', 'EFS-LGR-050'],
+    nValue: 12,
+    quotaLitres: 6500, usedLitres: 980,
+    startDate: daysAgo(3), endDate: daysAhead(57),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(5),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10436), type: 'money', status: 'pending',
+    partnerId: 'p-003', salePointIds: ['sp-020', 'sp-021'], channelIds: ['datum'],
+    products: ['KRN-PRM-200'],
+    quotaMoney: 380000, usedMoney: 0,
+    startDate: daysAhead(5), endDate: daysAhead(95),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(1),
+    emailSent: false,
+  },
+  {
+    code: 'PR-' + pad5(10437), type: 'nplus1', status: 'expired',
+    partnerId: 'p-005', salePointIds: ['sp-041'], channelIds: ['horeca'],
+    products: ['STL-WHT-050'],
+    nValue: 8,
+    quotaLitres: 400, usedLitres: 312,
+    startDate: daysAgo(120), endDate: daysAgo(15),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(125),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10438), type: 'nplus1', status: 'active',
+    partnerId: 'p-006', salePointIds: ['sp-050'], channelIds: ['wholesale'],
+    products: ['EFS-PIL-100'],
+    nValue: 20,
+    quotaLitres: 5000, usedLitres: 2100,
+    startDate: daysAgo(20), endDate: daysAhead(40),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(22),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10439), type: 'money', status: 'active',
+    partnerId: 'p-007', salePointIds: ['sp-060'], channelIds: ['diot'],
+    products: ['EFS-LGR-050', 'GLB-DRT-050', 'KRN-PRM-050'],
+    quotaMoney: 720000, usedMoney: 410000,
+    startDate: daysAgo(28), endDate: daysAhead(32),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(30),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10440), type: 'nplus1', status: 'active',
+    partnerId: 'p-008', salePointIds: ['sp-070'], channelIds: ['horeca'],
+    products: ['EFS-PIL-050'],
+    nValue: 10,
+    quotaLitres: 300, usedLitres: 270,
+    startDate: daysAgo(50), endDate: daysAhead(10),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(55),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10441), type: 'nplus1', status: 'pending',
+    partnerId: 'p-010', salePointIds: ['sp-090'], channelIds: ['nondatum'],
+    products: ['STL-WHT-033'],
+    nValue: 8,
+    quotaLitres: 240, usedLitres: 0,
+    startDate: daysAhead(2), endDate: daysAhead(62),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(0),
+    emailSent: false,
+  },
+  {
+    code: 'PR-' + pad5(10442), type: 'money', status: 'active',
+    partnerId: 'p-001', salePointIds: ['sp-001', 'sp-002'], channelIds: ['datum'],
+    products: ['EFS-LGR-150', 'KRN-PRM-200'],
+    quotaMoney: 920000, usedMoney: 220000,
+    startDate: daysAgo(11), endDate: daysAhead(49),
+    createdBy: 'Aigerim Bekova', createdAt: daysAgo(13),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10443), type: 'nplus1', status: 'active',
+    partnerId: 'p-004', salePointIds: ['sp-030'], channelIds: ['horeca'],
+    products: ['GLB-DRT-300'],
+    nValue: 30,
+    quotaLitres: 1500, usedLitres: 480,
+    startDate: daysAgo(6), endDate: daysAhead(54),
+    createdBy: 'Aizhan Nurlanova', createdAt: daysAgo(8),
+    emailSent: true,
+  },
+  {
+    code: 'PR-' + pad5(10444), type: 'nplus1', status: 'active',
+    partnerId: 'p-002', salePointIds: ['sp-010'], channelIds: ['datum'],
+    products: ['EFS-PIL-050'],
+    nValue: 10,
+    quotaLitres: 1800, usedLitres: 220,
+    startDate: daysAgo(2), endDate: daysAhead(58),
+    createdBy: 'Daniyar Serikov', createdAt: daysAgo(4),
+    emailSent: true,
+  },
+];
+
+// Partner requests with AI verification
+window.REQUESTS = [
+  {
+    id: 'rq-001', promoCode: 'PR-10421', partnerId: 'p-002',
+    submittedAt: daysAgo(2), period: { from: daysAgo(18), to: daysAgo(2) },
+    claimedSales: [
+      { sku: 'EFS-PIL-050', litres: 1840 },
+      { sku: 'EFS-LGR-050', litres: 1000 },
+    ],
+    aiStatus: 'verified',
+    aiConfidence: 0.97,
+    aiNotes_en: 'Sales volumes match Panorama records. Promo dates and SKUs match the promo scope. Eligible.',
+    aiNotes_ru: 'Объёмы продаж сходятся с данными Panorama. Даты и SKU соответствуют рамкам акции. Подтверждено.',
+    decision: null,
+  },
+  {
+    id: 'rq-002', promoCode: 'PR-10422', partnerId: 'p-003',
+    submittedAt: daysAgo(1), period: { from: daysAgo(12), to: daysAgo(1) },
+    claimedSales: [
+      { sku: 'EFS-LGR-150', litres: 2080 },
+      { sku: 'KRN-PRM-200', litres: 720 },
+    ],
+    aiStatus: 'flag',
+    aiConfidence: 0.71,
+    aiNotes_en: 'KRN-PRM-200 volume is 14% above the 90-day moving average. SKU mix is unusual for this sale point — recommend manual check.',
+    aiNotes_ru: 'Объём KRN-PRM-200 на 14% выше скользящей средней за 90 дней. Микс SKU нетипичен для этой точки — нужна ручная проверка.',
+    decision: null,
+  },
+  {
+    id: 'rq-003', promoCode: 'PR-10424', partnerId: 'p-001',
+    submittedAt: daysAgo(0), period: { from: daysAgo(40), to: daysAgo(0) },
+    claimedSales: [
+      { sku: 'EFS-PIL-050', litres: 3120 },
+      { sku: 'EFS-PIL-100', litres: 2800 },
+      { sku: 'STL-WHT-050', litres: 1184 },
+    ],
+    aiStatus: 'mismatch',
+    aiConfidence: 0.42,
+    aiNotes_en: 'STL-WHT-050 line: Panorama shows 920L for the period; partner claimed 1,184L. Discrepancy of +28.7%. Reject or request reconciliation.',
+    aiNotes_ru: 'Позиция STL-WHT-050: в Panorama 920 л за период, заявлено 1184 л. Расхождение +28,7%. Отклонить или запросить сверку.',
+    decision: null,
+  },
+  {
+    id: 'rq-004', promoCode: 'PR-10429', partnerId: 'p-007',
+    submittedAt: daysAgo(3), period: { from: daysAgo(22), to: daysAgo(3) },
+    claimedSales: [
+      { sku: 'EFS-LGR-050', litres: 1100 },
+      { sku: 'GLB-DRT-050', litres: 720 },
+    ],
+    aiStatus: 'verified',
+    aiConfidence: 0.93,
+    aiNotes_en: 'All claimed volumes match Diot distribution feed within ±0.5%. Eligible for compensation.',
+    aiNotes_ru: 'Все заявленные объёмы соответствуют выгрузке Диот ±0,5%. Допущено к компенсации.',
+    decision: 'approved',
+  },
+  {
+    id: 'rq-005', promoCode: 'PR-10431', partnerId: 'p-010',
+    submittedAt: daysAgo(2), period: { from: daysAgo(4), to: daysAgo(2) },
+    claimedSales: [
+      { sku: 'EFS-PIL-050', litres: 410 },
+      { sku: 'KRN-PRM-050', litres: 280 },
+    ],
+    aiStatus: 'flag',
+    aiConfidence: 0.78,
+    aiNotes_en: 'Period is shorter than typical (3 days). Volumes are plausible but small sample — confirm with sale-point #1503.',
+    aiNotes_ru: 'Период короткий (3 дня). Объёмы правдоподобны, но выборка мала — подтвердите по точке #1503.',
+    decision: null,
+  },
+  {
+    id: 'rq-006', promoCode: 'PR-10425', partnerId: 'p-006',
+    submittedAt: daysAgo(5), period: { from: daysAgo(55), to: daysAgo(5) },
+    claimedSales: [
+      { sku: 'EFS-PIL-100', litres: 18400 },
+      { sku: 'EFS-LGR-150', litres: 9800 },
+    ],
+    aiStatus: 'verified',
+    aiConfidence: 0.95,
+    aiNotes_en: 'Wholesale volumes verified against logistics manifests. N + KZT eligible: ₸1,389,200.',
+    aiNotes_ru: 'Оптовые объёмы подтверждены логистическими накладными. Сумма выплаты N + KZT: ₸1 389 200.',
+    decision: 'approved',
+  },
+];
+</script>
+<script>
+// Bilingual strings for the app
+window.I18N = {
+  en: {
+    appName: 'Efes Nexus',
+    company: 'Efes — Sales Operations',
+    nav: {
+      dashboard: 'Dashboard',
+      promos: 'Promo-Activities',
+      requests: 'Partner Requests',
+      partners: 'Partners',
+      products: 'Products',
+      reports: 'Reports',
+      settings: 'Settings',
+    },
+    actions: {
+      newPromo: 'New promo-activity',
+      export: 'Export to Excel',
+      filter: 'Filter',
+      search: 'Search by code, partner, product…',
+      cancel: 'Cancel',
+      save: 'Save changes',
+      next: 'Continue',
+      back: 'Back',
+      sendEmail: 'Send notification email',
+      sendDraft: 'Save draft',
+      create: 'Create promo',
+      edit: 'Edit',
+      approve: 'Approve',
+      reject: 'Reject',
+      reconcile: 'Request reconciliation',
+      addProduct: 'Add product',
+      addSalePoint: 'Add sale point',
+      changeQuota: 'Change quota',
+      changePeriod: 'Change period',
+      cancelPromo: 'Cancel promo',
+      viewEmail: 'View email',
+    },
+    status: {
+      active: 'Active', pending: 'Pending', draft: 'Draft', expired: 'Expired', cancelled: 'Cancelled',
+      verified: 'Verified', flag: 'Needs review', mismatch: 'Mismatch',
+    },
+    fields: {
+      code: 'Code', partner: 'Partner', type: 'Activity type', scope: 'Scope', channel: 'Channel',
+      products: 'Products', period: 'Period', quota: 'Quota', used: 'Used', remaining: 'Remaining',
+      progress: 'Utilisation', createdBy: 'Owner', startDate: 'Start', endDate: 'End',
+      nValue: 'N (litres per gift)', quotaLitres: 'Quota (litres)', quotaMoney: 'Quota (₸)',
+      salePoint: 'Sale point', address: 'Address', segment: 'Segment',
+      email: 'Notification email', subject: 'Subject', body: 'Body', recipient: 'To',
+    },
+    sections: {
+      overview: 'Overview', operations: 'Operations', activity: 'Activity log',
+      claimedSales: 'Claimed sales', aiAssessment: 'AI assessment', evidence: 'Evidence',
+      scope: 'Scope', parameters: 'Parameters', notification: 'Partner notification',
+    },
+    promoTypes: {
+      nplus1: 'N + 1 (free litre per N litres)',
+      money: 'N + KZT',
+    },
+    summary: {
+      totalActive: 'Active promos',
+      totalLitres: 'Litres committed',
+      totalMoney: 'Money committed',
+      pendingRequests: 'Pending requests',
+    },
+    units: { litres: 'L', money: '₸' },
+    misc: {
+      of: 'of', from: 'from', to: 'to', step: 'Step',
+      noResults: 'No results', loading: 'Loading…', selected: 'selected',
+      confidence: 'AI confidence', verifyAgain: 'Re-run AI check',
+    },
+    wizardSteps: ['Channel & type', 'Partner & scope', 'Products', 'Parameters', 'Email & review'],
+    placeholders: {
+      emailSubject: 'Promo-activity {code} — {partner}',
+      emailBody:
+        'Dear partner,\n\nWe are pleased to confirm promo-activity {code} starting {start} through {end}.\n\nType: {type}\nProducts: {products}\nQuota: {quota}\n\nBest regards,\nEfes Sales Operations',
+    },
+  },
+  ru: {
+    appName: 'Управление промо-активностями',
+    company: 'Efes — отдел продаж',
+    nav: {
+      dashboard: 'Главная',
+      promos: 'Промо-активности',
+      requests: 'Заявки партнёров',
+      partners: 'Партнёры',
+      products: 'Продукты',
+      reports: 'Отчёты',
+      settings: 'Настройки',
+    },
+    actions: {
+      newPromo: 'Новая промо-активность',
+      export: 'Экспорт в Excel',
+      filter: 'Фильтр',
+      search: 'Поиск по коду, партнёру, продукту…',
+      cancel: 'Отмена',
+      save: 'Сохранить',
+      next: 'Далее',
+      back: 'Назад',
+      sendEmail: 'Отправить письмо',
+      sendDraft: 'Сохранить черновик',
+      create: 'Создать промо',
+      edit: 'Редактировать',
+      approve: 'Подтвердить',
+      reject: 'Отклонить',
+      reconcile: 'Запросить сверку',
+      addProduct: 'Добавить продукт',
+      addSalePoint: 'Добавить точку',
+      changeQuota: 'Изменить квоту',
+      changePeriod: 'Изменить период',
+      cancelPromo: 'Отменить промо',
+      viewEmail: 'Просмотреть письмо',
+    },
+    status: {
+      active: 'Активно', pending: 'На согласовании', draft: 'Черновик', expired: 'Завершено', cancelled: 'Отменено',
+      verified: 'Подтверждено', flag: 'Требует проверки', mismatch: 'Расхождение',
+    },
+    fields: {
+      code: 'Код', partner: 'Партнёр', type: 'Тип активности', scope: 'Охват', channel: 'Канал',
+      products: 'Продукты', period: 'Период', quota: 'Квота', used: 'Использовано', remaining: 'Остаток',
+      progress: 'Использование', createdBy: 'Ответственный', startDate: 'Начало', endDate: 'Окончание',
+      nValue: 'N (литров за подарок)', quotaLitres: 'Квота (литров)', quotaMoney: 'Квота (₸)',
+      salePoint: 'Точка продаж', address: 'Адрес', segment: 'Сегмент',
+      email: 'Письмо партнёру', subject: 'Тема', body: 'Текст', recipient: 'Кому',
+    },
+    sections: {
+      overview: 'Обзор', operations: 'Операции', activity: 'Журнал событий',
+      claimedSales: 'Заявленные продажи', aiAssessment: 'Проверка AI', evidence: 'Сверка',
+      scope: 'Охват', parameters: 'Параметры', notification: 'Уведомление партнёра',
+    },
+    promoTypes: {
+      nplus1: 'N + 1 (литр в подарок за N литров)',
+      money: 'N + KZT',
+    },
+    summary: {
+      totalActive: 'Активных промо',
+      totalLitres: 'Литров под обязательством',
+      totalMoney: 'Денег под обязательством',
+      pendingRequests: 'Заявок в очереди',
+    },
+    units: { litres: 'л', money: '₸' },
+    misc: {
+      of: 'из', from: 'с', to: 'по', step: 'Шаг',
+      noResults: 'Ничего не найдено', loading: 'Загрузка…', selected: 'выбрано',
+      confidence: 'Уверенность AI', verifyAgain: 'Запустить проверку AI',
+    },
+    wizardSteps: ['Канал и тип', 'Партнёр и охват', 'Продукты', 'Параметры', 'Письмо и обзор'],
+    placeholders: {
+      emailSubject: 'Промо-активность {code} — {partner}',
+      emailBody:
+        'Уважаемый партнёр!\n\nПодтверждаем запуск промо-активности {code} с {start} по {end}.\n\nТип: {type}\nПродукты: {products}\nКвота: {quota}\n\nС уважением,\nОтдел продаж Efes',
+    },
+  },
+};
+</script>
+<script type="text/babel" data-presets="react">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value}
+             onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+</script>
+<script type="text/babel" data-presets="react">
+/* global React */
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+// ===== Icons (inline SVG, 16px default) =====
+const Icon = ({ name, size = 16, className = '', strokeWidth = 1.75 }) => {
+  const props = {
+    width: size, height: size, viewBox: '0 0 24 24', fill: 'none',
+    stroke: 'currentColor', strokeWidth, strokeLinecap: 'round', strokeLinejoin: 'round',
+    className,
+  };
+  const paths = {
+    dashboard: <><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></>,
+    promo: <><path d="M20 12V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v5"/><path d="M4 12v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M2 12h20"/><path d="M12 5v14"/></>,
+    requests: <><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></>,
+    partners: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    products: <><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></>,
+    reports: <><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></>,
+    settings: <><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></>,
+    search: <><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
+    plus: <><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>,
+    download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>,
+    filter: <><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></>,
+    chevron: <><polyline points="9 18 15 12 9 6"/></>,
+    chevronDown: <><polyline points="6 9 12 15 18 9"/></>,
+    close: <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+    check: <><polyline points="20 6 9 17 4 12"/></>,
+    edit: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></>,
+    trash: <><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></>,
+    mail: <><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>,
+    calendar: <><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
+    package: <><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></>,
+    sparkle: <><path d="M12 3l1.9 5.5L19 10l-5.1 1.5L12 17l-1.9-5.5L5 10l5.1-1.5z"/></>,
+    moon: <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>,
+    sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></>,
+    alert: <><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></>,
+    info: <><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><circle cx="12" cy="8" r="0.5"/></>,
+    bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></>,
+    user: <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
+    folder: <><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></>,
+    excel: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13l4 4M12 13l-4 4"/></>,
+    barChart: <><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></>,
+    refresh: <><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></>,
+    arrow: <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>,
+    drop: <><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></>,
+  };
+  return <svg {...props}>{paths[name] || null}</svg>;
+};
+
+// ===== Helpers =====
+function cls(...args) { return args.filter(Boolean).join(' '); }
+function fmtNum(n) {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('en-US').format(n).replace(/,/g, ' ');
+}
+function fmtMoney(n) {
+  if (n == null) return '—';
+  return '₸ ' + fmtNum(n);
+}
+function fmtLitres(n) {
+  if (n == null) return '—';
+  return fmtNum(n) + ' L';
+}
+function fmtDate(s, locale = 'en') {
+  if (!s) return '—';
+  const d = new Date(s);
+  return d.toLocaleDateString(locale === 'ru' ? 'ru-RU' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function pct(used, quota) {
+  if (!quota || !used) return 0;
+  return Math.min(100, Math.round((used / quota) * 100));
+}
+function statusBadgeKind(s) {
+  return ({active:'ok', pending:'warn', draft:'draft', expired:'info', cancelled:'bad'})[s] || '';
+}
+function aiBadgeKind(s) {
+  return ({verified:'ok', flag:'warn', mismatch:'bad'})[s] || '';
+}
+function aiIcon(s) {
+  return ({verified:'check', flag:'alert', mismatch:'close'})[s] || 'info';
+}
+
+// ===== Reusable bits =====
+const Checkbox = ({ checked, indet, onChange }) => (
+  <span className={cls('checkbox', checked && 'checked', indet && 'indet')} onClick={(e) => { e.stopPropagation(); onChange && onChange(!checked); }}>
+    {checked && !indet && <Icon name="check" size={11} strokeWidth={2.5} />}
+  </span>
+);
+
+const Badge = ({ kind, children, dot }) => (
+  <span className={cls('badge', kind, dot && 'dot')}>{children}</span>
+);
+
+const StatusBadge = ({ status, t }) => (
+  <Badge kind={statusBadgeKind(status)} dot>{t.status[status]}</Badge>
+);
+
+const TypeBadge = ({ type, t }) => (
+  <span className="badge badge-type">{type === 'nplus1' ? 'N + 1' : (t.promoTypes.money.split(' ')[0])}</span>
+);
+
+const Toast = ({ msg, onDone }) => {
+  useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, []);
+  return <div className="toast"><Icon name="check" size={14} strokeWidth={2.5} />{msg}</div>;
+};
+
+Object.assign(window, { Icon, Checkbox, Badge, StatusBadge, TypeBadge, Toast, cls, fmtNum, fmtMoney, fmtLitres, fmtDate, pct, statusBadgeKind, aiBadgeKind, aiIcon });
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, PARTNERS, CHANNELS, PRODUCTS, ACTIVITY_TYPES, Icon, Checkbox, cls */
+const { useState: useStateTP, useMemo: useMemoTP } = React;
+
+// Tree picker for Partner → Sale point → Channel
+function TreePicker({ value, onChange, lang, partnerFilter }) {
+  // value: { partnerIds: Set, salePointIds: Set }
+  const [expanded, setExpanded] = useStateTP(() => new Set(['p-001']));
+  const partners = useMemoTP(
+    () => partnerFilter ? PARTNERS.filter(partnerFilter) : PARTNERS,
+    [partnerFilter]
+  );
+
+  const toggle = (id) => {
+    const next = new Set(expanded);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setExpanded(next);
+  };
+
+  const setPartner = (p, on) => {
+    const sp = new Set(value.salePointIds);
+    const pp = new Set(value.partnerIds);
+    p.salePoints.forEach((s) => on ? sp.add(s.id) : sp.delete(s.id));
+    on ? pp.add(p.id) : pp.delete(p.id);
+    onChange({ partnerIds: pp, salePointIds: sp });
+  };
+
+  const setSP = (p, s, on) => {
+    const sp = new Set(value.salePointIds);
+    on ? sp.add(s.id) : sp.delete(s.id);
+    const pp = new Set(value.partnerIds);
+    const allOn = p.salePoints.every((x) => sp.has(x.id));
+    if (allOn) pp.add(p.id); else pp.delete(p.id);
+    onChange({ partnerIds: pp, salePointIds: sp });
+  };
+
+  const channelLabel = (id) => {
+    const search = (n) => {
+      if (n.id === id) return n['label_' + lang];
+      if (n.children) for (const c of n.children) { const r = search(c); if (r) return r; }
+      return null;
+    };
+    return search(CHANNELS.ontrade) || search(CHANNELS.offtrade) || id;
+  };
+
+  return (
+    <div className="tree">
+      {partners.map((p) => {
+        const allOn = p.salePoints.every((s) => value.salePointIds.has(s.id));
+        const someOn = !allOn && p.salePoints.some((s) => value.salePointIds.has(s.id));
+        const isOpen = expanded.has(p.id);
+        return (
+          <div key={p.id}>
+            <div className="tree-node">
+              <span className="twisty" onClick={() => toggle(p.id)}>
+                <Icon name={isOpen ? 'chevronDown' : 'chevron'} size={12} />
+              </span>
+              <Checkbox checked={allOn} indet={someOn} onChange={(v) => setPartner(p, v)} />
+              <label onClick={() => toggle(p.id)}>
+                <Icon name="folder" size={14} className="" />
+                <span style={{ fontWeight: 600 }}>{p.name}</span>
+                <span className="count">· {p.city} · {p.salePoints.length} pts</span>
+              </label>
+            </div>
+            {isOpen && (
+              <div className="tree-children">
+                {p.salePoints.map((s) => (
+                  <div className="tree-node" key={s.id}>
+                    <span style={{ width: 16 }} />
+                    <Checkbox checked={value.salePointIds.has(s.id)} onChange={(v) => setSP(p, s, v)} />
+                    <label>
+                      <Icon name="package" size={13} />
+                      <span>{s.name}</span>
+                      <span className="count">· {channelLabel(s.channel)}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+window.TreePicker = TreePicker;
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, PARTNERS, PRODUCTS, ACTIVITY_TYPES, CHANNELS, Icon, Checkbox, Badge, cls, TreePicker */
+const { useState: useStateW, useMemo: useMemoW } = React;
+
+function findChannelLabel(id, lang) {
+  const search = (n) => {
+    if (n.id === id) return n['label_' + lang];
+    if (n.children) for (const c of n.children) { const r = search(c); if (r) return r; }
+    return null;
+  };
+  return search(CHANNELS.ontrade) || search(CHANNELS.offtrade) || id;
+}
+
+function CreatePromoForm({ t, lang, onClose, onCreate, layout = 'wizard' }) {
+  // Shared state
+  const [step, setStep] = useStateW(0);
+  const [segment, setSegment] = useStateW('offtrade');
+  const [type, setType] = useStateW('nplus1');
+  const [scope, setScope] = useStateW({ partnerIds: new Set(), salePointIds: new Set() });
+  const [productSel, setProductSel] = useStateW(new Set(['EFS-PIL-050']));
+  const [params, setParams] = useStateW({
+    nValue: 10,
+    quotaLitres: 2000,
+    quotaMoney: 500000,
+    startDate: new Date().toISOString().slice(0,10),
+    endDate: new Date(Date.now()+60*86400000).toISOString().slice(0,10),
+  });
+  const [emailEnabled, setEmailEnabled] = useStateW(true);
+
+  const partnersInSegment = useMemoW(() => PARTNERS.filter((p) => p.segment === segment), [segment]);
+  const productList = PRODUCTS;
+
+  const partnerSummary = useMemoW(() => {
+    const partners = PARTNERS.filter((p) => scope.partnerIds.has(p.id) || p.salePoints.some((s) => scope.salePointIds.has(s.id)));
+    return partners.map((p) => p.name).join(', ') || (lang === 'ru' ? '— не выбрано —' : '— none selected —');
+  }, [scope, lang]);
+
+  const code = useMemoW(() => 'PR-' + String(10445 + Math.floor(Math.random() * 30)).padStart(5, '0'), []);
+
+  const valid = scope.salePointIds.size > 0 && productSel.size > 0;
+
+  // ===== STEP CONTENT (used by both layouts) =====
+  const StepChannelType = (
+    <>
+      <h3 style={{ marginTop: 0 }}>{lang === 'ru' ? 'Канал и тип акции' : 'Channel & activity type'}</h3>
+      <div className="field">
+        <label>{lang === 'ru' ? 'Сегмент канала' : 'Channel segment'}</label>
+        <div className="type-grid">
+          <div className={cls('type-card', segment === 'ontrade' && 'selected')} onClick={() => { setSegment('ontrade'); setType('nplus1'); }}>
+            <div className="t-title">On trade</div>
+            <div className="t-desc">HoReCa · SpecPegas</div>
+            <div className="t-desc" style={{ fontSize: 11 }}>{lang === 'ru' ? 'Только N + 1' : 'N + 1 only'}</div>
+          </div>
+          <div className={cls('type-card', segment === 'offtrade' && 'selected')} onClick={() => setSegment('offtrade')}>
+            <div className="t-title">Off trade</div>
+            <div className="t-desc">Sale point · Diot · Wholesale</div>
+            <div className="t-desc" style={{ fontSize: 11 }}>{lang === 'ru' ? 'N + 1 и N + KZT' : 'N + 1 and N + KZT'}</div>
+          </div>
+        </div>
+      </div>
+      <div className="field" style={{ marginTop: 18 }}>
+        <label>{t.fields.type}</label>
+        <div className="type-grid">
+          {ACTIVITY_TYPES.map((at) => {
+            const allowed = at.allowedIn.includes(segment);
+            return (
+              <div key={at.id} className={cls('type-card', type === at.id && 'selected', !allowed && 'disabled')} onClick={() => allowed && setType(at.id)}>
+                <div className="t-title">{at['label_' + lang]}</div>
+                <div className="t-desc">{at['description_' + lang]}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+
+  const StepScope = (
+    <>
+      <h3 style={{ marginTop: 0 }}>{lang === 'ru' ? 'Партнёр и охват' : 'Partner & scope'}</h3>
+      <div className="hint" style={{ marginBottom: 10 }}>
+        {lang === 'ru'
+          ? 'Выберите партнёров и точки продаж. Один партнёр или несколько — система свяжет автоматически.'
+          : 'Tick partners and individual sale points. The system will resolve channels automatically.'}
+      </div>
+      <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: 10, maxHeight: 360, overflow: 'auto' }} className="scroll-hint">
+        <TreePicker value={scope} onChange={setScope} lang={lang} partnerFilter={(p) => p.segment === segment} />
+      </div>
+      <div className="hint" style={{ marginTop: 8 }}>
+        <strong>{scope.salePointIds.size}</strong> {lang === 'ru' ? 'точек выбрано' : 'sale points selected'} · {partnerSummary}
+      </div>
+    </>
+  );
+
+  const toggleProd = (sku) => {
+    const next = new Set(productSel);
+    next.has(sku) ? next.delete(sku) : next.add(sku);
+    setProductSel(next);
+  };
+
+  const StepProducts = (
+    <>
+      <h3 style={{ marginTop: 0 }}>{t.fields.products}</h3>
+      <div className="hint" style={{ marginBottom: 10 }}>
+        {lang === 'ru' ? 'Можно выбрать несколько SKU.' : 'Pick one or more SKUs to include in this promo.'}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        {productList.map((p) => (
+          <div
+            key={p.sku}
+            onClick={() => toggleProd(p.sku)}
+            className={cls('type-card', productSel.has(p.sku) && 'selected')}
+            style={{ padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}
+          >
+            <Checkbox checked={productSel.has(p.sku)} onChange={() => toggleProd(p.sku)} />
+            <div>
+              <div className="t-title" style={{ fontSize: 13 }}>{p.name}</div>
+              <div className="t-desc" style={{ fontFamily: 'var(--font-mono)' }}>{p.sku} · {p.volume} L</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+
+  const StepParams = (
+    <>
+      <h3 style={{ marginTop: 0 }}>{t.sections.parameters}</h3>
+      {type === 'nplus1' && (
+        <div className="field">
+          <label>{t.fields.nValue}</label>
+          <input className="input" type="number" min="1" value={params.nValue}
+            onChange={(e) => setParams({ ...params, nValue: +e.target.value })} />
+          <div className="hint">
+            {lang === 'ru'
+              ? `За каждые ${params.nValue} литров — 1 литр в подарок.`
+              : `For every ${params.nValue} litres purchased, 1 litre is given for free.`}
+          </div>
+        </div>
+      )}
+      {type === 'nplus1' ? (
+        <div className="field">
+          <label>{t.fields.quotaLitres}</label>
+          <input className="input" type="number" value={params.quotaLitres}
+            onChange={(e) => setParams({ ...params, quotaLitres: +e.target.value })} />
+        </div>
+      ) : (
+        <div className="field">
+          <label>{t.fields.quotaMoney}</label>
+          <input className="input" type="number" value={params.quotaMoney}
+            onChange={(e) => setParams({ ...params, quotaMoney: +e.target.value })} />
+        </div>
+      )}
+      <div className="row-2">
+        <div className="field">
+          <label>{t.fields.startDate}</label>
+          <input className="input" type="date" value={params.startDate}
+            onChange={(e) => setParams({ ...params, startDate: e.target.value })} />
+        </div>
+        <div className="field">
+          <label>{t.fields.endDate}</label>
+          <input className="input" type="date" value={params.endDate}
+            onChange={(e) => setParams({ ...params, endDate: e.target.value })} />
+        </div>
+      </div>
+    </>
+  );
+
+  const productNames = [...productSel].map((s) => PRODUCTS.find((p) => p.sku === s)?.name).filter(Boolean).join(', ');
+  const emailSubject = (t.placeholders.emailSubject)
+    .replace('{code}', code).replace('{partner}', partnerSummary);
+  const quotaStr = type === 'nplus1' ? (params.quotaLitres + ' L') : ('₸ ' + params.quotaMoney);
+  const emailBody = (t.placeholders.emailBody)
+    .replace('{code}', code)
+    .replace('{start}', params.startDate)
+    .replace('{end}', params.endDate)
+    .replace('{type}', type === 'nplus1' ? `N + 1 (N=${params.nValue})` : (lang === 'ru' ? 'N + KZT' : 'N + KZT'))
+    .replace('{products}', productNames)
+    .replace('{quota}', quotaStr);
+
+  const StepEmail = (
+    <>
+      <h3 style={{ marginTop: 0 }}>{t.sections.notification}</h3>
+      <div className="field" style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <Checkbox checked={emailEnabled} onChange={setEmailEnabled} />
+        <label style={{ marginBottom: 0 }}>
+          {lang === 'ru' ? 'Отправить письмо партнёру через Outlook при создании' : 'Send Outlook notification email to partner on create'}
+        </label>
+      </div>
+      <div className="email" style={{ marginTop: 12 }}>
+        <div className="email-head">
+          <span className="lk">{t.fields.recipient}</span><span className="vl">partner@example.com</span>
+          <span className="lk">{t.fields.subject}</span><span className="vl"><strong>{emailSubject}</strong></span>
+        </div>
+        <div className="email-body">{emailBody}</div>
+      </div>
+      <div className="divider" />
+      <div className="section" style={{ margin: 0, padding: 14 }}>
+        <h3>{lang === 'ru' ? 'Сводка' : 'Summary'}</h3>
+        <div className="kv-grid">
+          <div className="kv"><span className="k">{t.fields.code}</span><span className="v" style={{ fontFamily: 'var(--font-mono)' }}>{code}</span></div>
+          <div className="kv"><span className="k">{t.fields.type}</span><span className="v">{ACTIVITY_TYPES.find((a) => a.id === type)['label_' + lang]}</span></div>
+          <div className="kv"><span className="k">{t.fields.partner}</span><span className="v">{partnerSummary}</span></div>
+          <div className="kv"><span className="k">{t.fields.products}</span><span className="v">{productSel.size} SKU</span></div>
+          <div className="kv"><span className="k">{t.fields.period}</span><span className="v">{params.startDate} → {params.endDate}</span></div>
+          <div className="kv"><span className="k">{t.fields.quota}</span><span className="v">{quotaStr}</span></div>
+        </div>
+      </div>
+    </>
+  );
+
+  const stepContent = [StepChannelType, StepScope, StepProducts, StepParams, StepEmail];
+
+  // ===== Layout: WIZARD =====
+  if (layout === 'wizard') {
+    return (
+      <>
+        <div className="drawer-head">
+          <div style={{ flex: 1 }}>
+            <h2>{t.actions.newPromo}</h2>
+            <div className="sub">{t.misc.step} {step + 1} {t.misc.of} {t.wizardSteps.length} · <span style={{ fontFamily: 'var(--font-mono)' }}>{code}</span></div>
+          </div>
+          <button className="icon-btn" onClick={onClose}><Icon name="close" /></button>
+        </div>
+        <div className="steps">
+          {t.wizardSteps.map((label, i) => (
+            <div key={i} className={cls('step', i === step && 'active', i < step && 'done')}>
+              <span className="num">{i < step ? '✓' : i + 1}</span>{label}
+            </div>
+          ))}
+        </div>
+        <div className="drawer-body">{stepContent[step]}</div>
+        <div className="drawer-foot">
+          <button className="btn" onClick={onClose}>{t.actions.cancel}</button>
+          <div style={{ flex: 1 }} />
+          {step > 0 && <button className="btn" onClick={() => setStep(step - 1)}>{t.actions.back}</button>}
+          {step < t.wizardSteps.length - 1 && (
+            <button className="btn primary" onClick={() => setStep(step + 1)}>{t.actions.next}</button>
+          )}
+          {step === t.wizardSteps.length - 1 && (
+            <>
+              <button className="btn" onClick={() => onCreate({ code, status: 'draft' })}>{t.actions.sendDraft}</button>
+              <button className="btn primary" disabled={!valid} onClick={() => onCreate({ code, status: emailEnabled ? 'pending' : 'draft', emailSent: emailEnabled })}>
+                <Icon name="mail" size={14} />{emailEnabled ? t.actions.sendEmail : t.actions.create}
+              </button>
+            </>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  // ===== Layout: SIDE PANEL (single long form) =====
+  return (
+    <>
+      <div className="drawer-head">
+        <div style={{ flex: 1 }}>
+          <h2>{t.actions.newPromo}</h2>
+          <div className="sub" style={{ fontFamily: 'var(--font-mono)' }}>{code}</div>
+        </div>
+        <button className="icon-btn" onClick={onClose}><Icon name="close" /></button>
+      </div>
+      <div className="drawer-body">
+        <div className="section">{StepChannelType}</div>
+        <div className="section">{StepScope}</div>
+        <div className="section">{StepProducts}</div>
+        <div className="section">{StepParams}</div>
+        <div className="section">{StepEmail}</div>
+      </div>
+      <div className="drawer-foot">
+        <button className="btn" onClick={onClose}>{t.actions.cancel}</button>
+        <div style={{ flex: 1 }} />
+        <button className="btn" onClick={() => onCreate({ code, status: 'draft' })}>{t.actions.sendDraft}</button>
+        <button className="btn primary" disabled={!valid} onClick={() => onCreate({ code, status: emailEnabled ? 'pending' : 'draft', emailSent: emailEnabled })}>
+          <Icon name="mail" size={14} />{emailEnabled ? t.actions.sendEmail : t.actions.create}
+        </button>
+      </div>
+    </>
+  );
+}
+
+window.CreatePromoForm = CreatePromoForm;
+window.findChannelLabel = findChannelLabel;
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, PARTNERS, PRODUCTS, ACTIVITY_TYPES, Icon, Badge, StatusBadge, TypeBadge, Checkbox,
+   cls, fmtNum, fmtMoney, fmtLitres, fmtDate, pct, findChannelLabel */
+const { useState: useStateD, useMemo: useMemoD } = React;
+
+function PromoDetail({ promo, t, lang, onClose, onPatch, pushToast }) {
+  const partner = PARTNERS.find((p) => p.id === promo.partnerId);
+  const [op, setOp] = useStateD(null); // 'cancel' | 'quota' | 'period' | 'product' | 'salepoint' | 'email'
+  const [quotaInput, setQuotaInput] = useStateD(promo.quotaLitres ?? promo.quotaMoney);
+  const [period, setPeriod] = useStateD({ start: promo.startDate, end: promo.endDate });
+  const [newProd, setNewProd] = useStateD('');
+  const [newSP, setNewSP] = useStateD('');
+  const [cancelReason, setCancelReason] = useStateD('');
+
+  const usagePct = pct(promo.usedLitres, promo.quotaLitres) || pct(promo.usedMoney, promo.quotaMoney);
+  const progressKind = usagePct >= 95 ? 'bad' : usagePct >= 75 ? 'warn' : '';
+
+  const channels = [...new Set(promo.channelIds)].map((id) => findChannelLabel(id, lang));
+  const productObjs = promo.products.map((sku) => PRODUCTS.find((p) => p.sku === sku)).filter(Boolean);
+  const salePoints = (partner?.salePoints || []).filter((s) => promo.salePointIds.includes(s.id));
+  const availableProds = PRODUCTS.filter((p) => !promo.products.includes(p.sku));
+  const availableSPs = (partner?.salePoints || []).filter((s) => !promo.salePointIds.includes(s.id));
+
+  const submitOp = () => {
+    if (op === 'cancel') {
+      onPatch({ status: 'cancelled', cancelReason });
+      pushToast(lang === 'ru' ? 'Промо отменено · письмо отправлено' : 'Promo cancelled · email sent');
+    } else if (op === 'quota') {
+      const patch = promo.type === 'nplus1' ? { quotaLitres: +quotaInput } : { quotaMoney: +quotaInput };
+      onPatch(patch);
+      pushToast(lang === 'ru' ? 'Квота обновлена' : 'Quota updated');
+    } else if (op === 'period') {
+      onPatch({ startDate: period.start, endDate: period.end });
+      pushToast(lang === 'ru' ? 'Период изменён' : 'Period changed');
+    } else if (op === 'product') {
+      onPatch({ products: [...promo.products, newProd] });
+      pushToast(lang === 'ru' ? 'Продукт добавлен' : 'Product added');
+    } else if (op === 'salepoint') {
+      onPatch({ salePointIds: [...promo.salePointIds, newSP] });
+      pushToast(lang === 'ru' ? 'Точка добавлена' : 'Sale point added');
+    }
+    setOp(null);
+  };
+
+  return (
+    <>
+      <div className="drawer-head">
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <span className="code-tag">{promo.code}</span>
+            <StatusBadge status={promo.status} t={t} />
+            <TypeBadge type={promo.type} t={t} />
+          </div>
+          <h2 style={{ marginTop: 8 }}>{partner?.name}</h2>
+          <div className="sub">{partner?.city} · {channels.join(', ')}</div>
+        </div>
+        <button className="icon-btn" onClick={onClose}><Icon name="close" /></button>
+      </div>
+
+      <div className="drawer-body">
+        <div className="section">
+          <h3>{t.sections.overview}</h3>
+          <div className="kv-grid">
+            <div className="kv editable">
+              <span className="k">{t.fields.type}</span>
+              <span className="v">{ACTIVITY_TYPES.find((a) => a.id === promo.type)?.['label_' + lang]}</span>
+            </div>
+            <div className="kv editable">
+              <span className="k">{t.fields.period}</span>
+              <span className="v">{fmtDate(promo.startDate, lang)} → {fmtDate(promo.endDate, lang)}
+                <button className="edit-btn" onClick={() => setOp('period')}><Icon name="edit" size={12} /></button>
+              </span>
+            </div>
+            <div className="kv editable">
+              <span className="k">{t.fields.quota}</span>
+              <span className="v">
+                {promo.type === 'nplus1' ? fmtLitres(promo.quotaLitres) : fmtMoney(promo.quotaMoney)}
+                <button className="edit-btn" onClick={() => setOp('quota')}><Icon name="edit" size={12} /></button>
+              </span>
+            </div>
+            <div className="kv">
+              <span className="k">{t.fields.used}</span>
+              <span className="v">
+                {promo.type === 'nplus1' ? fmtLitres(promo.usedLitres) : fmtMoney(promo.usedMoney)} ({usagePct}%)
+              </span>
+            </div>
+            {promo.type === 'nplus1' && (
+              <div className="kv">
+                <span className="k">{t.fields.nValue}</span>
+                <span className="v">N = {promo.nValue}</span>
+              </div>
+            )}
+            <div className="kv">
+              <span className="k">{t.fields.createdBy}</span>
+              <span className="v">{promo.createdBy}</span>
+            </div>
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <div className="hint" style={{ marginBottom: 4, display: 'flex', justifyContent: 'space-between' }}>
+              <span>{t.fields.progress}</span>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>{usagePct}%</span>
+            </div>
+            <div className={cls('progress', progressKind)} style={{ width: '100%' }}>
+              <span style={{ width: usagePct + '%' }} />
+            </div>
+          </div>
+        </div>
+
+        <div className="section">
+          <h3>{t.sections.scope}</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <strong style={{ fontSize: 13 }}>{t.fields.salePoint} ({salePoints.length})</strong>
+            <button className="btn sm" onClick={() => setOp('salepoint')} disabled={availableSPs.length === 0}>
+              <Icon name="plus" size={12} />{t.actions.addSalePoint}
+            </button>
+          </div>
+          <div style={{ display: 'grid', gap: 6 }}>
+            {salePoints.map((s) => (
+              <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12.5 }}>
+                <span><Icon name="package" size={12} /> <strong>{s.name}</strong> · <span style={{ color: 'var(--text-3)' }}>{s.address}</span></span>
+                <Badge kind="info">{findChannelLabel(s.channel, lang)}</Badge>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="section">
+          <h3>{t.fields.products}</h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+            {productObjs.map((p) => (
+              <span key={p.sku} className="prod-chip"><strong>{p.sku}</strong> · {p.name}</span>
+            ))}
+          </div>
+          <button className="btn sm" onClick={() => { setNewProd(availableProds[0]?.sku || ''); setOp('product'); }} disabled={availableProds.length === 0}>
+            <Icon name="plus" size={12} />{t.actions.addProduct}
+          </button>
+        </div>
+
+        <div className="section">
+          <h3>{t.sections.operations}</h3>
+          <div className="ops-list">
+            <div className="op-row" onClick={() => setOp('quota')}>
+              <div><strong>{t.actions.changeQuota}</strong>
+                <div className="desc">{lang === 'ru' ? 'Изменить лимит литров или денежный лимит' : 'Adjust the litres or money limit'}</div>
+              </div><Icon name="chevron" size={14} />
+            </div>
+            <div className="op-row" onClick={() => setOp('period')}>
+              <div><strong>{t.actions.changePeriod}</strong>
+                <div className="desc">{lang === 'ru' ? 'Сдвинуть даты начала и окончания' : 'Shift the start and end dates'}</div>
+              </div><Icon name="chevron" size={14} />
+            </div>
+            <div className="op-row" onClick={() => { setNewProd(availableProds[0]?.sku || ''); setOp('product'); }}>
+              <div><strong>{t.actions.addProduct}</strong>
+                <div className="desc">{lang === 'ru' ? 'Расширить ассортимент SKU' : 'Extend the SKU list'}</div>
+              </div><Icon name="chevron" size={14} />
+            </div>
+            <div className="op-row" onClick={() => { setNewSP(availableSPs[0]?.id || ''); setOp('salepoint'); }}>
+              <div><strong>{t.actions.addSalePoint}</strong>
+                <div className="desc">{lang === 'ru' ? 'Добавить точку партнёра в охват' : 'Add another partner location to the scope'}</div>
+              </div><Icon name="chevron" size={14} />
+            </div>
+            <div className="op-row" onClick={() => setOp('email')}>
+              <div><strong>{t.actions.viewEmail}</strong>
+                <div className="desc">{lang === 'ru' ? 'Открыть письмо Outlook для партнёра' : 'Re-open the Outlook notification email'}</div>
+              </div><Icon name="mail" size={14} />
+            </div>
+            <div className="op-row" onClick={() => setOp('cancel')} style={{ borderColor: 'var(--bad-border)', background: 'var(--bad-bg)' }}>
+              <div><strong style={{ color: 'var(--bad-fg)' }}>{t.actions.cancelPromo}</strong>
+                <div className="desc">{lang === 'ru' ? 'Отменить акцию для партнёра и оповестить' : 'Cancel for partner and notify by email'}</div>
+              </div><Icon name="trash" size={14} />
+            </div>
+          </div>
+        </div>
+
+        <div className="section">
+          <h3>{t.sections.activity}</h3>
+          <div className="timeline">
+            <div className="tl-item"><div><strong>{lang === 'ru' ? 'Создано' : 'Created'}</strong><div className="when">{fmtDate(promo.createdAt, lang)} · {promo.createdBy}</div></div></div>
+            {promo.emailSent && <div className="tl-item"><div><strong>{lang === 'ru' ? 'Письмо отправлено' : 'Notification email sent'}</strong><div className="when">{fmtDate(promo.createdAt, lang)} · Outlook</div></div></div>}
+            {promo.usedLitres > 0 && <div className="tl-item"><div><strong>{lang === 'ru' ? 'Заявка обработана' : 'Partner request processed'}</strong><div className="when">{fmtDate(promo.startDate, lang)}</div></div></div>}
+            {promo.cancelReason && <div className="tl-item"><div><strong>{lang === 'ru' ? 'Отмена' : 'Cancelled'}</strong><div className="when">{promo.cancelReason}</div></div></div>}
+          </div>
+        </div>
+      </div>
+
+      {/* Operation overlay */}
+      {op && (
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,23,42,.34)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 24, zIndex: 5 }}>
+          <div className="section" style={{ width: 480, maxWidth: '100%', margin: 0, boxShadow: 'var(--shadow-lg)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <h3 style={{ margin: 0 }}>{({
+                cancel: t.actions.cancelPromo, quota: t.actions.changeQuota, period: t.actions.changePeriod,
+                product: t.actions.addProduct, salepoint: t.actions.addSalePoint, email: t.actions.viewEmail,
+              })[op]}</h3>
+              <button className="icon-btn" onClick={() => setOp(null)}><Icon name="close" /></button>
+            </div>
+            {op === 'quota' && (
+              <div className="field">
+                <label>{promo.type === 'nplus1' ? t.fields.quotaLitres : t.fields.quotaMoney}</label>
+                <input className="input" type="number" value={quotaInput} onChange={(e) => setQuotaInput(e.target.value)} />
+                <div className="hint">{lang === 'ru' ? 'Текущая' : 'Current'}: {promo.type === 'nplus1' ? fmtLitres(promo.quotaLitres) : fmtMoney(promo.quotaMoney)} · {lang === 'ru' ? 'использовано' : 'used'} {usagePct}%</div>
+              </div>
+            )}
+            {op === 'period' && (
+              <div className="row-2">
+                <div className="field"><label>{t.fields.startDate}</label><input className="input" type="date" value={period.start} onChange={(e) => setPeriod({ ...period, start: e.target.value })} /></div>
+                <div className="field"><label>{t.fields.endDate}</label><input className="input" type="date" value={period.end} onChange={(e) => setPeriod({ ...period, end: e.target.value })} /></div>
+              </div>
+            )}
+            {op === 'product' && (
+              <div className="field"><label>SKU</label>
+                <select className="select" value={newProd} onChange={(e) => setNewProd(e.target.value)}>
+                  {availableProds.map((p) => <option key={p.sku} value={p.sku}>{p.sku} — {p.name}</option>)}
+                </select>
+              </div>
+            )}
+            {op === 'salepoint' && (
+              <div className="field"><label>{t.fields.salePoint}</label>
+                <select className="select" value={newSP} onChange={(e) => setNewSP(e.target.value)}>
+                  {availableSPs.map((s) => <option key={s.id} value={s.id}>{s.name} — {s.address}</option>)}
+                </select>
+              </div>
+            )}
+            {op === 'cancel' && (
+              <div className="field"><label>{lang === 'ru' ? 'Причина отмены' : 'Reason for cancellation'}</label>
+                <textarea className="textarea" value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder={lang === 'ru' ? 'Кратко опишите причину…' : 'Briefly describe the reason…'} />
+                <div className="hint">{lang === 'ru' ? 'Партнёру будет отправлено письмо с уведомлением.' : 'A cancellation email will be sent to the partner via Outlook.'}</div>
+              </div>
+            )}
+            {op === 'email' && (
+              <div className="email">
+                <div className="email-head">
+                  <span className="lk">{t.fields.recipient}</span><span className="vl">{partner?.name.toLowerCase().replace(/[^a-z]/g,'')}@partner.com</span>
+                  <span className="lk">{t.fields.subject}</span><span className="vl"><strong>Promo-activity {promo.code} — {partner?.name}</strong></span>
+                </div>
+                <div className="email-body">{(t.placeholders.emailBody)
+                  .replace('{code}', promo.code)
+                  .replace('{start}', fmtDate(promo.startDate, lang))
+                  .replace('{end}', fmtDate(promo.endDate, lang))
+                  .replace('{type}', ACTIVITY_TYPES.find((a) => a.id === promo.type)['label_' + lang])
+                  .replace('{products}', productObjs.map((p) => p.name).join(', '))
+                  .replace('{quota}', promo.type === 'nplus1' ? fmtLitres(promo.quotaLitres) : fmtMoney(promo.quotaMoney))}
+                </div>
+              </div>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 }}>
+              <button className="btn" onClick={() => setOp(null)}>{t.actions.cancel}</button>
+              {op !== 'email' && (
+                <button className={cls('btn', op === 'cancel' ? 'danger' : 'primary')} onClick={submitOp}>
+                  {op === 'cancel' ? t.actions.cancelPromo : t.actions.save}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+window.PromoDetail = PromoDetail;
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, PARTNERS, PRODUCTS, REQUESTS, Icon, Badge, Checkbox, cls,
+   fmtNum, fmtMoney, fmtLitres, fmtDate, aiBadgeKind, aiIcon */
+const { useState: useStateR, useMemo: useMemoR } = React;
+
+function RequestsPanel({ t, lang, requests, setRequests, aiVariant, pushToast }) {
+  const [selectedId, setSelectedId] = useStateR(requests[0]?.id || null);
+  const sel = requests.find((r) => r.id === selectedId) || requests[0];
+
+  const partner = PARTNERS.find((p) => p.id === sel?.partnerId);
+
+  const setDecision = (id, decision) => {
+    setRequests(requests.map((r) => r.id === id ? { ...r, decision } : r));
+    pushToast(decision === 'approved' ? (lang === 'ru' ? 'Заявка одобрена' : 'Request approved') : (lang === 'ru' ? 'Заявка отклонена' : 'Request rejected'));
+  };
+
+  const renderAIBlock = (r) => {
+    if (!r) return null;
+    const notes = r['aiNotes_' + lang];
+    const conf = Math.round(r.aiConfidence * 100);
+    if (aiVariant === 'badges') {
+      return (
+        <div className="ai-card">
+          <div className="ai-head">
+            <Badge kind={aiBadgeKind(r.aiStatus)} dot>
+              <Icon name={aiIcon(r.aiStatus)} size={11} strokeWidth={2.5} />{t.status[r.aiStatus]}
+            </Badge>
+            <strong>{lang === 'ru' ? 'Проверка AI' : 'AI verification'}</strong>
+            <span className="conf">{t.misc.confidence} <span className="conf-bar"><span style={{ width: conf + '%' }} /></span> {conf}%</span>
+          </div>
+          <div className="ai-notes">{notes}</div>
+        </div>
+      );
+    }
+    if (aiVariant === 'diff') {
+      // build diff: assume "system" volume = claimed × small jitter based on status
+      const factor = r.aiStatus === 'verified' ? 1.001 : r.aiStatus === 'flag' ? 0.91 : 0.78;
+      return (
+        <div className="ai-card">
+          <div className="ai-head">
+            <Badge kind={aiBadgeKind(r.aiStatus)} dot>{t.status[r.aiStatus]}</Badge>
+            <strong>{lang === 'ru' ? 'Сравнение с системой' : 'Side-by-side reconciliation'}</strong>
+            <span className="conf">{t.misc.confidence} {conf}%</span>
+          </div>
+          <div className="ai-evidence">
+            <div className="col">
+              <h5>{lang === 'ru' ? 'Партнёр заявил' : 'Partner claim'}</h5>
+              {r.claimedSales.map((s) => (
+                <div className="diff-row" key={s.sku}>
+                  <span>{s.sku}</span><span>{fmtLitres(s.litres)}</span>
+                </div>
+              ))}
+            </div>
+            <div className="col">
+              <h5>{lang === 'ru' ? 'Найдено в Panorama' : 'Panorama / system'}</h5>
+              {r.claimedSales.map((s) => {
+                const sys = Math.round(s.litres * factor);
+                const delta = ((s.litres - sys) / sys) * 100;
+                const kind = Math.abs(delta) < 1 ? 'ok' : Math.abs(delta) < 8 ? 'warn' : 'bad';
+                return (
+                  <div className="diff-row" key={s.sku}>
+                    <span>{fmtLitres(sys)}</span>
+                    <span className={cls('delta', kind)}>{delta >= 0 ? '+' : ''}{delta.toFixed(1)}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="ai-notes" style={{ marginTop: 10 }}>{notes}</div>
+        </div>
+      );
+    }
+    // chat
+    return (
+      <div className="ai-card">
+        <div className="ai-head">
+          <Badge kind={aiBadgeKind(r.aiStatus)} dot>{t.status[r.aiStatus]}</Badge>
+          <strong>{lang === 'ru' ? 'AI-ассистент' : 'AI assistant'}</strong>
+          <span className="conf">{conf}%</span>
+        </div>
+        <div className="ai-chat">
+          <div className="ai-msg">
+            <div className="av">AI</div>
+            <div className="bubble">{lang === 'ru' ? 'Получил заявку. Проверяю объёмы и SKU…' : 'Got the request. Checking volumes and SKUs…'}</div>
+          </div>
+          <div className="ai-msg">
+            <div className="av">AI</div>
+            <div className="bubble">{notes}</div>
+          </div>
+          <div className="ai-msg">
+            <div className="av">AI</div>
+            <div className="bubble">
+              {r.aiStatus === 'verified' && (lang === 'ru' ? 'Рекомендую одобрить.' : 'Recommendation: approve.')}
+              {r.aiStatus === 'flag' && (lang === 'ru' ? 'Рекомендую ручную проверку перед одобрением.' : 'Recommendation: manual review before approving.')}
+              {r.aiStatus === 'mismatch' && (lang === 'ru' ? 'Рекомендую отклонить или запросить сверку.' : 'Recommendation: reject or request reconciliation.')}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '420px 1fr', gap: 16, alignItems: 'flex-start' }}>
+      <div className="section" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <strong style={{ fontSize: 13 }}>{t.nav.requests}</strong>
+          <span className="badge" style={{ marginLeft: 'auto' }}>{requests.length}</span>
+        </div>
+        <div style={{ maxHeight: '70vh', overflowY: 'auto' }} className="scroll-hint">
+          {requests.map((r) => {
+            const p = PARTNERS.find((x) => x.id === r.partnerId);
+            const total = r.claimedSales.reduce((acc, s) => acc + s.litres, 0);
+            return (
+              <div key={r.id}
+                onClick={() => setSelectedId(r.id)}
+                style={{
+                  padding: '12px 14px',
+                  borderBottom: '1px solid var(--border)',
+                  background: sel?.id === r.id ? 'var(--brand-50)' : 'var(--surface)',
+                  cursor: 'pointer',
+                }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <span className="code-tag">{r.promoCode}</span>
+                  <Badge kind={aiBadgeKind(r.aiStatus)} dot>{t.status[r.aiStatus]}</Badge>
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>{p?.name}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+                  {fmtDate(r.period.from, lang)} → {fmtDate(r.period.to, lang)} · {fmtLitres(total)}
+                </div>
+                {r.decision && (
+                  <div style={{ marginTop: 4 }}>
+                    <Badge kind={r.decision === 'approved' ? 'ok' : 'bad'}>
+                      {r.decision === 'approved' ? (lang === 'ru' ? 'Одобрено' : 'Approved') : (lang === 'ru' ? 'Отклонено' : 'Rejected')}
+                    </Badge>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        {sel && (
+          <>
+            <div className="section">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                <div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
+                    <span className="code-tag">{sel.promoCode}</span>
+                    <Badge kind={aiBadgeKind(sel.aiStatus)} dot>{t.status[sel.aiStatus]}</Badge>
+                  </div>
+                  <h3 style={{ margin: 0, fontSize: 16, textTransform: 'none', letterSpacing: 0 }}>{partner?.name}</h3>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+                    {lang === 'ru' ? 'Заявка от' : 'Submitted'} {fmtDate(sel.submittedAt, lang)} · {lang === 'ru' ? 'период' : 'period'} {fmtDate(sel.period.from, lang)} → {fmtDate(sel.period.to, lang)}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn"><Icon name="refresh" size={14} />{t.misc.verifyAgain}</button>
+                  <button className="btn"><Icon name="excel" size={14} />{t.actions.export}</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="section">
+              <h3>{t.sections.aiAssessment}</h3>
+              {renderAIBlock(sel)}
+            </div>
+
+            <div className="section">
+              <h3>{t.sections.claimedSales}</h3>
+              <div className="table-wrap" style={{ borderRadius: 10 }}>
+                <table className="data">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>{lang === 'ru' ? 'Продукт' : 'Product'}</th>
+                      <th style={{ textAlign: 'right' }}>{lang === 'ru' ? 'Литров' : 'Litres'}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sel.claimedSales.map((s) => {
+                      const p = PRODUCTS.find((x) => x.sku === s.sku);
+                      return (
+                        <tr key={s.sku}>
+                          <td className="cell-num">{s.sku}</td>
+                          <td>{p?.name}</td>
+                          <td className="cell-num" style={{ textAlign: 'right' }}>{fmtLitres(s.litres)}</td>
+                        </tr>
+                      );
+                    })}
+                    <tr style={{ background: 'var(--surface-2)' }}>
+                      <td colSpan="2" style={{ fontWeight: 600 }}>{lang === 'ru' ? 'Итого' : 'Total'}</td>
+                      <td className="cell-num" style={{ textAlign: 'right', fontWeight: 600 }}>
+                        {fmtLitres(sel.claimedSales.reduce((a, s) => a + s.litres, 0))}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <button className="btn"><Icon name="refresh" size={14} />{t.actions.reconcile}</button>
+              <button className="btn danger" onClick={() => setDecision(sel.id, 'rejected')} disabled={sel.decision === 'rejected'}>
+                <Icon name="close" size={14} />{t.actions.reject}
+              </button>
+              <button className="btn primary" onClick={() => setDecision(sel.id, 'approved')} disabled={sel.decision === 'approved'}>
+                <Icon name="check" size={14} />{t.actions.approve}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+window.RequestsPanel = RequestsPanel;
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, ReactDOM, I18N, PROMOS, PARTNERS, REQUESTS, PRODUCTS, ACTIVITY_TYPES, ReactTable,
+   Icon, Badge, StatusBadge, TypeBadge, Checkbox, Toast, cls,
+   fmtNum, fmtMoney, fmtLitres, fmtDate, pct, statusBadgeKind, aiBadgeKind,
+   TreePicker, CreatePromoForm, PromoDetail, RequestsPanel, findChannelLabel,
+   TweaksPanel, useTweaks, TweakSection, TweakRadio, TweakToggle */
+const { useState: useStateApp, useEffect: useEffectApp, useMemo: useMemoApp } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light",
+  "createFlow": "wizard",
+  "aiVariant": "badges"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = useStateApp('ru');
+  const [tab, setTab] = useStateApp('promos');
+  const [promos, setPromos] = useStateApp(PROMOS);
+  const [requests, setRequests] = useStateApp(REQUESTS);
+  const [filter, setFilter] = useStateApp({ q: '' });
+  const [creating, setCreating] = useStateApp(false);
+  const [detailCode, setDetailCode] = useStateApp(null);
+  const [toasts, setToasts] = useStateApp([]);
+
+  useEffectApp(() => { document.documentElement.dataset.theme = tweaks.theme; }, [tweaks.theme]);
+
+  const t = I18N[lang];
+
+  const pushToast = (msg) => {
+    const id = Math.random().toString(36).slice(2);
+    setToasts((cur) => [...cur, { id, msg }]);
+  };
+
+  const detailPromo = promos.find((p) => p.code === detailCode);
+
+  const stats = useMemoApp(() => {
+    const active = promos.filter((p) => p.status === 'active');
+    const litres = active.filter((p) => p.type === 'nplus1').reduce((a, p) => a + (p.quotaLitres || 0), 0);
+    const money = active.filter((p) => p.type === 'money').reduce((a, p) => a + (p.quotaMoney || 0), 0);
+    const pendingReq = requests.filter((r) => !r.decision).length;
+    return { active: active.length, litres, money, pendingReq };
+  }, [promos, requests]);
+
+  const handleCreate = (newP) => {
+    const code = newP.code;
+    const stub = {
+      code, type: 'nplus1', status: newP.status || 'draft',
+      partnerId: 'p-001', salePointIds: ['sp-001'], channelIds: ['datum'],
+      products: ['EFS-PIL-050'], nValue: 10, quotaLitres: 1000, usedLitres: 0,
+      startDate: new Date().toISOString().slice(0,10),
+      endDate: new Date(Date.now()+60*86400000).toISOString().slice(0,10),
+      createdBy: 'You', createdAt: new Date().toISOString().slice(0,10),
+      emailSent: !!newP.emailSent,
+    };
+    setPromos([stub, ...promos]);
+    setCreating(false);
+    pushToast(newP.emailSent
+      ? (lang === 'ru' ? `Промо ${code} создано · письмо отправлено` : `Promo ${code} created · email sent`)
+      : (lang === 'ru' ? `Черновик ${code} сохранён` : `Draft ${code} saved`));
+  };
+
+  const handlePatch = (patch) => {
+    setPromos(promos.map((p) => p.code === detailCode ? { ...p, ...patch } : p));
+  };
+
+  return (
+    <div className="app">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-mark">EF</div>
+          <div className="brand-text">
+            <strong>Efes</strong>
+            <span>{t.company}</span>
+          </div>
+        </div>
+
+        <div className="nav-section-label">{lang === 'ru' ? 'Работа' : 'Workspace'}</div>
+        <div className={cls('nav-item', tab === 'promos' && 'active')} onClick={() => setTab('promos')}>
+          <Icon name="promo" />{t.nav.promos}
+          <span className="nav-count">{promos.length}</span>
+        </div>
+        <div className={cls('nav-item', tab === 'requests' && 'active')} onClick={() => setTab('requests')}>
+          <Icon name="requests" />{t.nav.requests}
+          <span className="nav-count">{requests.filter((r) => !r.decision).length}</span>
+        </div>
+
+        <div className="nav-section-label">{lang === 'ru' ? 'Справочники' : 'Catalogue'}</div>
+        <div className={cls('nav-item', tab === 'partners' && 'active')} onClick={() => setTab('partners')}>
+          <Icon name="partners" />{t.nav.partners}<span className="nav-count">{PARTNERS.length}</span>
+        </div>
+        <div className={cls('nav-item', tab === 'products' && 'active')} onClick={() => setTab('products')}>
+          <Icon name="products" />{t.nav.products}<span className="nav-count">{PRODUCTS.length}</span>
+        </div>
+        <div className="nav-item"><Icon name="reports" />{t.nav.reports}</div>
+        <div className="nav-item"><Icon name="settings" />{t.nav.settings}</div>
+
+        <div className="user-card">
+          <div className="user-avatar">AV</div>
+          <div className="user-meta">
+            <strong>Aizhan Nurlanova</strong>
+            <span>{lang === 'ru' ? 'Менеджер по продажам' : 'Sales manager'}</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <div className="main">
+        <header className="topbar">
+          <div className="crumbs">
+            {t.appName} · <strong>{tab === 'requests' ? t.nav.requests : tab === 'partners' ? t.nav.partners : tab === 'products' ? t.nav.products : t.nav.promos}</strong>
+          </div>
+          <div className="search">
+            <span className="search-icon"><Icon name="search" size={14} /></span>
+            <input placeholder={t.actions.search} value={filter.q} onChange={(e) => setFilter({ ...filter, q: e.target.value })} />
+            <span className="kbd">⌘K</span>
+          </div>
+          <div className="topbar-right">
+            <div className="lang-toggle">
+              <button className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>EN</button>
+              <button className={lang === 'ru' ? 'active' : ''} onClick={() => setLang('ru')}>RU</button>
+            </div>
+            <button className="icon-btn" title={lang === 'ru' ? 'Уведомления' : 'Notifications'}>
+              <Icon name="bell" size={14} />
+            </button>
+            <button className="icon-btn" onClick={() => setTweak('theme', tweaks.theme === 'light' ? 'dark' : 'light')}>
+              <Icon name={tweaks.theme === 'light' ? 'moon' : 'sun'} size={14} />
+            </button>
+          </div>
+        </header>
+
+        <main className="page" data-screen-label={tab}>
+          {tab === 'promos' && (
+            <PromosView
+              t={t} lang={lang} promos={promos} stats={stats} searchQuery={filter.q}
+              onCreate={() => setCreating(true)}
+              onSelect={(c) => setDetailCode(c)}
+              pushToast={pushToast}
+            />
+          )}
+          {tab === 'requests' && (
+            <RequestsView t={t} lang={lang} requests={requests} setRequests={setRequests} aiVariant={tweaks.aiVariant} pushToast={pushToast} />
+          )}
+          {tab === 'partners' && <PartnersView t={t} lang={lang} promos={promos} />}
+          {tab === 'products' && <ProductsView t={t} lang={lang} promos={promos} />}
+        </main>
+      </div>
+
+      {creating && (
+        <>
+          <div className="drawer-mask" onClick={() => setCreating(false)} />
+          <aside className={cls('drawer', tweaks.createFlow === 'panel' && 'wide')}>
+            <CreatePromoForm
+              t={t} lang={lang} layout={tweaks.createFlow === 'wizard' ? 'wizard' : 'panel'}
+              onClose={() => setCreating(false)} onCreate={handleCreate}
+            />
+          </aside>
+        </>
+      )}
+
+      {detailPromo && (
+        <>
+          <div className="drawer-mask" onClick={() => setDetailCode(null)} />
+          <aside className="drawer wide" style={{ position: 'fixed' }}>
+            <PromoDetail
+              promo={detailPromo} t={t} lang={lang}
+              onClose={() => setDetailCode(null)}
+              onPatch={handlePatch}
+              pushToast={pushToast}
+            />
+          </aside>
+        </>
+      )}
+
+      <div className="toast-wrap">
+        {toasts.map((tt) => <Toast key={tt.id} msg={tt.msg} onDone={() => setToasts((cur) => cur.filter((x) => x.id !== tt.id))} />)}
+      </div>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection title={lang === 'ru' ? 'Тема' : 'Theme'}>
+          <TweakRadio value={tweaks.theme} onChange={(v) => setTweak('theme', v)}
+            options={[{ value: 'light', label: 'Light' }, { value: 'dark', label: 'Dark' }]} />
+        </TweakSection>
+        <TweakSection title={lang === 'ru' ? 'Создание промо' : 'Create-promo flow'}>
+          <TweakRadio value={tweaks.createFlow} onChange={(v) => setTweak('createFlow', v)}
+            options={[{ value: 'wizard', label: lang === 'ru' ? 'Мастер' : 'Wizard' }, { value: 'panel', label: lang === 'ru' ? 'Боковая панель' : 'Side panel' }]} />
+        </TweakSection>
+        <TweakSection title={lang === 'ru' ? 'Проверка AI' : 'AI verification'}>
+          <TweakRadio value={tweaks.aiVariant} onChange={(v) => setTweak('aiVariant', v)}
+            options={[
+              { value: 'badges', label: lang === 'ru' ? 'Бейджи' : 'Badges' },
+              { value: 'diff', label: 'Diff' },
+              { value: 'chat', label: 'Chat' },
+            ]} />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+// ===== Promos =====
+// ===== Brand + litre helpers (derived from the app's own catalogue — no external data) =====
+// Brand is inferred from the SKU prefix of PRODUCTS: EFS→Efes, GLB→Goldberg, KRN→Karmen, STL→Stella.
+const BRAND_OF_SKU = { EFS: 'Efes', GLB: 'Goldberg', KRN: 'Karmen', STL: 'Stella' };
+function skuBrand(sku) { return BRAND_OF_SKU[String(sku).slice(0, 3)] || String(sku).slice(0, 3); }
+function promoBrands(p) { return [...new Set(p.products.map(skuBrand))]; }
+
+// This is a litre-volume report. N+1 promos use their litre fields directly; money (N+KZT)
+// promos are normalised onto the same litre axis via a demo-only ₸/L constant so every row's
+// "LT" columns and realisation bar are populated.
+const KZT_PER_LITRE = 650;
+function promoLitres(p) {
+  if (p.type === 'nplus1') return { quota: p.quotaLitres || 0, used: p.usedLitres || 0 };
+  return { quota: Math.round((p.quotaMoney || 0) / KZT_PER_LITRE), used: Math.round((p.usedMoney || 0) / KZT_PER_LITRE) };
+}
+function realisation(p) { const L = promoLitres(p); return L.quota ? L.used / L.quota : null; }
+
+// ===== Multi-select slicer (Power-BI-style filter card) =====
+function Slicer({ icon, title, options, selected, onToggle, onClear, searchable, searchPlaceholder, grid, lang }) {
+  const ru = lang === 'ru';
+  const [q, setQ] = useStateApp('');
+  const shown = useMemoApp(() => {
+    if (!searchable || !q.trim()) return options;
+    const s = q.toLowerCase();
+    return options.filter((o) => o.label.toLowerCase().includes(s));
+  }, [options, q, searchable]);
+  return (
+    <div className="slicer">
+      <div className="slicer-head">
+        <span className="sl-icon"><Icon name={icon} size={14} /></span>
+        <span className="sl-title">{title}</span>
+        {selected.size > 0 && <span className="sl-count">{selected.size}</span>}
+        <button className="sl-clear" onClick={onClear} disabled={selected.size === 0}>
+          <Icon name="close" size={11} />{ru ? 'Сбросить' : 'Clear'}
+        </button>
+      </div>
+      {searchable && (
+        <div className="slicer-search">
+          <span className="search-icon"><Icon name="search" size={13} /></span>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={searchPlaceholder} />
+        </div>
+      )}
+      <div className={cls('slicer-body', grid && 'grid')}>
+        {shown.length === 0
+          ? <span className="sl-empty">{ru ? 'Ничего не найдено' : 'No matches'}</span>
+          : shown.map((o) => (
+            <button key={o.value} className={cls('sl-pill', selected.has(o.value) && 'on')}
+              onClick={() => onToggle(o.value)} title={o.label}>
+              <span className="sl-check"><Icon name="check" size={11} strokeWidth={2.5} /></span>
+              <span className="sl-pill-label">{o.label}</span>
+            </button>
+          ))}
+      </div>
+    </div>
+  );
+}
+
+// ===== Flat promo-activity table (mirrors the "Promo status" report layout) =====
+function FlatPromoTable({ t, lang, promos, onSelect, anyFilter, onClearAll }) {
+  const ru = lang === 'ru';
+  const partnerOf = (p) => PARTNERS.find((x) => x.id === p.partnerId);
+  const [sort, setSort] = useStateApp({ col: 'start', dir: 'asc' });
+
+  const fmtDMY = (s) => { const d = new Date(s); const z = (n) => String(n).padStart(2, '0'); return z(d.getDate()) + '.' + z(d.getMonth() + 1) + '.' + d.getFullYear(); };
+  const dealLabel = (p) => (p.type === 'nplus1' ? p.nValue + '+1' : 'N+₸');
+
+  const sortVal = (p, col) => {
+    const L = promoLitres(p);
+    if (col === 'start') return p.startDate;
+    if (col === 'end') return p.endDate;
+    if (col === 'promo') return (partnerOf(p)?.name || '') + p.code;
+    if (col === 'quota') return L.quota;
+    if (col === 'used') return L.used;
+    if (col === 'left') return L.quota - L.used;
+    if (col === 'pct') { const r = realisation(p); return r == null ? -1 : r; }
+    return 0;
+  };
+  const toggleSort = (col) => setSort((s) => (s.col !== col ? { col, dir: 'asc' } : s.dir === 'asc' ? { col, dir: 'desc' } : { col: 'start', dir: 'asc' }));
+  const sortInd = (col) => (sort.col === col ? (sort.dir === 'asc' ? '▲' : '▼') : '↕');
+  const sortCls = (col) => cls('sort-ind', sort.col === col && sort.dir);
+
+  const rows = useMemoApp(() => {
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    return promos.slice().sort((a, b) => { const va = sortVal(a, sort.col), vb = sortVal(b, sort.col); return (va < vb ? -1 : va > vb ? 1 : 0) * dir; });
+  }, [promos, sort]);
+
+  const totals = useMemoApp(() => {
+    let q = 0, u = 0;
+    promos.forEach((p) => { const L = promoLitres(p); q += L.quota; u += L.used; });
+    return { quota: q, used: u, left: q - u, ratio: q ? u / q : null };
+  }, [promos]);
+
+  const lvlOf = (r) => (r == null ? '' : r >= 1 ? 'over' : r >= 0.85 ? 'near' : '');
+  const pctTxt = (r) => (r == null ? '—' : Math.round(r * 100) + '%');
+  const barCell = (r) => {
+    const lvl = lvlOf(r);
+    const w = r == null ? 0 : Math.min(100, Math.round(r * 100));
+    return (
+      <td className={cls('num fl-pct', lvl)}>
+        <div className={cls('fl-bar', lvl)}>
+          <span className="fl-bar-val">{pctTxt(r)}</span>
+          <span className="fl-bar-track"><span className="fl-bar-fill" style={{ width: w + '%' }} /></span>
+        </div>
+      </td>
+    );
+  };
+  const TH = (col, label, num) => (
+    <th className={cls(num && 'num', 'sortable')} onClick={() => toggleSort(col)}>
+      <span className="th-inner">{label}<span className={sortCls(col)}>{sortInd(col)}</span></span>
+    </th>
+  );
+
+  return (
+    <>
+      <div className="promo-resultbar">
+        <span className="rb-count"><b>{promos.length}</b>{ru ? 'промо-активностей' : 'promo-activities'}</span>
+        <span className="rb-metric">{ru ? 'Квота' : 'Quota'}<b>{fmtNum(totals.quota)}</b>{ru ? 'Л' : 'L'}</span>
+        <span className="rb-metric">{ru ? 'Реализовано' : 'Realised'}<b>{fmtNum(totals.used)}</b>{ru ? 'Л' : 'L'}</span>
+        <span className="rb-metric">{ru ? 'Реализация' : 'Realisation'}<b>{pctTxt(totals.ratio)}</b></span>
+        {anyFilter && (
+          <button className="rb-clear" onClick={onClearAll}><Icon name="close" size={12} />{ru ? 'Сбросить фильтры' : 'Clear filters'}</button>
+        )}
+      </div>
+      <div className="table-wrap flat-wrap">
+        <table className="data flat">
+          <colgroup>
+            <col style={{ width: '112px' }} />
+            <col style={{ width: '112px' }} />
+            <col />
+            <col style={{ width: '96px' }} />
+            <col style={{ width: '96px' }} />
+            <col style={{ width: '96px' }} />
+            <col style={{ width: '188px' }} />
+          </colgroup>
+          <thead>
+            <tr>
+              {TH('start', ru ? 'Дата начала' : 'Starting date')}
+              {TH('end', ru ? 'Дата окончания' : 'Ending date')}
+              {TH('promo', ru ? 'Промо' : 'Promo')}
+              {TH('quota', ru ? 'Квота, Л' : 'Promo quota, L', true)}
+              {TH('used', ru ? 'Реализ., Л' : 'Quota rlz, L', true)}
+              {TH('left', ru ? 'Остаток, Л' : 'Left quota, L', true)}
+              {TH('pct', ru ? 'Реализ., %' : 'Quota rlz, %', true)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((p) => {
+              const L = promoLitres(p); const r = realisation(p); const pt = partnerOf(p);
+              return (
+                <tr key={p.code} onClick={() => onSelect(p.code)} title={ru ? 'Открыть промо' : 'Open promo'}>
+                  <td className="fl-date">{fmtDMY(p.startDate)}</td>
+                  <td className="fl-date">{fmtDMY(p.endDate)}</td>
+                  <td>
+                    <div className="fl-promo">
+                      <span className="code-tag">{p.code}</span>
+                      <span className="fl-name">
+                        <span className="fl-title">{dealLabel(p)} · {pt?.name}</span>
+                        <span className="fl-sub">{promoBrands(p).join(', ')} · {findChannelLabel(p.channelIds[0], lang)}</span>
+                      </span>
+                    </div>
+                  </td>
+                  <td className="num">{fmtNum(L.quota)}</td>
+                  <td className="num">{fmtNum(L.used)}</td>
+                  <td className="num">{fmtNum(L.quota - L.used)}</td>
+                  {barCell(r)}
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot>
+            <tr className="fl-total">
+              <td colSpan={3}>{ru ? 'Итого' : 'Total'}</td>
+              <td className="num">{fmtNum(totals.quota)}</td>
+              <td className="num">{fmtNum(totals.used)}</td>
+              <td className="num">{fmtNum(totals.left)}</td>
+              {barCell(totals.ratio)}
+            </tr>
+          </tfoot>
+        </table>
+        {promos.length === 0 && <div className="empty">{t.misc.noResults}</div>}
+      </div>
+    </>
+  );
+}
+
+function PromosView({ t, lang, promos, stats, searchQuery, onCreate, onSelect, pushToast }) {
+  const ru = lang === 'ru';
+  const partnerOf = (p) => PARTNERS.find((x) => x.id === p.partnerId);
+
+  const [selDist, setSelDist] = useStateApp(() => new Set());
+  const [selChan, setSelChan] = useStateApp(() => new Set());
+  const [selBrand, setSelBrand] = useStateApp(() => new Set());
+
+  const toggleIn = (setter) => (val) => setter((s) => { const n = new Set(s); n.has(val) ? n.delete(val) : n.add(val); return n; });
+  const clearAll = () => { setSelDist(new Set()); setSelChan(new Set()); setSelBrand(new Set()); };
+  const anyFilter = selDist.size + selChan.size + selBrand.size > 0;
+
+  // Slicer options — built from the app's own data, scoped to values that actually occur in promos.
+  const distOpts = useMemoApp(() => [...new Set(promos.map((p) => p.partnerId))]
+    .map((id) => ({ value: id, label: PARTNERS.find((x) => x.id === id)?.name || id }))
+    .sort((a, b) => a.label.localeCompare(b.label)), [promos]);
+  const chanOpts = useMemoApp(() => [...new Set(promos.flatMap((p) => p.channelIds))]
+    .map((id) => ({ value: id, label: findChannelLabel(id, lang) }))
+    .sort((a, b) => a.label.localeCompare(b.label)), [promos, lang]);
+  const brandOpts = useMemoApp(() => [...new Set(promos.flatMap(promoBrands))]
+    .sort().map((b) => ({ value: b, label: b })), [promos]);
+
+  const filtered = useMemoApp(() => promos.filter((p) => {
+    if (selDist.size && !selDist.has(p.partnerId)) return false;
+    if (selChan.size && !p.channelIds.some((c) => selChan.has(c))) return false;
+    if (selBrand.size && !promoBrands(p).some((b) => selBrand.has(b))) return false;
+    if (searchQuery) {
+      const q = String(searchQuery).toLowerCase();
+      const pt = partnerOf(p);
+      const hit = p.code.toLowerCase().includes(q) || (pt?.name || '').toLowerCase().includes(q)
+        || (pt?.city || '').toLowerCase().includes(q) || (p.createdBy || '').toLowerCase().includes(q)
+        || p.products.some((s) => s.toLowerCase().includes(q));
+      if (!hit) return false;
+    }
+    return true;
+  }), [promos, selDist, selChan, selBrand, searchQuery, lang]);
+
+  return (
+    <>
+      <div className="page-title">
+        <div>
+          <h1>{t.nav.promos}</h1>
+          <p>{ru ? 'Все промо-активности по партнёрам, точкам и каналам.' : 'All promo-activities across partners, sale points and channels.'}</p>
+        </div>
+        <div className="page-actions">
+          <button className="btn" onClick={() => pushToast(ru ? 'Файл Excel сформирован' : 'Excel export generated')}>
+            <Icon name="excel" size={14} />{t.actions.export}
+          </button>
+          <button className="btn primary" onClick={onCreate}><Icon name="plus" size={14} />{t.actions.newPromo}</button>
+        </div>
+      </div>
+
+      <div className="promo-filters">
+        <Slicer icon="partners" title={ru ? 'Дистрибьютор' : 'Distributor'} options={distOpts} selected={selDist}
+          onToggle={toggleIn(setSelDist)} onClear={() => setSelDist(new Set())}
+          searchable searchPlaceholder={ru ? 'Поиск дистрибьютора…' : 'Search distributor…'} grid lang={lang} />
+        <Slicer icon="barChart" title={t.fields.channel} options={chanOpts} selected={selChan}
+          onToggle={toggleIn(setSelChan)} onClear={() => setSelChan(new Set())} lang={lang} />
+        <Slicer icon="package" title={ru ? 'Бренд' : 'Brand'} options={brandOpts} selected={selBrand}
+          onToggle={toggleIn(setSelBrand)} onClear={() => setSelBrand(new Set())} lang={lang} />
+      </div>
+
+      <FlatPromoTable t={t} lang={lang} promos={filtered} onSelect={onSelect}
+        anyFilter={anyFilter} onClearAll={clearAll} />
+    </>
+  );
+}
+
+// ===== Promo activities — Excel-style pivot =====
+// Mirrors the "NEW KZT PROMO status" workbook: a compact/outline PivotTable with a
+// REGION -> AREA row hierarchy, inline sub-totals, a Grand Total row, KZT number
+// formatting, %-conditional formatting and frozen header + first column. Expand any
+// area to drill down to its individual promo activities.
+
+// City -> macro-region map (derived from the app's own partner cities; no Excel data copied).
+const CITY_REGION = {
+  'Almaty': 'SOUTH', 'Shymkent': 'SOUTH', 'Taraz': 'SOUTH', 'Kyzylorda': 'SOUTH', 'Turkestan': 'SOUTH', 'Taldykorgan': 'SOUTH',
+  'Astana': 'NORTH', 'Kokshetau': 'NORTH', 'Petropavlovsk': 'NORTH', 'Atbasar': 'NORTH', 'Shuchinsk': 'NORTH', 'Stepnogorsk': 'NORTH', 'Akkol/Yerementau': 'NORTH', 'Pavlodar/Ekibastuz': 'NORTH', 'Kostanay': 'NORTH',
+  'Oskemen': 'EAST', 'Semey': 'EAST', 'Ridder': 'EAST', 'Ayagoz': 'EAST', 'Altay': 'EAST', 'Shemonaiha': 'EAST',
+  'Aktobe': 'WEST', 'Atyrau': 'WEST', 'Aktau': 'WEST', 'Zhanaozen': 'WEST', 'Oral': 'WEST', 'Kulsary': 'WEST',
+  'Karaganda': 'CENTRAL', 'Zhezkazgan': 'CENTRAL', 'Balkhash': 'CENTRAL',
+};
+const REGION_ORDER = ['NORTH', 'WEST', 'SOUTH', 'EAST', 'CENTRAL', 'OTHER'];
+const REGION_LABEL = {
+  NORTH:   { en: 'NORTH REGION',    ru: 'СЕВЕРНЫЙ РЕГИОН' },
+  WEST:    { en: 'WEST REGION',     ru: 'ЗАПАДНЫЙ РЕГИОН' },
+  SOUTH:   { en: 'SOUTH REGION',    ru: 'ЮЖНЫЙ РЕГИОН' },
+  EAST:    { en: 'EAST REGION',     ru: 'ВОСТОЧНЫЙ РЕГИОН' },
+  CENTRAL: { en: 'CENTRAL REGION',  ru: 'ЦЕНТРАЛЬНЫЙ РЕГИОН' },
+  OTHER:   { en: 'OTHER',           ru: 'ПРОЧЕЕ' },
+};
+
+// Aggregate a set of promos into the pivot's KZT measures (mirrors the workbook columns).
+function aggPromos(list) {
+  let quotaMoney = 0, usedMoney = 0;
+  const outlets = new Set();
+  list.forEach((p) => {
+    if (p.type === 'money') { quotaMoney += p.quotaMoney || 0; usedMoney += p.usedMoney || 0; }
+    p.salePointIds.forEach((id) => outlets.add(id));
+  });
+  return { outlets: outlets.size, quotaMoney, usedMoney, leftMoney: quotaMoney - usedMoney, ratio: quotaMoney > 0 ? usedMoney / quotaMoney : null };
+}
+// One promo's realisation ratio (KZT for money promos, litres for N+1) so every leaf still
+// carries a % the conditional-format can colour.
+function promoRatio(p) {
+  return p.type === 'money'
+    ? (p.quotaMoney ? p.usedMoney / p.quotaMoney : null)
+    : (p.quotaLitres ? p.usedLitres / p.quotaLitres : null);
+}
+function leafVal(p, col) {
+  if (col === 'outlets') return p.salePointIds.length;
+  if (col === 'ratio') { const r = promoRatio(p); return r == null ? -1 : r; }
+  if (p.type !== 'money') return -1;
+  if (col === 'quotaMoney') return p.quotaMoney || 0;
+  if (col === 'usedMoney') return p.usedMoney || 0;
+  if (col === 'leftMoney') return (p.quotaMoney || 0) - (p.usedMoney || 0);
+  return 0;
+}
+const fmtPct = (r) => (r == null ? '—' : Math.round(r * 100) + '%');
+// Excel cellIs rule was ">100% -> red". We flag >=100% red and >=85% amber so a fully
+// consumed quota reads as an alert.
+const cfClass = (r) => (r == null ? '' : r >= 1 ? 'cf-over' : r >= 0.85 ? 'cf-near' : '');
+
+// Row-grouping dimensions offered in the "Rows" field selectors.
+function pivotDims(lang, t, partnerOf) {
+  const seg = (s) => (s === 'ontrade' ? (lang === 'ru' ? 'Он-трейд' : 'On trade') : (lang === 'ru' ? 'Офф-трейд' : 'Off trade'));
+  const txt = (a, b) => String(a).localeCompare(String(b));
+  return {
+    region:  { label: lang === 'ru' ? 'Регион' : 'Region',  key: (p) => CITY_REGION[partnerOf(p)?.city] || 'OTHER', display: (k) => (REGION_LABEL[k] ? REGION_LABEL[k][lang] : k), order: (a, b) => (REGION_ORDER.indexOf(a) - REGION_ORDER.indexOf(b)) || txt(a, b) },
+    city:    { label: lang === 'ru' ? 'Город' : 'Area',     key: (p) => partnerOf(p)?.city || '—', display: (k) => k, order: txt },
+    partner: { label: t.fields.partner, key: (p) => partnerOf(p)?.name || '—', display: (k) => k, order: txt },
+    segment: { label: lang === 'ru' ? 'Сегмент' : 'Segment', key: (p) => partnerOf(p)?.segment || '—', display: (k) => seg(k), order: txt },
+    channel: { label: t.fields.channel, key: (p) => findChannelLabel(p.channelIds[0], lang) || '—', display: (k) => k, order: txt },
+    type:    { label: t.fields.type, key: (p) => p.type, display: (k) => (k === 'nplus1' ? 'N + 1' : 'N + KZT'), order: txt },
+    status:  { label: lang === 'ru' ? 'Статус' : 'Status', key: (p) => p.status, display: (k) => (t.status[k] || k), order: txt },
+    owner:   { label: t.fields.createdBy, key: (p) => p.createdBy, display: (k) => k, order: txt },
+  };
+}
+
+// Excel-pivot-style promo table: outline rows, sub-totals, grand total, conditional
+// formatting and frozen panes. Pure React (no TanStack) for full control of the layout.
+function PromoTable({ t, lang, promos, searchQuery, onSelect }) {
+  const partnerOf = (p) => PARTNERS.find((x) => x.id === p.partnerId);
+  const ru = lang === 'ru';
+
+  const [l1, setL1] = useStateApp('region');
+  const [l2, setL2] = useStateApp('city');
+  const [typeF, setTypeF] = useStateApp('all');
+  const [statusF, setStatusF] = useStateApp('all');
+  const [channelF, setChannelF] = useStateApp('all');
+  const [ownerF, setOwnerF] = useStateApp('all');
+  const [sort, setSort] = useStateApp({ col: null, dir: 'desc' });
+
+  const dims = useMemoApp(() => pivotDims(lang, t, partnerOf), [lang, t]);
+  const dim1 = dims[l1];
+  const dim2 = l2 === 'none' ? null : dims[l2];
+
+  const filtered = useMemoApp(() => promos.filter((p) => {
+    if (typeF !== 'all' && p.type !== typeF) return false;
+    if (statusF !== 'all' && p.status !== statusF) return false;
+    if (channelF !== 'all' && !p.channelIds.includes(channelF)) return false;
+    if (ownerF !== 'all' && p.createdBy !== ownerF) return false;
+    if (searchQuery) {
+      const q = String(searchQuery).toLowerCase();
+      const pt = partnerOf(p);
+      const hit = p.code.toLowerCase().includes(q) || (pt?.name || '').toLowerCase().includes(q)
+        || (pt?.city || '').toLowerCase().includes(q) || (p.createdBy || '').toLowerCase().includes(q)
+        || p.products.some((s) => s.toLowerCase().includes(q));
+      if (!hit) return false;
+    }
+    return true;
+  }), [promos, typeF, statusF, channelF, ownerF, searchQuery, lang]);
+
+  // Expansion: default opens every level-1 group (areas visible, promo rows collapsed).
+  const [expanded, setExpanded] = useStateApp(() => {
+    const s = new Set();
+    promos.forEach((p) => s.add('1|' + (CITY_REGION[PARTNERS.find((x) => x.id === p.partnerId)?.city] || 'OTHER')));
+    return s;
+  });
+  useEffectApp(() => {
+    const s = new Set();
+    filtered.forEach((p) => s.add('1|' + dim1.key(p)));
+    setExpanded(s);
+  }, [l1, l2]); // reset to "areas open" whenever the row fields change
+  const toggle = (key) => setExpanded((s) => { const n = new Set(s); n.has(key) ? n.delete(key) : n.add(key); return n; });
+  const expandAll = () => {
+    const s = new Set();
+    filtered.forEach((p) => { const k1 = dim1.key(p); s.add('1|' + k1); if (dim2) s.add('2|' + k1 + '|' + dim2.key(p)); });
+    setExpanded(s);
+  };
+  const collapseAll = () => setExpanded(new Set());
+
+  const toggleSort = (col) => setSort((s) => (s.col !== col ? { col, dir: 'desc' } : s.dir === 'desc' ? { col, dir: 'asc' } : { col: null, dir: 'desc' }));
+  const sortInd = (col) => (sort.col === col ? (sort.dir === 'asc' ? '▲' : '▼') : '↕');
+
+  const { rows, grand, groupCount } = useMemoApp(() => {
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    const groupCmp = (A, B, dim) => (sort.col ? (((A.agg[sort.col] ?? -1) - (B.agg[sort.col] ?? -1)) * dir) : dim.order(A.k, B.k));
+    const leafCmp = (a, b) => (sort.col ? ((leafVal(a, sort.col) - leafVal(b, sort.col)) * dir) : (a.startDate < b.startDate ? 1 : -1));
+    const groupOf = (list, dim) => {
+      const m = new Map();
+      list.forEach((p) => { const k = dim.key(p); if (!m.has(k)) m.set(k, []); m.get(k).push(p); });
+      return [...m.entries()].map(([k, l]) => ({ k, list: l, agg: aggPromos(l) }));
+    };
+    const out = [];
+    let gc = 0;
+    const g1 = groupOf(filtered, dim1).sort((A, B) => groupCmp(A, B, dim1));
+    g1.forEach((a) => {
+      gc++;
+      const key1 = '1|' + a.k;
+      const open1 = expanded.has(key1);
+      out.push({ kind: 'group', depth: 0, key: key1, label: dim1.display(a.k), agg: a.agg, open: open1 });
+      if (!open1) return;
+      if (dim2) {
+        const g2 = groupOf(a.list, dim2).sort((A, B) => groupCmp(A, B, dim2));
+        g2.forEach((b) => {
+          gc++;
+          const key2 = '2|' + a.k + '|' + b.k;
+          const open2 = expanded.has(key2);
+          out.push({ kind: 'group', depth: 1, key: key2, label: dim2.display(b.k), agg: b.agg, open: open2 });
+          if (open2) b.list.slice().sort(leafCmp).forEach((p) => out.push({ kind: 'leaf', depth: 2, promo: p }));
+        });
+      } else {
+        a.list.slice().sort(leafCmp).forEach((p) => out.push({ kind: 'leaf', depth: 1, promo: p }));
+      }
+    });
+    return { rows: out, grand: aggPromos(filtered), groupCount: gc };
+  }, [filtered, l1, l2, expanded, sort, lang]);
+
+  const owners = useMemoApp(() => [...new Set(promos.map((p) => p.createdBy))], [promos]);
+  const channelIds = useMemoApp(() => { const s = new Set(); promos.forEach((p) => p.channelIds.forEach((c) => s.add(c))); return [...s]; }, [promos]);
+
+  const DIM_OPTS = [
+    { value: 'region', label: ru ? 'Регион' : 'Region' },
+    { value: 'city', label: ru ? 'Город' : 'Area' },
+    { value: 'partner', label: t.fields.partner },
+    { value: 'segment', label: ru ? 'Сегмент' : 'Segment' },
+    { value: 'channel', label: t.fields.channel },
+    { value: 'type', label: t.fields.type },
+    { value: 'status', label: ru ? 'Статус' : 'Status' },
+    { value: 'owner', label: t.fields.createdBy },
+  ];
+  const TYPE_OPTS = [{ value: 'all', label: ru ? '(Все)' : '(All)' }, { value: 'nplus1', label: 'N + 1' }, { value: 'money', label: 'N + KZT' }];
+  const STATUS_OPTS = [{ value: 'all', label: ru ? '(Все)' : '(All)' }, { value: 'active', label: t.status.active }, { value: 'pending', label: t.status.pending }, { value: 'draft', label: t.status.draft }, { value: 'expired', label: t.status.expired }, { value: 'cancelled', label: t.status.cancelled }];
+
+  const hierHeader = dim1.label + (dim2 ? ' / ' + dim2.label : '');
+  const moneyCell = (v) => (v ? fmtNum(v) : '—');
+  const sortCls = (col) => cls('sort-ind', sort.col === col && sort.dir);
+
+  const renderGroup = (row) => (
+    <tr key={row.key} className={cls('pv-group', row.depth === 0 ? 'pv-l1' : 'pv-l2')} onClick={() => toggle(row.key)}>
+      <td className="pv-name" style={{ paddingLeft: 12 + row.depth * 20 }}>
+        <span className="pv-twisty">{row.open ? '▾' : '▸'}</span>
+        <span className="pv-label">{row.label}</span>
+      </td>
+      <td className="num">{row.agg.outlets}</td>
+      <td className="num">{moneyCell(row.agg.quotaMoney)}</td>
+      <td className="num">{moneyCell(row.agg.usedMoney)}</td>
+      <td className="num">{row.agg.quotaMoney ? fmtNum(row.agg.leftMoney) : '—'}</td>
+      <td className={cls('num pv-pct', cfClass(row.agg.ratio))}>{fmtPct(row.agg.ratio)}</td>
+    </tr>
+  );
+  const renderLeaf = (row) => {
+    const p = row.promo; const pt = partnerOf(p); const money = p.type === 'money'; const r = promoRatio(p);
+    return (
+      <tr key={p.code} className="pv-leaf" onClick={() => onSelect(p.code)} title={ru ? 'Открыть промо' : 'Open promo'}>
+        <td className="pv-name" style={{ paddingLeft: 12 + row.depth * 20 }}>
+          <span className="pv-twisty" />
+          <span className="code-tag">{p.code}</span>
+          <span className="pv-leaf-sub">{pt?.name}{!money && p.quotaLitres ? ' · ' + fmtLitres(p.quotaLitres) : ''}</span>
+        </td>
+        <td className="num">{p.salePointIds.length}</td>
+        <td className="num">{money ? fmtNum(p.quotaMoney) : '—'}</td>
+        <td className="num">{money ? fmtNum(p.usedMoney) : '—'}</td>
+        <td className="num">{money ? fmtNum((p.quotaMoney || 0) - (p.usedMoney || 0)) : '—'}</td>
+        <td className={cls('num pv-pct', cfClass(r))}>{fmtPct(r)}</td>
+      </tr>
+    );
+  };
+
+  return (
+    <>
+      <div className="toolbar pivot-toolbar">
+        <span className="rf-group">
+          <span className="tb-label">{ru ? 'Строки' : 'Rows'}</span>
+          <select className="select compact" value={l1} onChange={(e) => setL1(e.target.value)}>
+            {DIM_OPTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+          <span className="rf-arrow">›</span>
+          <select className="select compact" value={l2} onChange={(e) => setL2(e.target.value)}>
+            <option value="none">{ru ? '— нет —' : '— none —'}</option>
+            {DIM_OPTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </span>
+        <span className="tb-div" />
+        <span className="rf-group">
+          <span className="tb-label">{t.fields.type}</span>
+          <select className="select compact" value={typeF} onChange={(e) => setTypeF(e.target.value)}>
+            {TYPE_OPTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </span>
+        <span className="rf-group">
+          <span className="tb-label">{ru ? 'Статус' : 'Status'}</span>
+          <select className="select compact" value={statusF} onChange={(e) => setStatusF(e.target.value)}>
+            {STATUS_OPTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </span>
+        <div className="toolbar-spacer" />
+        <select className="select compact" value={channelF} onChange={(e) => setChannelF(e.target.value)}>
+          <option value="all">{ru ? 'Все каналы' : 'All channels'}</option>
+          {channelIds.map((c) => <option key={c} value={c}>{findChannelLabel(c, lang)}</option>)}
+        </select>
+        <select className="select compact" value={ownerF} onChange={(e) => setOwnerF(e.target.value)}>
+          <option value="all">{ru ? 'Все ответственные' : 'All owners'}</option>
+          {owners.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+      </div>
+
+      <div className="toolbar toolbar-sub">
+        <button className="btn sm ghost" onClick={expandAll}>{ru ? 'Развернуть всё' : 'Expand all'}</button>
+        <button className="btn sm ghost" onClick={collapseAll}>{ru ? 'Свернуть всё' : 'Collapse all'}</button>
+        {sort.col && (<><span className="tb-div" /><button className="btn sm ghost" onClick={() => setSort({ col: null, dir: 'desc' })}><Icon name="close" size={12} />{ru ? 'Сбросить сортировку' : 'Clear sort'}</button></>)}
+        <div className="toolbar-spacer" />
+        <span className="tb-hint">{filtered.length} {ru ? 'промо' : 'promos'} · {groupCount} {ru ? 'групп' : 'groups'}</span>
+      </div>
+
+      <div className="table-wrap pivot-wrap">
+        <table className="data pivot">
+          <thead>
+            <tr>
+              <th className="pv-rowhdr">{hierHeader}</th>
+              <th className="num sortable" onClick={() => toggleSort('outlets')} title={ru ? 'Точек продаж с промо-заказами' : 'Outlets with promo orders'}><span className="th-inner">{ru ? '# точек' : '# outlets'}<span className={sortCls('outlets')}>{sortInd('outlets')}</span></span></th>
+              <th className="num sortable" onClick={() => toggleSort('quotaMoney')}><span className="th-inner">{ru ? 'Квота, ₸' : 'Quota, ₸'}<span className={sortCls('quotaMoney')}>{sortInd('quotaMoney')}</span></span></th>
+              <th className="num sortable" onClick={() => toggleSort('usedMoney')}><span className="th-inner">{ru ? 'Реализовано, ₸' : 'Realized, ₸'}<span className={sortCls('usedMoney')}>{sortInd('usedMoney')}</span></span></th>
+              <th className="num sortable" onClick={() => toggleSort('leftMoney')}><span className="th-inner">{ru ? 'Остаток, ₸' : 'Left, ₸'}<span className={sortCls('leftMoney')}>{sortInd('leftMoney')}</span></span></th>
+              <th className="num sortable" onClick={() => toggleSort('ratio')}><span className="th-inner">{ru ? 'Реализация, %' : 'Realized, %'}<span className={sortCls('ratio')}>{sortInd('ratio')}</span></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (row.kind === 'group' ? renderGroup(row) : renderLeaf(row)))}
+          </tbody>
+          <tfoot>
+            <tr className="pv-total">
+              <td className="pv-name" style={{ paddingLeft: 12 }}>{ru ? 'Итого' : 'Total'}</td>
+              <td className="num">{grand.outlets}</td>
+              <td className="num">{moneyCell(grand.quotaMoney)}</td>
+              <td className="num">{moneyCell(grand.usedMoney)}</td>
+              <td className="num">{grand.quotaMoney ? fmtNum(grand.leftMoney) : '—'}</td>
+              <td className={cls('num pv-pct', cfClass(grand.ratio))}>{fmtPct(grand.ratio)}</td>
+            </tr>
+          </tfoot>
+        </table>
+        {filtered.length === 0 && <div className="empty">{t.misc.noResults}</div>}
+      </div>
+    </>
+  );
+}
+
+function FilterChips({ label, value, onChange, options }) {
+  return (
+    <>
+      <span style={{ fontSize: 11.5, color: 'var(--text-3)', marginRight: 4, textTransform: 'uppercase', letterSpacing: '.04em', fontWeight: 600 }}>{label}</span>
+      {options.map((o) => (
+        <button key={o.value} className={cls('chip', value === o.value && 'active')} onClick={() => onChange(o.value)}>
+          {o.label}
+        </button>
+      ))}
+    </>
+  );
+}
+
+function StatTiles({ stats, t, lang }) {
+  return (
+    <div className="stats">
+      <div className="stat">
+        <span className="stat-label">{t.summary.totalActive}</span>
+        <span className="stat-value">{stats.active}</span>
+        <span className="stat-sub"><b>+3</b> {lang === 'ru' ? 'за неделю' : 'this week'}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-label">{t.summary.totalLitres}</span>
+        <span className="stat-value">{fmtNum(stats.litres)}<span style={{ fontSize: 14, color: 'var(--text-3)', marginLeft: 4 }}>L</span></span>
+        <span className="stat-sub">{lang === 'ru' ? 'по активным N + 1' : 'across active N + 1 promos'}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-label">{t.summary.totalMoney}</span>
+        <span className="stat-value">₸{(stats.money / 1000000).toFixed(2)}M</span>
+        <span className="stat-sub">{lang === 'ru' ? 'по денежным акциям' : 'across N + KZT'}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-label">{t.summary.pendingRequests}</span>
+        <span className="stat-value">{stats.pendingReq}</span>
+        <span className="stat-sub">{lang === 'ru' ? 'ожидают решения' : 'waiting for decision'}</span>
+      </div>
+    </div>
+  );
+}
+
+// ===== Requests =====
+function RequestsView({ t, lang, requests, setRequests, aiVariant, pushToast }) {
+  return (
+    <>
+      <div className="page-title">
+        <div>
+          <h1>{t.nav.requests}</h1>
+          <p>{lang === 'ru' ? 'Заявки от партнёров на компенсации с автоматической AI-сверкой.' : 'Partner compensation requests with automatic AI cross-check.'}</p>
+        </div>
+        <div className="page-actions">
+          <button className="btn"><Icon name="excel" size={14} />{t.actions.export}</button>
+        </div>
+      </div>
+      <RequestsPanel t={t} lang={lang} requests={requests} setRequests={setRequests} aiVariant={aiVariant} pushToast={pushToast} />
+    </>
+  );
+}
+
+// ===== Partners =====
+function PartnersView({ t, lang, promos }) {
+  return (
+    <>
+      <div className="page-title"><div><h1>{t.nav.partners}</h1><p>{lang === 'ru' ? 'Иерархия партнёров, точек продаж и каналов.' : 'Partner hierarchy with sale points and channels.'}</p></div></div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+        {PARTNERS.map((p) => {
+          const cnt = promos.filter((pp) => pp.partnerId === p.id).length;
+          return (
+            <div key={p.id} className="section" style={{ marginBottom: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <span className="code-tag" style={{ fontSize: 11 }}>{p.code}</span>
+                  <h3 style={{ margin: '6px 0 2px', textTransform: 'none', letterSpacing: 0, fontSize: 16 }}>{p.name}</h3>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)' }}>{p.city}</div>
+                </div>
+                <Badge kind={p.segment === 'ontrade' ? 'info' : ''}>{p.segment === 'ontrade' ? 'On trade' : 'Off trade'}</Badge>
+              </div>
+              <div style={{ marginTop: 12, display: 'grid', gap: 6 }}>
+                {p.salePoints.map((s) => (
+                  <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderTop: '1px solid var(--border)', fontSize: 12.5 }}>
+                    <span><Icon name="package" size={12} /> {s.name}<span style={{ color: 'var(--text-3)' }}> · {s.address}</span></span>
+                    <span style={{ color: 'var(--text-3)', fontSize: 11 }}>{findChannelLabel(s.channel, lang)}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 10, fontSize: 11.5, color: 'var(--text-3)' }}>
+                {cnt} {lang === 'ru' ? 'промо-активностей' : 'promo-activities'}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+// ===== Products =====
+function ProductsView({ t, lang, promos }) {
+  return (
+    <>
+      <div className="page-title"><div><h1>{t.nav.products}</h1><p>{lang === 'ru' ? 'Каталог продуктов Efes, доступных для промо.' : 'Product catalogue eligible for promo activities.'}</p></div></div>
+      <div className="table-wrap">
+        <table className="data">
+          <thead><tr><th>SKU</th><th>{lang === 'ru' ? 'Продукт' : 'Product'}</th><th>{lang === 'ru' ? 'Объём' : 'Volume'}</th><th>{lang === 'ru' ? 'Активных промо' : 'In active promos'}</th></tr></thead>
+          <tbody>
+            {PRODUCTS.map((p) => {
+              const cnt = promos.filter((pp) => pp.products.includes(p.sku) && pp.status === 'active').length;
+              return (
+                <tr key={p.sku}>
+                  <td><span className="code-tag">{p.sku}</span></td>
+                  <td>{p.name}</td>
+                  <td className="cell-num">{p.volume} L</td>
+                  <td><Badge>{cnt}</Badge></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body></html>

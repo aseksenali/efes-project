@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Compensation" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:process id="Process_Compensation" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_CRM" name="CRM support specialist">
+        <bpmn:flowNodeRef>Task_CRM_Send</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SFE" name="SFE specialist">
+        <bpmn:flowNodeRef>Task_SFE_Send</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Partner" name="Partner" />
+      <bpmn:lane id="Lane_SSC" name="Sales systems communication specialist">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Split_Inputs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SSC_RecvOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SSC_RecvTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitVedomost</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Bnd_25th</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RemindPartner</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_RemindPartner</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Split_Vedomost</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Join_OpInputs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Join_TechInputs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_OpsPreApproved</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendToOperators</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitOpApprovals</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Bnd_3d_Op</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RemindOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_RemindOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConsolidateOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendOpToSCtrl</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitSCtrlOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_ErrorsOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_FixErrorsOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Op</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitSSupTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Bnd_3d_SSupTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RemindSSupTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_RemindSSupTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConsolidateTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendTechToSCtrl</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_WaitSCtrlTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_ErrorsTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_FixErrorsTech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Tech</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SendTechToSup</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Op" name="Operator">
+        <bpmn:flowNodeRef>Task_OperatorApprove</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SSup" name="Sales supervisor">
+        <bpmn:flowNodeRef>Task_SSupApproveTech</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_SCtrl" name="Sales controlling">
+        <bpmn:flowNodeRef>Task_SCtrlApproveOp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SCtrlApproveTech</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Monthly compensation&#10;cycle begins">
+      <bpmn:outgoing>Flow_Start_to_Split</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_Start_1" />
+    </bpmn:startEvent>
+    <bpmn:parallelGateway id="Gw_Split_Inputs">
+      <bpmn:incoming>Flow_Start_to_Split</bpmn:incoming>
+      <bpmn:outgoing>Flow_Split_to_CRM</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Split_to_SFE</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Split_to_Wait</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sendTask id="Task_CRM_Send" name="Send Excel of operator&#10;compensation calculations">
+      <bpmn:incoming>Flow_Split_to_CRM</bpmn:incoming>
+      <bpmn:outgoing>Flow_CRM_to_Recv</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:receiveTask id="Task_SSC_RecvOp" name="Receive operator&#10;compensation Excel">
+      <bpmn:incoming>Flow_CRM_to_Recv</bpmn:incoming>
+      <bpmn:outgoing>Flow_RecvOp_to_Join</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sendTask id="Task_SFE_Send" name="Send Excel of technician&#10;compensation calculations">
+      <bpmn:incoming>Flow_Split_to_SFE</bpmn:incoming>
+      <bpmn:outgoing>Flow_SFE_to_Recv</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:receiveTask id="Task_SSC_RecvTech" name="Receive technician&#10;compensation Excel">
+      <bpmn:incoming>Flow_SFE_to_Recv</bpmn:incoming>
+      <bpmn:outgoing>Flow_RecvTech_to_Join</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:receiveTask id="Task_WaitVedomost" name="Wait for «Ведомость о&#10;поощрении сотрудников»&#10;from all Partners">
+      <bpmn:incoming>Flow_Split_to_Wait</bpmn:incoming>
+      <bpmn:outgoing>Flow_Wait_to_VedSplit</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:boundaryEvent id="Bnd_25th" name="25th of month" cancelActivity="false" attachedToRef="Task_WaitVedomost">
+      <bpmn:outgoing>Flow_Bnd25_to_Remind</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_Bnd_25th" />
+    </bpmn:boundaryEvent>
+    <bpmn:sendTask id="Task_RemindPartner" name="Remind Partner —&#10;«Ведомость» due 25th">
+      <bpmn:incoming>Flow_Bnd25_to_Remind</bpmn:incoming>
+      <bpmn:outgoing>Flow_RemindPart_to_End</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="End_RemindPartner" name="Partner reminded">
+      <bpmn:incoming>Flow_RemindPart_to_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:parallelGateway id="Gw_Split_Vedomost">
+      <bpmn:incoming>Flow_Wait_to_VedSplit</bpmn:incoming>
+      <bpmn:outgoing>Flow_VedSplit_to_OpJoin</bpmn:outgoing>
+      <bpmn:outgoing>Flow_VedSplit_to_TechJoin</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gw_Join_OpInputs">
+      <bpmn:incoming>Flow_RecvOp_to_Join</bpmn:incoming>
+      <bpmn:incoming>Flow_VedSplit_to_OpJoin</bpmn:incoming>
+      <bpmn:outgoing>Flow_OpJoin_to_PreGw</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gw_Join_TechInputs">
+      <bpmn:incoming>Flow_RecvTech_to_Join</bpmn:incoming>
+      <bpmn:incoming>Flow_VedSplit_to_TechJoin</bpmn:incoming>
+      <bpmn:outgoing>Flow_TechJoin_to_Send</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:exclusiveGateway id="Gw_OpsPreApproved" name="Operator&#10;pre-approved&#10;by Partner?">
+      <bpmn:incoming>Flow_OpJoin_to_PreGw</bpmn:incoming>
+      <bpmn:outgoing>Flow_OpsPre_No</bpmn:outgoing>
+      <bpmn:outgoing>Flow_OpsPre_Yes</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="Task_SendToOperators" name="Send «Ведомость» to&#10;each Operator&#10;(operator records only)">
+      <bpmn:incoming>Flow_OpsPre_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_SendOp_to_OpApprove</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics />
+    </bpmn:sendTask>
+    <bpmn:userTask id="Task_OperatorApprove" name="Approve «Ведомость»">
+      <bpmn:incoming>Flow_SendOp_to_OpApprove</bpmn:incoming>
+      <bpmn:outgoing>Flow_OpApprove_to_Wait</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics />
+    </bpmn:userTask>
+    <bpmn:receiveTask id="Task_WaitOpApprovals" name="Wait for approvals from&#10;all Operators">
+      <bpmn:incoming>Flow_OpApprove_to_Wait</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitOpAppr_to_Cons</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:boundaryEvent id="Bnd_3d_Op" name="3 days elapsed" cancelActivity="false" attachedToRef="Task_WaitOpApprovals">
+      <bpmn:outgoing>Flow_Bnd3dOp_to_Remind</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_Bnd_3d_Op" />
+    </bpmn:boundaryEvent>
+    <bpmn:sendTask id="Task_RemindOp" name="Send reminder&#10;to Operator">
+      <bpmn:incoming>Flow_Bnd3dOp_to_Remind</bpmn:incoming>
+      <bpmn:outgoing>Flow_RemindOp_to_End</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="End_RemindOp" name="Operator reminded">
+      <bpmn:incoming>Flow_RemindOp_to_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_ConsolidateOp" name="Consolidate operator file:&#10;totals by Operator">
+      <bpmn:incoming>Flow_OpsPre_Yes</bpmn:incoming>
+      <bpmn:incoming>Flow_WaitOpAppr_to_Cons</bpmn:incoming>
+      <bpmn:outgoing>Flow_ConsOp_to_Send</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sendTask id="Task_SendOpToSCtrl" name="Send operator consolidated&#10;file to Sales controlling">
+      <bpmn:incoming>Flow_ConsOp_to_Send</bpmn:incoming>
+      <bpmn:incoming>Flow_FixOp_to_SendSCtrl</bpmn:incoming>
+      <bpmn:outgoing>Flow_SendOpSCtrl_to_App</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="Task_SCtrlApproveOp" name="Review operator file &#38;&#10;approve / report errors">
+      <bpmn:incoming>Flow_SendOpSCtrl_to_App</bpmn:incoming>
+      <bpmn:outgoing>Flow_SCtrlOp_to_Wait</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:receiveTask id="Task_WaitSCtrlOp" name="Wait for Sales controlling&#10;response (operator file)">
+      <bpmn:incoming>Flow_SCtrlOp_to_Wait</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitSCtrlOp_to_Gw</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:exclusiveGateway id="Gw_ErrorsOp" name="Errors&#10;reported?">
+      <bpmn:incoming>Flow_WaitSCtrlOp_to_Gw</bpmn:incoming>
+      <bpmn:outgoing>Flow_ErrOp_Yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ErrOp_No</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_FixErrorsOp" name="Fix errors in&#10;operator file">
+      <bpmn:incoming>Flow_ErrOp_Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_FixOp_to_SendSCtrl</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Op" name="Operator cycle&#10;completed">
+      <bpmn:incoming>Flow_ErrOp_No</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="Task_SendTechToSup" name="Send technician file&#10;to Sales supervisor">
+      <bpmn:incoming>Flow_TechJoin_to_Send</bpmn:incoming>
+      <bpmn:outgoing>Flow_SendTech_to_App</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="Task_SSupApproveTech" name="Approve technician&#10;«Ведомость»">
+      <bpmn:incoming>Flow_SendTech_to_App</bpmn:incoming>
+      <bpmn:outgoing>Flow_SSupTech_to_Wait</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:receiveTask id="Task_WaitSSupTech" name="Wait for Sales supervisor&#10;approval (technician file)">
+      <bpmn:incoming>Flow_SSupTech_to_Wait</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitSSupTech_Cons</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:boundaryEvent id="Bnd_3d_SSupTech" name="3 days elapsed" cancelActivity="false" attachedToRef="Task_WaitSSupTech">
+      <bpmn:outgoing>Flow_Bnd3dSSupTech_Rem</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_Bnd_3d_SSupTech" />
+    </bpmn:boundaryEvent>
+    <bpmn:sendTask id="Task_RemindSSupTech" name="Remind Sales supervisor&#10;(technician file)">
+      <bpmn:incoming>Flow_Bnd3dSSupTech_Rem</bpmn:incoming>
+      <bpmn:outgoing>Flow_RemindSSupTech_End</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="End_RemindSSupTech" name="Supervisor reminded">
+      <bpmn:incoming>Flow_RemindSSupTech_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_ConsolidateTech" name="Consolidate technician file:&#10;totals by Partner">
+      <bpmn:incoming>Flow_WaitSSupTech_Cons</bpmn:incoming>
+      <bpmn:outgoing>Flow_ConsTech_to_Send</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sendTask id="Task_SendTechToSCtrl" name="Send technician consolidated&#10;file to Sales controlling">
+      <bpmn:incoming>Flow_ConsTech_to_Send</bpmn:incoming>
+      <bpmn:incoming>Flow_FixTech_SendSCtrl</bpmn:incoming>
+      <bpmn:outgoing>Flow_SendTechSCtrl_App</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="Task_SCtrlApproveTech" name="Review technician file &#38;&#10;approve / report errors">
+      <bpmn:incoming>Flow_SendTechSCtrl_App</bpmn:incoming>
+      <bpmn:outgoing>Flow_SCtrlTech_to_Wait</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:receiveTask id="Task_WaitSCtrlTech" name="Wait for Sales controlling&#10;response (technician file)">
+      <bpmn:incoming>Flow_SCtrlTech_to_Wait</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitSCtrlTech_Gw</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:exclusiveGateway id="Gw_ErrorsTech" name="Errors&#10;reported?">
+      <bpmn:incoming>Flow_WaitSCtrlTech_Gw</bpmn:incoming>
+      <bpmn:outgoing>Flow_ErrTech_Yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ErrTech_No</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_FixErrorsTech" name="Fix errors in&#10;technician file">
+      <bpmn:incoming>Flow_ErrTech_Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_FixTech_SendSCtrl</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Tech" name="Technician cycle&#10;completed">
+      <bpmn:incoming>Flow_ErrTech_No</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Start_to_Split" sourceRef="Start_1" targetRef="Gw_Split_Inputs" />
+    <bpmn:sequenceFlow id="Flow_Split_to_CRM" sourceRef="Gw_Split_Inputs" targetRef="Task_CRM_Send" />
+    <bpmn:sequenceFlow id="Flow_Split_to_SFE" sourceRef="Gw_Split_Inputs" targetRef="Task_SFE_Send" />
+    <bpmn:sequenceFlow id="Flow_Split_to_Wait" sourceRef="Gw_Split_Inputs" targetRef="Task_WaitVedomost" />
+    <bpmn:sequenceFlow id="Flow_CRM_to_Recv" sourceRef="Task_CRM_Send" targetRef="Task_SSC_RecvOp" />
+    <bpmn:sequenceFlow id="Flow_RecvOp_to_Join" sourceRef="Task_SSC_RecvOp" targetRef="Gw_Join_OpInputs" />
+    <bpmn:sequenceFlow id="Flow_SFE_to_Recv" sourceRef="Task_SFE_Send" targetRef="Task_SSC_RecvTech" />
+    <bpmn:sequenceFlow id="Flow_RecvTech_to_Join" sourceRef="Task_SSC_RecvTech" targetRef="Gw_Join_TechInputs" />
+    <bpmn:sequenceFlow id="Flow_Wait_to_VedSplit" sourceRef="Task_WaitVedomost" targetRef="Gw_Split_Vedomost" />
+    <bpmn:sequenceFlow id="Flow_VedSplit_to_OpJoin" sourceRef="Gw_Split_Vedomost" targetRef="Gw_Join_OpInputs" />
+    <bpmn:sequenceFlow id="Flow_VedSplit_to_TechJoin" sourceRef="Gw_Split_Vedomost" targetRef="Gw_Join_TechInputs" />
+    <bpmn:sequenceFlow id="Flow_Bnd25_to_Remind" sourceRef="Bnd_25th" targetRef="Task_RemindPartner" />
+    <bpmn:sequenceFlow id="Flow_RemindPart_to_End" sourceRef="Task_RemindPartner" targetRef="End_RemindPartner" />
+    <bpmn:sequenceFlow id="Flow_OpJoin_to_PreGw" sourceRef="Gw_Join_OpInputs" targetRef="Gw_OpsPreApproved" />
+    <bpmn:sequenceFlow id="Flow_OpsPre_No" name="No" sourceRef="Gw_OpsPreApproved" targetRef="Task_SendToOperators" />
+    <bpmn:sequenceFlow id="Flow_OpsPre_Yes" name="Yes" sourceRef="Gw_OpsPreApproved" targetRef="Task_ConsolidateOp" />
+    <bpmn:sequenceFlow id="Flow_SendOp_to_OpApprove" sourceRef="Task_SendToOperators" targetRef="Task_OperatorApprove" />
+    <bpmn:sequenceFlow id="Flow_OpApprove_to_Wait" sourceRef="Task_OperatorApprove" targetRef="Task_WaitOpApprovals" />
+    <bpmn:sequenceFlow id="Flow_Bnd3dOp_to_Remind" sourceRef="Bnd_3d_Op" targetRef="Task_RemindOp" />
+    <bpmn:sequenceFlow id="Flow_RemindOp_to_End" sourceRef="Task_RemindOp" targetRef="End_RemindOp" />
+    <bpmn:sequenceFlow id="Flow_WaitOpAppr_to_Cons" sourceRef="Task_WaitOpApprovals" targetRef="Task_ConsolidateOp" />
+    <bpmn:sequenceFlow id="Flow_ConsOp_to_Send" sourceRef="Task_ConsolidateOp" targetRef="Task_SendOpToSCtrl" />
+    <bpmn:sequenceFlow id="Flow_SendOpSCtrl_to_App" sourceRef="Task_SendOpToSCtrl" targetRef="Task_SCtrlApproveOp" />
+    <bpmn:sequenceFlow id="Flow_SCtrlOp_to_Wait" sourceRef="Task_SCtrlApproveOp" targetRef="Task_WaitSCtrlOp" />
+    <bpmn:sequenceFlow id="Flow_WaitSCtrlOp_to_Gw" sourceRef="Task_WaitSCtrlOp" targetRef="Gw_ErrorsOp" />
+    <bpmn:sequenceFlow id="Flow_ErrOp_Yes" name="Yes" sourceRef="Gw_ErrorsOp" targetRef="Task_FixErrorsOp" />
+    <bpmn:sequenceFlow id="Flow_ErrOp_No" name="No" sourceRef="Gw_ErrorsOp" targetRef="End_Op" />
+    <bpmn:sequenceFlow id="Flow_FixOp_to_SendSCtrl" sourceRef="Task_FixErrorsOp" targetRef="Task_SendOpToSCtrl" />
+    <bpmn:sequenceFlow id="Flow_TechJoin_to_Send" sourceRef="Gw_Join_TechInputs" targetRef="Task_SendTechToSup" />
+    <bpmn:sequenceFlow id="Flow_SendTech_to_App" sourceRef="Task_SendTechToSup" targetRef="Task_SSupApproveTech" />
+    <bpmn:sequenceFlow id="Flow_SSupTech_to_Wait" sourceRef="Task_SSupApproveTech" targetRef="Task_WaitSSupTech" />
+    <bpmn:sequenceFlow id="Flow_Bnd3dSSupTech_Rem" sourceRef="Bnd_3d_SSupTech" targetRef="Task_RemindSSupTech" />
+    <bpmn:sequenceFlow id="Flow_RemindSSupTech_End" sourceRef="Task_RemindSSupTech" targetRef="End_RemindSSupTech" />
+    <bpmn:sequenceFlow id="Flow_WaitSSupTech_Cons" sourceRef="Task_WaitSSupTech" targetRef="Task_ConsolidateTech" />
+    <bpmn:sequenceFlow id="Flow_ConsTech_to_Send" sourceRef="Task_ConsolidateTech" targetRef="Task_SendTechToSCtrl" />
+    <bpmn:sequenceFlow id="Flow_SendTechSCtrl_App" sourceRef="Task_SendTechToSCtrl" targetRef="Task_SCtrlApproveTech" />
+    <bpmn:sequenceFlow id="Flow_SCtrlTech_to_Wait" sourceRef="Task_SCtrlApproveTech" targetRef="Task_WaitSCtrlTech" />
+    <bpmn:sequenceFlow id="Flow_WaitSCtrlTech_Gw" sourceRef="Task_WaitSCtrlTech" targetRef="Gw_ErrorsTech" />
+    <bpmn:sequenceFlow id="Flow_ErrTech_Yes" name="Yes" sourceRef="Gw_ErrorsTech" targetRef="Task_FixErrorsTech" />
+    <bpmn:sequenceFlow id="Flow_ErrTech_No" name="No" sourceRef="Gw_ErrorsTech" targetRef="End_Tech" />
+    <bpmn:sequenceFlow id="Flow_FixTech_SendSCtrl" sourceRef="Task_FixErrorsTech" targetRef="Task_SendTechToSCtrl" />
+    <bpmn:textAnnotation id="Note_PartnerRules">
+      <bpmn:text>Partner sends «Ведомость о поощрении сотрудников» by the
+25th of each month. Rules:
+  • files for operators &amp; technicians are NOT separated —
+    they arrive mixed in one email, separate emails, or a
+    combined PDF;
+  • one «Ведомость» per page; Partner name in page header;
+  • operator vs technician is determined by the row's amount:
+    operator if amount is a multiple of the global
+    «minimal operator compensation» parameter; technician if
+    a multiple of the «minimal technician compensation»;
+  • email may include comment that operator approvals were
+    already collected — those Operators are then skipped.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_PartnerRules" associationDirection="None" sourceRef="Note_PartnerRules" targetRef="Task_WaitVedomost" />
+    <bpmn:textAnnotation id="Note_PreApproved">
+      <bpmn:text>If the Partner's email noted that operator approvals
+were already collected, those Operators are not contacted.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Note_PreApproved" associationDirection="None" sourceRef="Note_PreApproved" targetRef="Gw_OpsPreApproved" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Compensation">
+      <bpmndi:BPMNShape id="Lane_SCtrl_di" bpmnElement="Lane_SCtrl" isHorizontal="true">
+        <dc:Bounds x="160" y="1500" width="3400" height="260" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SSup_di" bpmnElement="Lane_SSup" isHorizontal="true">
+        <dc:Bounds x="160" y="1360" width="3400" height="140" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Op_di" bpmnElement="Lane_Op" isHorizontal="true">
+        <dc:Bounds x="160" y="1200" width="3400" height="160" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SSC_di" bpmnElement="Lane_SSC" isHorizontal="true">
+        <dc:Bounds x="160" y="480" width="3400" height="720" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Partner_di" bpmnElement="Lane_Partner" isHorizontal="true">
+        <dc:Bounds x="160" y="320" width="3400" height="160" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_SFE_di" bpmnElement="Lane_SFE" isHorizontal="true">
+        <dc:Bounds x="160" y="200" width="3400" height="120" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_CRM_di" bpmnElement="Lane_CRM" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="3400" height="120" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="222" y="822" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="170" y="862" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Split_Inputs_di" bpmnElement="Gw_Split_Inputs">
+        <dc:Bounds x="335" y="815" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CRM_Send_di" bpmnElement="Task_CRM_Send">
+        <dc:Bounds x="450" y="100" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SSC_RecvOp_di" bpmnElement="Task_SSC_RecvOp">
+        <dc:Bounds x="630" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SFE_Send_di" bpmnElement="Task_SFE_Send">
+        <dc:Bounds x="450" y="220" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SSC_RecvTech_di" bpmnElement="Task_SSC_RecvTech">
+        <dc:Bounds x="630" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitVedomost_di" bpmnElement="Task_WaitVedomost">
+        <dc:Bounds x="830" y="800" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RemindPartner_di" bpmnElement="Task_RemindPartner">
+        <dc:Bounds x="1010" y="500" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_RemindPartner_di" bpmnElement="End_RemindPartner">
+        <dc:Bounds x="1202" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1150" y="562" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Split_Vedomost_di" bpmnElement="Gw_Split_Vedomost">
+        <dc:Bounds x="1035" y="815" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Join_OpInputs_di" bpmnElement="Gw_Join_OpInputs">
+        <dc:Bounds x="1155" y="645" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Join_TechInputs_di" bpmnElement="Gw_Join_TechInputs">
+        <dc:Bounds x="1155" y="985" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_OpsPreApproved_di" bpmnElement="Gw_OpsPreApproved" isMarkerVisible="true">
+        <dc:Bounds x="1295" y="645" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1250" y="601" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendToOperators_di" bpmnElement="Task_SendToOperators">
+        <dc:Bounds x="1410" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_OperatorApprove_di" bpmnElement="Task_OperatorApprove">
+        <dc:Bounds x="1410" y="1240" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitOpApprovals_di" bpmnElement="Task_WaitOpApprovals">
+        <dc:Bounds x="1590" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RemindOp_di" bpmnElement="Task_RemindOp">
+        <dc:Bounds x="1750" y="500" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_RemindOp_di" bpmnElement="End_RemindOp">
+        <dc:Bounds x="1942" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1890" y="562" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConsolidateOp_di" bpmnElement="Task_ConsolidateOp">
+        <dc:Bounds x="1830" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendOpToSCtrl_di" bpmnElement="Task_SendOpToSCtrl">
+        <dc:Bounds x="2050" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SCtrlApproveOp_di" bpmnElement="Task_SCtrlApproveOp">
+        <dc:Bounds x="2050" y="1530" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitSCtrlOp_di" bpmnElement="Task_WaitSCtrlOp">
+        <dc:Bounds x="2230" y="630" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_ErrorsOp_di" bpmnElement="Gw_ErrorsOp" isMarkerVisible="true">
+        <dc:Bounds x="2435" y="645" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2390" y="601" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FixErrorsOp_di" bpmnElement="Task_FixErrorsOp">
+        <dc:Bounds x="2390" y="500" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Op_di" bpmnElement="End_Op">
+        <dc:Bounds x="2602" y="652" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2550" y="692" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitSSupTech_di" bpmnElement="Task_WaitSSupTech">
+        <dc:Bounds x="1430" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RemindSSupTech_di" bpmnElement="Task_RemindSSupTech">
+        <dc:Bounds x="1590" y="1100" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_RemindSSupTech_di" bpmnElement="End_RemindSSupTech">
+        <dc:Bounds x="1782" y="1122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1730" y="1162" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConsolidateTech_di" bpmnElement="Task_ConsolidateTech">
+        <dc:Bounds x="1610" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendTechToSCtrl_di" bpmnElement="Task_SendTechToSCtrl">
+        <dc:Bounds x="1790" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SCtrlApproveTech_di" bpmnElement="Task_SCtrlApproveTech">
+        <dc:Bounds x="1790" y="1650" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_WaitSCtrlTech_di" bpmnElement="Task_WaitSCtrlTech">
+        <dc:Bounds x="1970" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_ErrorsTech_di" bpmnElement="Gw_ErrorsTech" isMarkerVisible="true">
+        <dc:Bounds x="2175" y="985" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2130" y="941" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FixErrorsTech_di" bpmnElement="Task_FixErrorsTech">
+        <dc:Bounds x="2130" y="1100" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Tech_di" bpmnElement="End_Tech">
+        <dc:Bounds x="2342" y="992" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2290" y="1032" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendTechToSup_di" bpmnElement="Task_SendTechToSup">
+        <dc:Bounds x="1240" y="970" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SSupApproveTech_di" bpmnElement="Task_SSupApproveTech">
+        <dc:Bounds x="1240" y="1390" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Note_PartnerRules_di" bpmnElement="Note_PartnerRules">
+        <dc:Bounds x="780" y="335" width="240" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Note_PreApproved_di" bpmnElement="Note_PreApproved">
+        <dc:Bounds x="1200" y="1215" width="240" height="130" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Bnd_3d_SSupTech_di" bpmnElement="Bnd_3d_SSupTech">
+        <dc:Bounds x="1522" y="1032" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1470" y="1072" width="140" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Bnd_3d_Op_di" bpmnElement="Bnd_3d_Op">
+        <dc:Bounds x="1682" y="612" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1630" y="588" width="140" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Bnd_25th_di" bpmnElement="Bnd_25th">
+        <dc:Bounds x="922" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="870" y="758" width="140" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_to_Split_di" bpmnElement="Flow_Start_to_Split">
+        <di:waypoint x="258" y="840" />
+        <di:waypoint x="335" y="840" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Split_to_CRM_di" bpmnElement="Flow_Split_to_CRM">
+        <di:waypoint x="385" y="840" />
+        <di:waypoint x="418" y="840" />
+        <di:waypoint x="418" y="140" />
+        <di:waypoint x="450" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Split_to_SFE_di" bpmnElement="Flow_Split_to_SFE">
+        <di:waypoint x="385" y="840" />
+        <di:waypoint x="418" y="840" />
+        <di:waypoint x="418" y="260" />
+        <di:waypoint x="450" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Split_to_Wait_di" bpmnElement="Flow_Split_to_Wait">
+        <di:waypoint x="385" y="840" />
+        <di:waypoint x="830" y="840" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CRM_to_Recv_di" bpmnElement="Flow_CRM_to_Recv">
+        <di:waypoint x="590" y="140" />
+        <di:waypoint x="610" y="140" />
+        <di:waypoint x="610" y="670" />
+        <di:waypoint x="630" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RecvOp_to_Join_di" bpmnElement="Flow_RecvOp_to_Join">
+        <di:waypoint x="770" y="670" />
+        <di:waypoint x="1155" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SFE_to_Recv_di" bpmnElement="Flow_SFE_to_Recv">
+        <di:waypoint x="590" y="260" />
+        <di:waypoint x="610" y="260" />
+        <di:waypoint x="610" y="1010" />
+        <di:waypoint x="630" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RecvTech_to_Join_di" bpmnElement="Flow_RecvTech_to_Join">
+        <di:waypoint x="770" y="1010" />
+        <di:waypoint x="1155" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Wait_to_VedSplit_di" bpmnElement="Flow_Wait_to_VedSplit">
+        <di:waypoint x="970" y="840" />
+        <di:waypoint x="1035" y="840" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_VedSplit_to_OpJoin_di" bpmnElement="Flow_VedSplit_to_OpJoin">
+        <di:waypoint x="1085" y="840" />
+        <di:waypoint x="1120" y="840" />
+        <di:waypoint x="1120" y="670" />
+        <di:waypoint x="1155" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_VedSplit_to_TechJoin_di" bpmnElement="Flow_VedSplit_to_TechJoin">
+        <di:waypoint x="1085" y="840" />
+        <di:waypoint x="1120" y="840" />
+        <di:waypoint x="1120" y="1010" />
+        <di:waypoint x="1155" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Bnd25_to_Remind_di" bpmnElement="Flow_Bnd25_to_Remind">
+        <di:waypoint x="940" y="782" />
+        <di:waypoint x="940" y="540" />
+        <di:waypoint x="1010" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RemindPart_to_End_di" bpmnElement="Flow_RemindPart_to_End">
+        <di:waypoint x="1150" y="540" />
+        <di:waypoint x="1202" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OpJoin_to_PreGw_di" bpmnElement="Flow_OpJoin_to_PreGw">
+        <di:waypoint x="1205" y="670" />
+        <di:waypoint x="1295" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OpsPre_No_di" bpmnElement="Flow_OpsPre_No">
+        <di:waypoint x="1345" y="670" />
+        <di:waypoint x="1410" y="670" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1353" y="648" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OpsPre_Yes_di" bpmnElement="Flow_OpsPre_Yes">
+        <di:waypoint x="1345" y="670" />
+        <di:waypoint x="1345" y="750" />
+        <di:waypoint x="1810" y="750" />
+        <di:waypoint x="1810" y="670" />
+        <di:waypoint x="1830" y="670" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1353" y="701" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendOp_to_OpApprove_di" bpmnElement="Flow_SendOp_to_OpApprove">
+        <di:waypoint x="1480" y="710" />
+        <di:waypoint x="1480" y="800" />
+        <di:waypoint x="1390" y="800" />
+        <di:waypoint x="1390" y="1280" />
+        <di:waypoint x="1410" y="1280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OpApprove_to_Wait_di" bpmnElement="Flow_OpApprove_to_Wait">
+        <di:waypoint x="1550" y="1280" />
+        <di:waypoint x="1570" y="1280" />
+        <di:waypoint x="1570" y="670" />
+        <di:waypoint x="1590" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Bnd3dOp_to_Remind_di" bpmnElement="Flow_Bnd3dOp_to_Remind">
+        <di:waypoint x="1700" y="612" />
+        <di:waypoint x="1700" y="540" />
+        <di:waypoint x="1750" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RemindOp_to_End_di" bpmnElement="Flow_RemindOp_to_End">
+        <di:waypoint x="1890" y="540" />
+        <di:waypoint x="1942" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitOpAppr_to_Cons_di" bpmnElement="Flow_WaitOpAppr_to_Cons">
+        <di:waypoint x="1730" y="670" />
+        <di:waypoint x="1830" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ConsOp_to_Send_di" bpmnElement="Flow_ConsOp_to_Send">
+        <di:waypoint x="1970" y="670" />
+        <di:waypoint x="2050" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendOpSCtrl_to_App_di" bpmnElement="Flow_SendOpSCtrl_to_App">
+        <di:waypoint x="2120" y="710" />
+        <di:waypoint x="2120" y="1530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SCtrlOp_to_Wait_di" bpmnElement="Flow_SCtrlOp_to_Wait">
+        <di:waypoint x="2120" y="1530" />
+        <di:waypoint x="2120" y="750" />
+        <di:waypoint x="2300" y="750" />
+        <di:waypoint x="2300" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitSCtrlOp_to_Gw_di" bpmnElement="Flow_WaitSCtrlOp_to_Gw">
+        <di:waypoint x="2370" y="670" />
+        <di:waypoint x="2435" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ErrOp_Yes_di" bpmnElement="Flow_ErrOp_Yes">
+        <di:waypoint x="2460" y="645" />
+        <di:waypoint x="2460" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2468" y="604" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ErrOp_No_di" bpmnElement="Flow_ErrOp_No">
+        <di:waypoint x="2485" y="670" />
+        <di:waypoint x="2602" y="670" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2493" y="648" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FixOp_to_SendSCtrl_di" bpmnElement="Flow_FixOp_to_SendSCtrl">
+        <di:waypoint x="2460" y="580" />
+        <di:waypoint x="2460" y="620" />
+        <di:waypoint x="2120" y="620" />
+        <di:waypoint x="2120" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TechJoin_to_Send_di" bpmnElement="Flow_TechJoin_to_Send">
+        <di:waypoint x="1205" y="1010" />
+        <di:waypoint x="1240" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendTech_to_App_di" bpmnElement="Flow_SendTech_to_App">
+        <di:waypoint x="1310" y="1050" />
+        <di:waypoint x="1310" y="1390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SSupTech_to_Wait_di" bpmnElement="Flow_SSupTech_to_Wait">
+        <di:waypoint x="1380" y="1430" />
+        <di:waypoint x="1410" y="1430" />
+        <di:waypoint x="1410" y="1010" />
+        <di:waypoint x="1430" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Bnd3dSSupTech_Rem_di" bpmnElement="Flow_Bnd3dSSupTech_Rem">
+        <di:waypoint x="1540" y="1068" />
+        <di:waypoint x="1540" y="1140" />
+        <di:waypoint x="1590" y="1140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RemindSSupTech_End_di" bpmnElement="Flow_RemindSSupTech_End">
+        <di:waypoint x="1730" y="1140" />
+        <di:waypoint x="1782" y="1140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitSSupTech_Cons_di" bpmnElement="Flow_WaitSSupTech_Cons">
+        <di:waypoint x="1570" y="1010" />
+        <di:waypoint x="1610" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ConsTech_to_Send_di" bpmnElement="Flow_ConsTech_to_Send">
+        <di:waypoint x="1750" y="1010" />
+        <di:waypoint x="1790" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendTechSCtrl_App_di" bpmnElement="Flow_SendTechSCtrl_App">
+        <di:waypoint x="1860" y="1050" />
+        <di:waypoint x="1860" y="1650" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SCtrlTech_to_Wait_di" bpmnElement="Flow_SCtrlTech_to_Wait">
+        <di:waypoint x="1930" y="1690" />
+        <di:waypoint x="1950" y="1690" />
+        <di:waypoint x="1950" y="1010" />
+        <di:waypoint x="1970" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitSCtrlTech_Gw_di" bpmnElement="Flow_WaitSCtrlTech_Gw">
+        <di:waypoint x="2110" y="1010" />
+        <di:waypoint x="2175" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ErrTech_Yes_di" bpmnElement="Flow_ErrTech_Yes">
+        <di:waypoint x="2200" y="1035" />
+        <di:waypoint x="2200" y="1100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2208" y="1058" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ErrTech_No_di" bpmnElement="Flow_ErrTech_No">
+        <di:waypoint x="2225" y="1010" />
+        <di:waypoint x="2342" y="1010" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2233" y="988" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FixTech_SendSCtrl_di" bpmnElement="Flow_FixTech_SendSCtrl">
+        <di:waypoint x="2200" y="1100" />
+        <di:waypoint x="2200" y="1080" />
+        <di:waypoint x="1860" y="1080" />
+        <di:waypoint x="1860" y="1050" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Note_PartnerRules_di" bpmnElement="Assoc_Note_PartnerRules">
+        <di:waypoint x="900" y="465" />
+        <di:waypoint x="900" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Note_PreApproved_di" bpmnElement="Assoc_Note_PreApproved">
+        <di:waypoint x="1320" y="1215" />
+        <di:waypoint x="1320" y="695" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

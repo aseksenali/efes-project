@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="2" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_Enabled">
+    <vt:lpwstr>true</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="3" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_SetDate">
+    <vt:lpwstr>2026-06-03T05:47:32Z</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="4" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_Method">
+    <vt:lpwstr>Privileged</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="5" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_Name">
+    <vt:lpwstr>Публичные данные</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="6" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_SiteId">
+    <vt:lpwstr>e763b98e-4b7c-41f7-9105-0ab753568526</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="7" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_ActionId">
+    <vt:lpwstr>6609c51b-9195-442a-b398-3174045bb277</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="8" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_ContentBits">
+    <vt:lpwstr>0</vt:lpwstr>
+  </property>
+  <property fmtid="{D5CDD505-2E9C-101B-9397-08002B2CF9AE}" pid="9" name="MSIP_Label_e86fda2e-cb39-40eb-9c23-082a57943f2a_Tag">
+    <vt:lpwstr>10, 0, 1, 1</vt:lpwstr>
+  </property>
+</Properties>
