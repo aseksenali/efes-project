@@ -19,3 +19,7 @@ Thumbs.db
 # temp / scratch
 _to_delete/
 *.tmp
+
+# python caches
+__pycache__/
+*.pyc
