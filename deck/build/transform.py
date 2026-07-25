@@ -621,6 +621,7 @@ def stats_v3(slide, L):
             sub='Объём промо вырос почти в 5 раз при той же команде. Платформа возвращает специалистам рабочее время, забирая рутину на себя.',
             big='158 ч/мес', lab='возвращённого рабочего времени · Год 1',
             pill='28 % рутины — у системы', fte='≈ 1,1 штатной ставки, освобождённой от ручной рутины',
+            note='Платформа сама переносит данные между Excel, Panorama и письмами партнёрам. Это время специалисты возвращают в работу с партнёрами и в контроль расчётов.',
             tiles=[('ПРОМО-АКТИВНОСТИ / ГОД', '×4,6', '2 187 → 10 112', '+362 %'),
                    ('ПАРТНЁРЫ', '33', '31 → 33 · за 6 мес', '+6,5 %'),
                    ('ПРОДУКТЫ · SKU', '105', '78 → 105 · за 6 мес', '+35 %'),
@@ -630,6 +631,7 @@ def stats_v3(slide, L):
             sub='Promo volume grew almost 5× with the same team. The platform gives specialists their working time back by taking over the routine.',
             big='158 h/mo', lab='of working time returned · Year 1',
             pill='28% of routine automated', fte='≈ 1.1 FTE freed from manual routine',
+            note='The platform moves data between Excel, Panorama and partner emails by itself. Specialists put that time back into working with partners and checking calculations.',
             tiles=[('PROMOS / YEAR', '×4.6', '2,187 → 10,112', '+362%'),
                    ('PARTNERS', '33', '31 → 33 · in 6 mo', '+6.5%'),
                    ('PRODUCTS · SKU', '105', '78 → 105 · in 6 mo', '+35%'),
@@ -638,32 +640,40 @@ def stats_v3(slide, L):
     add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
     add_text(slide, MX, 1.56, 11.9, 0.6, S['sub'], size=12.5, color='56616F', spacing=1.15)
     top, bot = 2.32, 6.46
-    # ---- hero card (left, dominant) ----
-    hw = 7.0; hh = bot - top
-    add_round_rect(slide, MX, top, hw, hh, 'FFFFFF', 'E2E7EE', shadow=True)
-    add_rect(slide, MX + 0.02, top, hw - 0.04, 0.05, '15924F')
-    add_round_rect(slide, MX + 0.5, top + 0.5, 0.72, 0.72, 'E7F5EC', 'BBE3C8', radius_in=0.2)
-    add_pic(slide, str(ICONDIR / 'clock_dkgreen.png'), MX + 0.5 + 0.17, top + 0.5 + 0.17, 0.38, 0.38)
-    add_text(slide, MX + 0.5, top + 1.38, hw - 1.0, 1.2, S['big'], size=66, bold=True, color='15924F', anchor='m')
-    add_text(slide, MX + 0.52, top + 2.62, hw - 1.0, 0.4, S['lab'], size=15, color='56616F', anchor='m')
-    add_rect(slide, MX + 0.52, top + 3.16, hw - 1.04, 0.014, 'E2E7EE')
-    ppw = 2.3
-    add_round_rect(slide, MX + 0.52, top + 3.40, ppw, 0.36, 'E7F5EC', 'BBE3C8', radius_in=0.18)
-    add_text(slide, MX + 0.52, top + 3.40, ppw, 0.36, S['pill'], size=11, bold=True,
-             color='15924F', align='c', anchor='m')
-    # ---- supporting KPI tiles (right, stacked) ----
-    tx = MX + hw + 0.18; tw = CW - hw - 0.18
-    th = 0.93; gap = (hh - 4 * th) / 3
+    # ---- supporting KPI tiles: one row across the top ----
+    th = 1.42; gap = 0.20
+    tw = (CW - 3 * gap) / 4
     for i, (lab, big, sub, delta) in enumerate(S['tiles']):
-        y = top + i * (th + gap)
-        add_round_rect(slide, tx, y, tw, th, 'FFFFFF', 'E2E7EE', shadow=True)
-        add_rect(slide, tx, y + 0.02, 0.05, th - 0.04, '004C8D')
-        add_text(slide, tx + 0.28, y + 0.11, tw - 0.5, 0.22, lab, size=8.5, bold=True,
+        x = MX + i * (tw + gap)
+        add_round_rect(slide, x, top, tw, th, 'FFFFFF', 'E2E7EE', shadow=True)
+        add_rect(slide, x, top + 0.02, 0.05, th - 0.04, '004C8D')
+        add_text(slide, x + 0.30, top + 0.15, tw - 0.5, 0.24, lab, size=8.5, bold=True,
                  color='56616F', char_spacing=0.8, anchor='m')
-        add_text(slide, tx + 0.28, y + 0.30, 2.6, 0.38, big, size=20, bold=True, color='004C8D', anchor='m')
-        add_text(slide, tx + 0.28, y + 0.63, tw - 0.5, 0.26,
+        add_text(slide, x + 0.30, top + 0.44, tw - 0.5, 0.46, big, size=23, bold=True,
+                 color='004C8D', anchor='m')
+        add_text(slide, x + 0.30, top + 0.97, tw - 0.5, 0.32,
                  [(sub + '  ', {'color': '6E7885'}), (delta, {'bold': True, 'color': '15924F'})],
-                 size=11, anchor='m')
+                 size=9.5, anchor='m')
+    # ---- hero card: the returned hours, full width, below the tiles ----
+    hy = top + th + 0.26; hh = bot - hy
+    add_round_rect(slide, MX, hy, CW, hh, 'FFFFFF', 'E2E7EE', shadow=True)
+    add_rect(slide, MX + 0.02, hy, CW - 0.04, 0.05, '15924F')
+    # clock chip, vertically centred on the big number
+    ncy = hy + 0.55 + 0.575                       # centre of the 158 h/mo block
+    add_round_rect(slide, MX + 0.62, ncy - 0.41, 0.82, 0.82, 'E7F5EC', 'BBE3C8', radius_in=0.22)
+    add_pic(slide, str(ICONDIR / 'clock_dkgreen.png'), MX + 0.82, ncy - 0.21, 0.42, 0.42)
+    add_text(slide, MX + 1.74, hy + 0.55, 4.7, 1.15, S['big'], size=62, bold=True,
+             color='15924F', anchor='m')
+    add_text(slide, MX + 1.78, hy + 1.72, 4.7, 0.40, S['lab'], size=14.5, color='56616F', anchor='m')
+    # divider + supporting column on the right
+    add_rect(slide, MX + 6.62, hy + 0.48, 0.014, hh - 0.96, 'E2E7EE')
+    rx = MX + 7.12; rw = CW - 7.12 - 0.55
+    ry = hy + (hh - 1.52) / 2
+    ppw = 2.42
+    add_round_rect(slide, rx, ry, ppw, 0.40, 'E7F5EC', 'BBE3C8', radius_in=0.2)
+    add_text(slide, rx, ry, ppw, 0.40, S['pill'], size=11.5, bold=True,
+             color='15924F', align='c', anchor='m')
+    add_text(slide, rx, ry + 0.58, rw, 0.94, S['note'], size=12.5, color='56616F', spacing=1.25)
 
 # ============================================================
 # 2b) stats slide v2 — full rebuild: KPI strip + chart + hero tile
@@ -1002,6 +1012,168 @@ def replace_logo(prs):
         part._blob = logo_bytes
 
 # ============================================================
+# AUTHOR / TEAM SLIDE
+# ============================================================
+def plain_footer(slide):
+    """Slides duplicated off a BPMN slide inherit its 'Efes Nexus · BPMN' footer."""
+    for el in all_graphics(slide):
+        g = sp_geom(el)
+        if g and g[1] > 6.9 * EMU and 'BPMN' in sp_texts(el):
+            set_single_text(el, 'Efes Nexus')
+
+def author_photo():
+    """assets/author.{jpg,jpeg,png} if the author dropped a photo in, else None."""
+    for name in ('author.jpg', 'author.jpeg', 'author.png', 'author.webp'):
+        p = ASSETS / name
+        if p.exists():
+            return str(p)
+    return None
+
+def build_author(slide, L):
+    strip_slide(slide); plain_footer(slide)
+    S = {'ru': dict(
+            kick='Команда', h2='Кто делает Efes Nexus',
+            sub='Платформу разрабатывает команда из пяти инженеров под руководством основателя проекта.',
+            name='Асет Сексенали', initials='АС',
+            role='Founding engineer · тимлид', contact='asetseksenali@gmail.com',
+            cards=[('РОЛЬ В ПРОЕКТЕ',
+                    'Основатель и ведущий инженер Efes Nexus. Отвечает за архитектуру платформы, '
+                    'модель процессов и интеграции с Panorama и 1С.'),
+                   ('КОМАНДА',
+                    'Тимлид команды из четырёх разработчиков: фронтенд, бэкенд, интеграции и внедрение. '
+                    'Вся разработка ведётся внутри команды, без подрядчиков.'),
+                   ('ЧТО УЖЕ СДЕЛАНО',
+                    'Смоделированы три BPMN-процесса промо-активностей, разобраны ограничения '
+                    'KZPromotion, собрана и запущена работающая платформа.')]),
+         'en': dict(
+            kick='The team', h2='Who builds Efes Nexus',
+            sub='The platform is built by a team of five engineers led by the founding engineer of the project.',
+            name='Aset Seksenali', initials='AS',
+            role='Founding engineer · team lead', contact='asetseksenali@gmail.com',
+            cards=[('ROLE ON THE PROJECT',
+                    'Founding and lead engineer of Efes Nexus. Owns the platform architecture, '
+                    'the process model and the Panorama and 1C integrations.'),
+                   ('THE TEAM',
+                    'Team lead of four developers: frontend, backend, integrations and rollout. '
+                    'All development is done in-house, with no subcontractors.'),
+                   ('WHAT IS ALREADY DONE',
+                    'Three promo-activity BPMN processes modelled, the limits of KZPromotion mapped, '
+                    'and a working platform built and running.')])}[L]
+    kicker(slide, MX, 0.56, S['kick'], False)
+    add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
+    add_text(slide, MX, 1.56, 11.9, 0.6, S['sub'], size=12.5, color='56616F', spacing=1.15)
+    top, bot = 2.32, 6.46
+    # ---- profile card (left) ----
+    pw = 4.5; ph = bot - top
+    add_round_rect(slide, MX, top, pw, ph, 'FFFFFF', 'E2E7EE', shadow=True)
+    add_rect(slide, MX + 0.02, top, pw - 0.04, 0.05, '004C8D')
+    av = 1.70; ax = MX + (pw - av) / 2; ay = top + 0.42
+    photo = author_photo()
+    if photo:
+        add_pic(slide, photo, ax, ay, av, av)
+    else:
+        add_round_rect(slide, ax, ay, av, av, 'E3EEF8', '9CC6E8', radius_in=av / 2)
+        add_text(slide, ax, ay, av, av, S['initials'], size=46, bold=True,
+                 color='004C8D', align='c', anchor='m')
+    add_text(slide, MX + 0.35, ay + av + 0.28, pw - 0.7, 0.42, S['name'], size=22, bold=True,
+             color='0C1726', align='c', anchor='m')
+    add_text(slide, MX + 0.35, ay + av + 0.73, pw - 0.7, 0.36, S['role'], size=13, bold=True,
+             color='1166A8', align='c', anchor='m')
+    add_rect(slide, MX + 0.9, ay + av + 1.24, pw - 1.8, 0.014, 'E2E7EE')
+    add_text(slide, MX + 0.35, ay + av + 1.36, pw - 0.7, 0.34, S['contact'], size=12,
+             color='56616F', align='c', anchor='m')
+    # ---- fact cards (right) ----
+    rx = MX + pw + 0.24; rw = CW - pw - 0.24
+    ch = (ph - 0.44) / 3
+    for i, (lab, body) in enumerate(S['cards']):
+        y = top + i * (ch + 0.22)
+        add_round_rect(slide, rx, y, rw, ch, 'FFFFFF', 'E2E7EE', shadow=True)
+        add_rect(slide, rx, y + 0.02, 0.05, ch - 0.04, '004C8D')
+        add_text(slide, rx + 0.32, y + 0.18, rw - 0.6, 0.24, lab, size=8.5, bold=True,
+                 color='1166A8', char_spacing=0.8, anchor='m')
+        add_text(slide, rx + 0.32, y + 0.48, rw - 0.62, ch - 0.62, body, size=12.5,
+                 color='56616F', spacing=1.25)
+
+# ============================================================
+# COMMERCIAL PROPOSAL / PRICING SLIDE
+# ============================================================
+def build_pricing(slide, L):
+    strip_slide(slide); plain_footer(slide)
+    S = {'ru': dict(
+            kick='Коммерческое предложение', h2='Стоимость и этапы',
+            sub='Платформа разворачивается на сервере Efes Kazakhstan — отдельная инфраструктура не нужна. '
+                'Первый этап покрывает всё, что показано в презентации; второй подключается по решению заказчика.',
+            l1='ЭТАП 1 · ВНЕДРЕНИЕ ПЛАТФОРМЫ', p1='5 000 000 ₸',
+            c1='всё, что работает в презентации',
+            i1=['Создание, изменение и закрытие промо-активностей',
+                'Уведомления партнёров и синхронизация с Panorama',
+                'Расчёт компенсаций и выгрузка отчётов',
+                'Проверка остатков на складе партнёра и предрасчёты промо',
+                'Развёртывание на сервере Efes Kazakhstan, обучение команды'],
+            l2='ЭТАП 2 · ОПЦИОНАЛЬНО', p2='+ 5 000 000 ₸',
+            c2='возможности дальнейшего развития',
+            i2=['AI Search & Knowledge Base — поиск по истории акций',
+                '1C Invoice Validation — проверка выгрузок и накладных',
+                'Масштабирование расчётов на другие типы компенсаций',
+                'Исторический календарь промо-активностей'],
+            n2='Подключается отдельно, после запуска первого этапа.',
+            band='Первый этап — 5 000 000 ₸ за работающую платформу на сервере заказчика. '
+                 'Второй этап не обязателен и оплачивается только если Efes решит его запускать.'),
+         'en': dict(
+            kick='Commercial proposal', h2='Pricing and phases',
+            sub='The platform is deployed on the Efes Kazakhstan server — no separate infrastructure is needed. '
+                'Phase 1 covers everything shown in this deck; phase 2 is taken up at the client’s discretion.',
+            l1='PHASE 1 · PLATFORM ROLLOUT', p1='5,000,000 KZT',
+            c1='everything shown in this deck',
+            i1=['Creating, changing and closing promo activities',
+                'Partner notifications and Panorama synchronisation',
+                'Compensation calculations and report exports',
+                'Partner stock checks and promo pre-calculations',
+                'Deployment on the Efes Kazakhstan server, team training'],
+            l2='PHASE 2 · OPTIONAL', p2='+ 5,000,000 KZT',
+            c2='further development possibilities',
+            i2=['AI Search & Knowledge Base — search across promo history',
+                '1C Invoice Validation — checking exports and invoices',
+                'Scaling calculations to other compensation types',
+                'Historical promo activity calendar'],
+            n2='Taken up separately, after phase 1 goes live.',
+            band='Phase 1 — 5,000,000 KZT for a working platform on the client’s own server. '
+                 'Phase 2 is optional and is paid for only if Efes decides to start it.')}[L]
+    kicker(slide, MX, 0.56, S['kick'], False)
+    add_text(slide, MX, 0.86, CW, 0.66, S['h2'], size=29, bold=True, color='0C1726', anchor='m')
+    add_text(slide, MX, 1.52, 11.9, 0.7, S['sub'], size=12.5, color='56616F', spacing=1.15)
+    top = 2.32; ch = 3.74
+    cw = (CW - 0.24) / 2
+
+    def card(x, lab, price, cap, items, note, primary):
+        add_round_rect(slide, x, top, cw, ch, 'FFFFFF', 'E2E7EE', shadow=True)
+        add_rect(slide, x + 0.02, top, cw - 0.04, 0.05, '004C8D' if primary else '9CC6E8')
+        add_text(slide, x + 0.42, top + 0.26, cw - 0.8, 0.26, lab, size=9, bold=True,
+                 color='1166A8' if primary else '8B94A2', char_spacing=1.0, anchor='m')
+        add_text(slide, x + 0.42, top + 0.60, cw - 0.8, 0.78, price, size=40, bold=True,
+                 color='004C8D' if primary else '56616F', anchor='m')
+        add_text(slide, x + 0.44, top + 1.42, cw - 0.8, 0.28, cap, size=12,
+                 color='8B94A2', italic=True, anchor='m')
+        add_rect(slide, x + 0.42, top + 1.82, cw - 0.84, 0.014, 'E2E7EE')
+        for j, it in enumerate(items):
+            y = top + 1.94 + j * 0.345
+            add_round_rect(slide, x + 0.44, y + 0.11, 0.085, 0.085,
+                           '004C8D' if primary else '9CC6E8', radius_in=0.0425)
+            add_text(slide, x + 0.70, y, cw - 1.1, 0.30, it, size=11.5, color='56616F', anchor='m')
+        if note:
+            add_text(slide, x + 0.44, top + ch - 0.44, cw - 0.9, 0.32, note, size=11,
+                     color='8B94A2', italic=True, anchor='m')
+
+    card(MX, S['l1'], S['p1'], S['c1'], S['i1'], None, True)
+    card(MX + cw + 0.24, S['l2'], S['p2'], S['c2'], S['i2'], S['n2'], False)
+    # ---- closing band ----
+    by = top + ch + 0.16
+    add_round_rect(slide, MX, by, CW, 0.52, '004C8D', radius_in=0.1)
+    add_pic(slide, str(ICONDIR / 'bolt_white.png'), MX + 0.34, by + 0.15, 0.22, 0.22)
+    add_text(slide, MX + 0.72, by, CW - 1.0, 0.52, S['band'], size=11.5, bold=True,
+             color='FFFFFF', anchor='m')
+
+# ============================================================
 # DELETE SLIDE
 # ============================================================
 def delete_slide(prs, index):
@@ -1031,6 +1203,10 @@ def run(src, out, L, shots):
     retitle(prs.slides[1], 'BPMN ·', T['k2'], T['told'], T['t2'])
     retitle(prs.slides[2], 'BPMN ·', T['k3'], T['told'], T['t3'])
     remove_red_node(prs.slides[1], L)          # (1) drop the not-performed step from "today"
+    # today the partner letter is written and sent by hand, so it is not an auto-notification
+    MAIL = {'ru': ('Авто-уведомление партнёров письмом', 'Письмо партнёрам вручную'),
+            'en': ('Auto-notifying partners by email', 'Manual email to partners')}[L]
+    replace_text_everywhere(prs.slides[1], *MAIL)
     mark_new_step(prs.slides[2], L)            # (3+10) red NEW step + accent callout
     build_video(prs.slides[4], L)              # (5+6) "Промо-дашборд" with embedded video
     stats_v3(prs.slides[5], L)                 # no charts; saved time is the accent
@@ -1043,6 +1219,13 @@ def run(src, out, L, shots):
     # KZPromotion (current tool) slide right after "today" -> index 2, stats shifts to 3
     duplicate_slide(prs, 1, 2)
     build_kzpromotion(prs.slides[2], L)
+    # closing slides: who builds it, and what it costs. Appended before the delete
+    # below, otherwise they would reuse the dropped slide's part name.
+    n = len(prs.slides._sldIdLst)
+    duplicate_slide(prs, 1, n)
+    build_author(prs.slides[n], L)
+    duplicate_slide(prs, 1, n + 1)
+    build_pricing(prs.slides[n + 1], L)
     # drop the old 'scaling' slide last (its part number would otherwise be reused)
     delete_slide(prs, 8)
     # (8) new logo everywhere
